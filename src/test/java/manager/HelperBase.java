@@ -33,10 +33,12 @@ public class HelperBase {
      * Метод для заполнения полей символами.
      * Метод адаптирован под обновление страницы при заполнении поле различных форм.
      */
-    protected void type(By locator, String text) {
+    protected void type(By locator, String text, boolean hasDelay) {
         for (var i = 1; i <= 3; i++) {
             try {
-                TimeUnit.MILLISECONDS.sleep(400);
+                if (hasDelay) {
+                    TimeUnit.MILLISECONDS.sleep(400);
+                }
                 WebElement element = presenceOfElement(locator);
                 element.sendKeys(text);
                 return;
@@ -54,10 +56,12 @@ public class HelperBase {
      * Метод осуществляет ЛКМ по веб-элементу.
      * Метод адаптирован под обновление страницы при заполнении поле различных форм.
      */
-    protected void click(By locator) {
+    protected void click(By locator, boolean hasDelay) {
         for (var i = 1; i <= 10; i++) {
             try {
-                TimeUnit.MILLISECONDS.sleep(400);
+                if (hasDelay) {
+                    TimeUnit.MILLISECONDS.sleep(400);
+                }
                 WebElement element = presenceOfElement(locator);
                 element.click();
                 return;
@@ -96,7 +100,7 @@ public class HelperBase {
     /**
      * Метод для выбора элементов выпадающего списка типа select по индексу
      */
-    protected void optionPicker(By locator, int index) {
+    protected void optionPicker(By locator, int index, boolean hasDelay) {
         Select option = new Select(manager.driver.findElement(locator));
         option.selectByIndex(index);
         try {
@@ -143,13 +147,15 @@ public class HelperBase {
     /**
      * Метод загружает документ
      */
-    protected void fileUpload(By locator, String path) {
+    protected void fileUpload(By locator, String path, boolean hasDelay) {
         WebElement element = presenceOfElement(locator);
         element.sendKeys(path);
-        try {
-            TimeUnit.MILLISECONDS.sleep(400);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (hasDelay) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(400);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

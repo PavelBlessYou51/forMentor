@@ -15,17 +15,17 @@ public class LoginHelper extends HelperBase {
      * Метод осуществляет авторизацию
      */
     public void login(String login, String password) {
-        click(By.xpath("//a[contains(text(), 'Войти')]"));
-        type(By.id("j_username"), login);
-        type(By.id("j_password"), password);
-        click(By.name("j_idt292"));
+        click(By.xpath("//a[contains(text(), 'Войти')]"), false);
+        type(By.id("j_username"), login, false);
+        type(By.id("j_password"), password, false);
+        click(By.name("j_idt292"), false);
     }
 
     /**
      * Метод выхода из учетной записи
      */
     public void logout() {
-        click(By.cssSelector("a[class='logged-in-welcome logged-out']"));
+        click(By.cssSelector("a[class='logged-in-welcome logged-out']"), false);
     }
 
     /**

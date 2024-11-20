@@ -22,8 +22,8 @@ public class SubmitHelper extends HelperBase {
         fillInventionCommonInfoPart(priorityType);
         addNewApplicant();
         addNewInventor();
-        click(By.cssSelector("input[value='Далее']"));
-        click(By.cssSelector("input[value='Далее']"));
+        click(By.cssSelector("input[value='Далее']"), true);
+        click(By.cssSelector("input[value='Далее']"), true);
         fillEditionalInfo(false);
         fillDocumentForm("invention");
         fillTaxFormInvention();
@@ -41,8 +41,8 @@ public class SubmitHelper extends HelperBase {
         fillInventionCommonInfoPart("withoutPreority");
         addNewApplicant();
         addNewInventor();
-        click(By.cssSelector("input[value='Далее']"));
-        click(By.cssSelector("input[value='Далее']"));
+        click(By.cssSelector("input[value='Далее']"), true);
+        click(By.cssSelector("input[value='Далее']"), true);
         fillEditionalInfo(true);
         fillDocumentForm("invention");
         fillTaxFormInvention();
@@ -58,11 +58,11 @@ public class SubmitHelper extends HelperBase {
         selectSphereOfApplication("industrial");
         selectTypeOfApplication("ind_usualApp");
         fillIndustrialCommonInfoPart();
-        click(By.cssSelector("input[value='Далее']"));
+        click(By.cssSelector("input[value='Далее']"), true);
         addNewApplicant();
         addNewInventor();
-        click(By.cssSelector("input[value='Далее']"));
-        click(By.cssSelector("input[value='Далее']"));
+        click(By.cssSelector("input[value='Далее']"), true);
+        click(By.cssSelector("input[value='Далее']"), true);
         fillDocumentForm("industrial");
         fillIndustrialPrototype();
         fillTaxFormIndustrial();
@@ -76,9 +76,9 @@ public class SubmitHelper extends HelperBase {
      */
     protected void selectSphereOfApplication(String typeSphere) {
         if ("invention".equals(typeSphere)) {
-            click(By.xpath("//span[contains(text(), 'Изобретения')]"));
+            click(By.xpath("//span[contains(text(), 'Изобретения')]"), true);
         } else if ("industrial".equals(typeSphere)) {
-            click(By.xpath("//span[contains(text(), 'Промышленные')]"));
+            click(By.xpath("//span[contains(text(), 'Промышленные')]"), true);
         }
 
     }
@@ -88,9 +88,9 @@ public class SubmitHelper extends HelperBase {
      */
     protected void selectTypeOfApplication(String typeApp) {
         if ("inv_EuroApp".equals(typeApp)) {
-            click(By.cssSelector("input[value='Подать евразийскую заявку']"));
+            click(By.cssSelector("input[value='Подать евразийскую заявку']"), true);
         } else if ("ind_usualApp".equals(typeApp)) {
-            click(By.cssSelector("input[value='Подать заявку']"));
+            click(By.cssSelector("input[value='Подать заявку']"), true);
         }
 
     }
@@ -101,9 +101,9 @@ public class SubmitHelper extends HelperBase {
     protected void fillInventionCommonInfoPart(String priorityType) {
         EntityDataBase entity = new EntityDataBase();
         String inventionName = entity.fakerRU.lorem().sentence();
-        type(By.id("form:invName"), inventionName);
+        type(By.id("form:invName"), inventionName, true);
         if (!"withoutPreority".equals(priorityType)) {
-            click(By.id("form:cbPrio"));
+            click(By.id("form:cbPrio"), true);
             if ("previousPCT".equals(priorityType)) {
                 previousPCTApplication(entity.fakerRU.number().digits(6), entity.countryCode);
             } else if ("previousEuro".equals(priorityType)) {
@@ -114,7 +114,7 @@ public class SubmitHelper extends HelperBase {
                 startsOpenShowing(entity.fakerRU.number().digits(6));
             }
         }
-        click(By.id("form:j_idt110:nextButtonId"));
+        click(By.id("form:j_idt110:nextButtonId"), true);
 
     }
 
@@ -124,10 +124,10 @@ public class SubmitHelper extends HelperBase {
     protected void addNewApplicant() throws InterruptedException {
         boolean hasHeader = true;
         while (hasHeader) {
-            click(By.cssSelector("input[value='Добавить нового заявителя']"));
+            click(By.cssSelector("input[value='Добавить нового заявителя']"), true);
             fillPersonData("applicant");
-            click(By.cssSelector("input[value='Далее']"));
-            click(By.cssSelector("input[value='Далее']"));
+            click(By.cssSelector("input[value='Далее']"), true);
+            click(By.cssSelector("input[value='Далее']"), true);
             hasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Заявители')]"));
             if (hasHeader) {
                 deletePerson();
@@ -141,10 +141,10 @@ public class SubmitHelper extends HelperBase {
     protected void addNewInventor() throws InterruptedException {
         boolean HasHeader = true;
         while (HasHeader) {
-            click(By.xpath("//input[contains(@value, 'Добавить нового')]"));
+            click(By.xpath("//input[contains(@value, 'Добавить нового')]"), true);
             fillPersonData("inventor");
-            click(By.cssSelector("input[value='Далее']"));
-            click(By.cssSelector("input[value='Далее']"));
+            click(By.cssSelector("input[value='Далее']"), true);
+            click(By.cssSelector("input[value='Далее']"), true);
             HasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Документы')]"));
             if (HasHeader) {
                 deletePerson();
@@ -158,15 +158,15 @@ public class SubmitHelper extends HelperBase {
      */
     protected void fillDocumentForm(String appType) {
         if ("invention".equals(appType)) {
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt813:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/oписание.pdf"));
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt835:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"));
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt901:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"));
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt1062:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"));
+            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt813:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/oписание.pdf"), true);
+            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt835:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
+            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt901:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
+            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt1062:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"), true);
         } else if ("industrial".equals(appType)) {
-            fileUpload(By.xpath("//div[contains(@id, 'upload16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"));
-            fileUpload(By.xpath("//div[contains(@id, 'upload18')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"));
+            fileUpload(By.xpath("//div[contains(@id, 'upload16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
+            fileUpload(By.xpath("//div[contains(@id, 'upload18')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"), true);
         }
-        click(By.cssSelector("input[value='Далее']"));
+        click(By.cssSelector("input[value='Далее']"), true);
     }
 
     /**
@@ -174,9 +174,9 @@ public class SubmitHelper extends HelperBase {
      */
     protected void fillTaxFormInvention() {
         chooseDiscount("1");
-        click(By.id("form:j_idt1194:j_idt1227:j_idt1229:cbDuty001"));
-        click(By.id("form:j_idt1194:j_idt1512:j_idt1517:1"));
-        fileUpload(By.className("rf-fu-inp"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/пп_об_оплате_гп.pdf"));
+        click(By.id("form:j_idt1194:j_idt1227:j_idt1229:cbDuty001"), true);
+        click(By.id("form:j_idt1194:j_idt1512:j_idt1517:1"), true);
+        fileUpload(By.className("rf-fu-inp"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/пп_об_оплате_гп.pdf"), true);
 
     }
 
@@ -185,17 +185,17 @@ public class SubmitHelper extends HelperBase {
      */
     protected void fillEditionalInfo(boolean withPetition) {
         if (withPetition) {
-            click(By.xpath("(//div[@class='application-text']//input)[2]"));
+            click(By.xpath("(//div[@class='application-text']//input)[2]"), true);
         }
-        click(By.cssSelector("input[value='Далее']"));
+        click(By.cssSelector("input[value='Далее']"), true);
     }
 
     /**
      * Метод подписывает и подает заявки
      */
     public void signInApplication() {
-        click(By.xpath("//input[@value='Подписать и подать заявку']"));
-        click(By.xpath("//input[@value='Подписать и подать']"));
+        click(By.xpath("//input[@value='Подписать и подать заявку']"), true);
+        click(By.xpath("//input[@value='Подписать и подать']"), true);
     }
 
     /**
@@ -203,64 +203,64 @@ public class SubmitHelper extends HelperBase {
      */
     protected void fillPersonData(String personType) {
         PersonData person = new PersonData();
-        optionPicker(By.cssSelector("select[class='application-input']"), 1);
+        optionPicker(By.cssSelector("select[class='application-input']"), 1, true);
         if ("applicant".equals(personType)) {
-            type(By.xpath("//input[contains(@id, 'idTown')]"), person.postCode);
-            type(By.xpath("//input[contains(@id, 'phone')]"), person.phoneNumber);
+            type(By.xpath("//input[contains(@id, 'idTown')]"), person.postCode, true);
+            type(By.xpath("//input[contains(@id, 'phone')]"), person.phoneNumber, true);
         }
-        type(By.xpath("//input[contains(@id, 'appeal')]"), person.callTo);
-        type(By.xpath("//input[contains(@id, 'country')]"), person.countryCode);
-        type(By.xpath("//textarea[contains(@id, 'address')]"), person.address);
-        type(By.xpath("//textarea[contains(@id, 'name')]"), person.surname);
-        type(By.xpath("//input[contains(@id, 'firstName')]"), person.name);
-        type(By.xpath("//input[contains(@id, 'middleName')]"), person.patronymic);
-        type(By.xpath("//input[contains(@id, 'email')]"), person.email);
+        type(By.xpath("//input[contains(@id, 'appeal')]"), person.callTo, true);
+        type(By.xpath("//input[contains(@id, 'country')]"), person.countryCode, true);
+        type(By.xpath("//textarea[contains(@id, 'address')]"), person.address, true);
+        type(By.xpath("//textarea[contains(@id, 'name')]"), person.surname, true);
+        type(By.xpath("//input[contains(@id, 'firstName')]"), person.name, true);
+        type(By.xpath("//input[contains(@id, 'middleName')]"), person.patronymic, true);
+        type(By.xpath("//input[contains(@id, 'email')]"), person.email, true);
     }
 
     /**
      * Метод удаляет добавленного заявителя\автора\изобретателя
      */
     protected void deletePerson() {
-        click(By.xpath("//input[contains(@value, 'Удалить ')]"));
+        click(By.xpath("//input[contains(@value, 'Удалить ')]"), true);
     }
 
     /**
      * Метод заполняет данные приоритета по предыдущей заявке при подаче заявки на изобретение
      */
     protected void previousPCTApplication(String prevApp, String countryCode) {
-        type(By.name("form:priorityOptionsIntTable:0:j_idt60"), prevApp);
-        click(By.id("form:priorityOptionsIntTable:0:calPrioritetIntDateInputDate"));
-        click(By.xpath("//div[contains(text(), 'Today')]"));
-        type(By.name("form:priorityOptionsIntTable:0:j_idt66"), countryCode);
+        type(By.name("form:priorityOptionsIntTable:0:j_idt60"), prevApp, true);
+        click(By.id("form:priorityOptionsIntTable:0:calPrioritetIntDateInputDate"), true);
+        click(By.xpath("//div[contains(text(), 'Today')]"), true);
+        type(By.name("form:priorityOptionsIntTable:0:j_idt66"), countryCode, true);
     }
 
     /**
      * Метод заполняет данные приоритета по предыдущей евразийской заявке при подаче заявки на изобретение
      */
     protected void previousEuroApplication(String prevApp) {
-        click(By.id("form:rbPrio:1"));
-        click(By.id("form:j_idt79:0:calPrioritetEurDateInputDate"));
-        click(By.xpath("//div[contains(text(), 'Today')]"));
-        type(By.name("form:j_idt79:0:j_idt85"), prevApp);
+        click(By.id("form:rbPrio:1"), true);
+        click(By.id("form:j_idt79:0:calPrioritetEurDateInputDate"), true);
+        click(By.xpath("//div[contains(text(), 'Today')]"), true);
+        type(By.name("form:j_idt79:0:j_idt85"), prevApp, true);
     }
 
     /**
      * Метод заполняет данные приоритета по дате подачи доп материалов при подаче заявки на изобретение
      */
     protected void additionalMaterials(String prevApp) {
-        click(By.id("form:rbPrio:2"));
-        click(By.id("form:j_idt90:0:calPrioritetAddDateInputDate"));
-        click(By.xpath("//div[contains(text(), 'Today')]"));
-        type(By.name("form:j_idt90:0:j_idt96"), prevApp);
+        click(By.id("form:rbPrio:2"), true);
+        click(By.id("form:j_idt90:0:calPrioritetAddDateInputDate"), true);
+        click(By.xpath("//div[contains(text(), 'Today')]"), true);
+        type(By.name("form:j_idt90:0:j_idt96"), prevApp, true);
     }
 
     /**
      * Метод заполняет данные приоритета по дате первого открытого показа при подаче заявки на изобретение
      */
     protected void startsOpenShowing(String prevApp) {
-        click(By.id("form:rbPrio:3"));
-        click(By.id("form:j_idt101:0:calPrioritetAddDateInputDate"));
-        click(By.xpath("//div[contains(text(), 'Today')]"));
+        click(By.id("form:rbPrio:3"), true);
+        click(By.id("form:j_idt101:0:calPrioritetAddDateInputDate"), true);
+        click(By.xpath("//div[contains(text(), 'Today')]"), true);
     }
 
     /**
@@ -277,8 +277,8 @@ public class SubmitHelper extends HelperBase {
      * Метод заполняет раздел №1 "Общая информация" заявки на ПО
      */
     protected void fillIndustrialCommonInfoPart() {
-        type(By.className("application-input"), "N" + getRandomInt(999));
-        optionPicker(By.className("application-select-text"), getRandomInt(19));
+        type(By.className("application-input"), "N" + getRandomInt(999), true);
+        optionPicker(By.className("application-select-text"), getRandomInt(19), true);
     }
 
     /**
@@ -288,32 +288,32 @@ public class SubmitHelper extends HelperBase {
         EntityDataBase entity = new EntityDataBase();
         String prototypeName = entity.fakerRU.lorem().sentence();
         String productIndication = entity.fakerRU.lorem().sentence();
-        type(By.xpath("//textarea[contains(@id, 'dgnNameInv')]"), prototypeName);
-        type(By.xpath("//textarea[contains(@id, 'dgnNameProduct')]"), productIndication);
+        type(By.xpath("//textarea[contains(@id, 'dgnNameInv')]"), prototypeName, true);
+        type(By.xpath("//textarea[contains(@id, 'dgnNameProduct')]"), productIndication, true);
         randomOptionPicker(By.xpath("//select[contains(@id, 'selectLocSubCls')]"));
         File[] listOfFile = getListOfFiles(getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/prototype_picture"));
         for (int i = 1; i <= 7; i++) {
             String selectLocator = String.format("(//select[count(option)=8])[%s]", i);
-            optionPicker(By.xpath(selectLocator), i);
+            optionPicker(By.xpath(selectLocator), i, true);
         }
         for (int i = 1; i <= 7; i++) {
             String uploadLocator = String.format("(//div[contains(@id, 'upload%s')]//input)[1]", i);
-            fileUpload(By.xpath(uploadLocator), listOfFile[i - 1].getAbsolutePath());
+            fileUpload(By.xpath(uploadLocator), listOfFile[i - 1].getAbsolutePath(), true);
         }
-        fileUpload(By.xpath("//div[contains(@id, 'upload8')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/3d_model.STEP"));
-        fileUpload(By.xpath("//div[contains(@id, 'upload9')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/чертеж_общего_вид_изд.jpg"));
-        fileUpload(By.xpath("//div[contains(@id, 'upload10')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/конфекционная_карта.pdf"));
-        fileUpload(By.xpath("//div[contains(@id, 'upload11')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/описание_пром_образца.pdf"));
-        click(By.cssSelector("input[value='Далее']"));
+        fileUpload(By.xpath("//div[contains(@id, 'upload8')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/3d_model.STEP"), true);
+        fileUpload(By.xpath("//div[contains(@id, 'upload9')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/чертеж_общего_вид_изд.jpg"), true);
+        fileUpload(By.xpath("//div[contains(@id, 'upload10')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/конфекционная_карта.pdf"), true);
+        fileUpload(By.xpath("//div[contains(@id, 'upload11')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/описание_пром_образца.pdf"), true);
+        click(By.cssSelector("input[value='Далее']"), true);
     }
 
     /**
      * Метод заполняет раздел №8 "Расчет пошлин" заявки на ПО
      */
     protected void fillTaxFormIndustrial() {
-        click(By.xpath("(//input[contains(@id, 'cbDuty')])[1]"));
-        click(By.cssSelector("input[value='payment-document']"));
-        fileUpload(By.xpath("//span[contains(@id, 'uploadGroup')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invetion/пп_об_оплате_гп.pdf"));
+        click(By.xpath("(//input[contains(@id, 'cbDuty')])[1]"), true);
+        click(By.cssSelector("input[value='payment-document']"), true);
+        fileUpload(By.xpath("//span[contains(@id, 'uploadGroup')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invetion/пп_об_оплате_гп.pdf"), true);
     }
 
 

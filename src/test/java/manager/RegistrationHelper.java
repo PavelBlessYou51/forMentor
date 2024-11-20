@@ -21,7 +21,7 @@ public class RegistrationHelper extends HelperBase {
      * Метод для перехода на страницу с формой регистрации
      */
     public void goToRegisterPage() {
-        click(By.xpath("//a[contains(text(), 'Регистрация')]"));
+        click(By.xpath("//a[contains(text(), 'Регистрация')]"), true);
     }
 
     /**
@@ -30,19 +30,19 @@ public class RegistrationHelper extends HelperBase {
     public void fillRegistrationFormForPerson() throws InterruptedException {
         goToRegisterPage();
         PersonData person = new PersonData();
-        optionPicker(By.id("form:j_idt258:j_idt262"), getRandomInt(3));
-        optionPicker(By.name("form:j_idt204"), getRandomInt(8));
-        type(By.name("form:j_idt224"), person.surname);
-        type(By.name("form:j_idt228"), person.name);
-        type(By.name("form:j_idt232"), person.patronymic);
-        type(By.id("form:email"), person.email);
-        type(By.id("form:emailToConfirm"), person.email);
-        type(By.name("form:j_idt244"), person.passport);
-        type(By.id("form:appeal"), person.callTo);
-        type(By.name("form:j_idt272"), person.postCode);
-        type(By.name("form:j_idt276"), person.address);
-        type(By.name("form:j_idt280"), person.phoneNumber);
-        click(By.id("form:btnSelfRegistrationUser"));
+        optionPicker(By.id("form:j_idt258:j_idt262"), getRandomInt(3), false);
+        optionPicker(By.name("form:j_idt204"), getRandomInt(8), false);
+        type(By.name("form:j_idt224"), person.surname, false);
+        type(By.name("form:j_idt228"), person.name, false);
+        type(By.name("form:j_idt232"), person.patronymic, false);
+        type(By.id("form:email"), person.email, false);
+        type(By.id("form:emailToConfirm"), person.email, false);
+        type(By.name("form:j_idt244"), person.passport, false);
+        type(By.id("form:appeal"), person.callTo, false);
+        type(By.name("form:j_idt272"), person.postCode, false);
+        type(By.name("form:j_idt276"), person.address, false);
+        type(By.name("form:j_idt280"), person.phoneNumber, false);
+        click(By.id("form:btnSelfRegistrationUser"), false);
     }
 
     /**
@@ -51,21 +51,21 @@ public class RegistrationHelper extends HelperBase {
     public void fillRegistrationFormForOrganisation() throws InterruptedException {
         goToRegisterPage();
         OrganisationData oraganisation = new OrganisationData();
-        optionPicker(By.id("form:radioPanelId"), 2);
-        optionPicker(By.id("form:j_idt258:j_idt262"), getRandomInt(3));
-        optionPicker(By.name("form:j_idt204"), getRandomInt(8));
-        type(By.name("form:j_idt224"), oraganisation.surname);
-        type(By.name("form:j_idt228"), oraganisation.name);
-        type(By.name("form:j_idt232"), oraganisation.patronymic);
-        type(By.id("form:email"), oraganisation.email);
-        type(By.id("form:emailToConfirm"), oraganisation.email);
-        type(By.name("form:j_idt249"), oraganisation.position);
-        type(By.name("form:j_idt254"), oraganisation.organisationName);
-        type(By.id("form:appeal"), oraganisation.callTo);
-        type(By.name("form:j_idt272"), oraganisation.postCode);
-        type(By.name("form:j_idt276"), oraganisation.address);
-        type(By.name("form:j_idt280"), oraganisation.phoneNumber);
-        click(By.id("form:btnSelfRegistrationUser"));
+        optionPicker(By.id("form:radioPanelId"), 2, false);
+        optionPicker(By.id("form:j_idt258:j_idt262"), getRandomInt(3), false);
+        optionPicker(By.name("form:j_idt204"), getRandomInt(8), false);
+        type(By.name("form:j_idt224"), oraganisation.surname, false);
+        type(By.name("form:j_idt228"), oraganisation.name, false);
+        type(By.name("form:j_idt232"), oraganisation.patronymic, false);
+        type(By.id("form:email"), oraganisation.email, false);
+        type(By.id("form:emailToConfirm"), oraganisation.email, false);
+        type(By.name("form:j_idt249"), oraganisation.position, false);
+        type(By.name("form:j_idt254"), oraganisation.organisationName, false);
+        type(By.id("form:appeal"), oraganisation.callTo, false);
+        type(By.name("form:j_idt272"), oraganisation.postCode, false);
+        type(By.name("form:j_idt276"), oraganisation.address, false);
+        type(By.name("form:j_idt280"), oraganisation.phoneNumber, false);
+        click(By.id("form:btnSelfRegistrationUser"), false);
     }
 
     /**
@@ -76,19 +76,19 @@ public class RegistrationHelper extends HelperBase {
         String regNumber;
         String email;
         PatentAgent patentAgent = new PatentAgent(agentType);
-        optionPicker(By.id("form:radioPanelId"), 1);
+        optionPicker(By.id("form:radioPanelId"), 1, false);
         if ("industrial".equals(agentType)) {
-            click(By.id("form:certificationTypeRadio:1"));
+            click(By.id("form:certificationTypeRadio:1"), false);
             regNumber = patentAgent.agentRegNumberIndustrialdesign[getRandomInt(3)];
         } else {
             regNumber = patentAgent.agentRegNumberInvention[getRandomInt(3)];
         }
-        click(By.name("form:j_idt218"));
-        type(By.name("form:j_idt218"), regNumber);
-        click(By.id("form:btnCheckUser"));
+        click(By.name("form:j_idt218"), false);
+        type(By.name("form:j_idt218"), regNumber, false);
+        click(By.id("form:btnCheckUser"), false);
         email = getElementAttrValue(By.id("form:email"), "value");
-        type(By.id("form:emailToConfirm"), email);
-        click(By.id("form:btnSelfRegistrationUser"));
+        type(By.id("form:emailToConfirm"), email, false);
+        click(By.id("form:btnSelfRegistrationUser"), false);
     }
 
     /**
