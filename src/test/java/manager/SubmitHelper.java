@@ -54,7 +54,7 @@ public class SubmitHelper extends HelperBase {
     /**
      * Метод подает заявку на ПО
      */
-    public String sendIndustrialApplication() throws InterruptedException {
+    public String sendIndustrialApplication(int countOfSamples) throws InterruptedException {
         selectSphereOfApplication("industrial");
         selectTypeOfApplication("ind_usualApp");
         fillIndustrialCommonInfoPart();
@@ -64,7 +64,7 @@ public class SubmitHelper extends HelperBase {
         click(By.cssSelector("input[value='Далее']"), true);
         click(By.cssSelector("input[value='Далее']"), true);
         fillDocumentForm("industrial");
-        fillIndustrialPrototype();
+        fillIndustrialPrototype(countOfSamples);
         fillTaxFormIndustrial();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -158,7 +158,7 @@ public class SubmitHelper extends HelperBase {
      */
     protected void fillDocumentForm(String appType) {
         if ("invention".equals(appType)) {
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt813:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/oписание.pdf"), true);
+            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt813:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
             fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt835:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
             fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt901:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
             fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt1062:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"), true);
@@ -204,12 +204,12 @@ public class SubmitHelper extends HelperBase {
     protected void fillPersonData(String personType) {
         PersonData person = new PersonData();
         optionPicker(By.cssSelector("select[class='application-input']"), 1, true);
+        type(By.xpath("//input[contains(@id, 'country')]"), person.countryCode, true);
         if ("applicant".equals(personType)) {
             type(By.xpath("//input[contains(@id, 'idTown')]"), person.postCode, true);
             type(By.xpath("//input[contains(@id, 'phone')]"), person.phoneNumber, true);
         }
         type(By.xpath("//input[contains(@id, 'appeal')]"), person.callTo, true);
-        type(By.xpath("//input[contains(@id, 'country')]"), person.countryCode, true);
         type(By.xpath("//textarea[contains(@id, 'address')]"), person.address, true);
         type(By.xpath("//textarea[contains(@id, 'name')]"), person.surname, true);
         type(By.xpath("//input[contains(@id, 'firstName')]"), person.name, true);
@@ -284,26 +284,31 @@ public class SubmitHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Промышленные образцы" заявки на ПО
      */
-    protected void fillIndustrialPrototype() {
-        EntityDataBase entity = new EntityDataBase();
-        String prototypeName = entity.fakerRU.lorem().sentence();
-        String productIndication = entity.fakerRU.lorem().sentence();
-        type(By.xpath("//textarea[contains(@id, 'dgnNameInv')]"), prototypeName, true);
-        type(By.xpath("//textarea[contains(@id, 'dgnNameProduct')]"), productIndication, true);
-        randomOptionPicker(By.xpath("//select[contains(@id, 'selectLocSubCls')]"));
-        File[] listOfFile = getListOfFiles(getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/prototype_picture"));
-        for (int i = 1; i <= 7; i++) {
-            String selectLocator = String.format("(//select[count(option)=8])[%s]", i);
-            optionPicker(By.xpath(selectLocator), i, true);
+    protected void fillIndustrialPrototype(int countOfSamples) {
+        for (int l = 0; l < countOfSamples; l++) {
+            if (l >= 1) {
+                click(By.cssSelector("input[value='Добавить новый промышленный образец']"), true);
+            }
+            EntityDataBase entity = new EntityDataBase();
+            String prototypeName = entity.fakerRU.lorem().sentence();
+            String productIndication = entity.fakerRU.lorem().sentence();
+            type(By.xpath(String.format("//textarea[contains(@id, 'repeatDesign:%s:design:dgnNameInv')]", l)), prototypeName, true);
+            type(By.xpath(String.format("//textarea[contains(@id, 'repeatDesign:%s:design:dgnNameProduct')]", l)), productIndication, true);
+            randomOptionPicker(By.xpath(String.format("//select[contains(@id, 'repeatDesign:%s:design:selectLocSubCls')]", l)));
+            File[] listOfFile = getListOfFiles(getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/prototype_picture"));
+            for (int i = 1; i <= 7; i++) {
+                String selectLocator = String.format("(//select[contains(@id, 'repeatDesign:%s:design')][count(option)=8][not(contains(@id, 'selectLocSubCls'))])[%s]", l, i);
+                optionPicker(By.xpath(selectLocator), i, true);
+            }
+            for (int k = 1; k <= 7; k++) {
+                String uploadLocator = String.format("(//div[contains(@id, 'upload%s')][contains(@id, 'repeatDesign:%s:design')]//input)[1]", k, l);
+                fileUpload(By.xpath(uploadLocator), listOfFile[k - 1].getAbsolutePath(), true);
+            }
+            fileUpload(By.xpath(String.format("//div[contains(@id, 'upload8')][contains(@id, 'repeatDesign:%s:design')]//input", l)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/3d_model.STEP"), true);
+            fileUpload(By.xpath(String.format("//div[contains(@id, 'upload9')][contains(@id, 'repeatDesign:%s:design')]//input", l)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/чертеж_общего_вид_изд.jpg"), true);
+            fileUpload(By.xpath(String.format("//div[contains(@id, 'upload10')][contains(@id, 'repeatDesign:%s:design')]//input", l)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/конфекционная_карта.pdf"), true);
+            fileUpload(By.xpath(String.format("//div[contains(@id, 'upload11')][contains(@id, 'repeatDesign:%s:design')]//input", l)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/описание_пром_образца.pdf"), true);
         }
-        for (int i = 1; i <= 7; i++) {
-            String uploadLocator = String.format("(//div[contains(@id, 'upload%s')]//input)[1]", i);
-            fileUpload(By.xpath(uploadLocator), listOfFile[i - 1].getAbsolutePath(), true);
-        }
-        fileUpload(By.xpath("//div[contains(@id, 'upload8')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/3d_model.STEP"), true);
-        fileUpload(By.xpath("//div[contains(@id, 'upload9')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/чертеж_общего_вид_изд.jpg"), true);
-        fileUpload(By.xpath("//div[contains(@id, 'upload10')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/конфекционная_карта.pdf"), true);
-        fileUpload(By.xpath("//div[contains(@id, 'upload11')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/описание_пром_образца.pdf"), true);
         click(By.cssSelector("input[value='Далее']"), true);
     }
 
@@ -313,7 +318,7 @@ public class SubmitHelper extends HelperBase {
     protected void fillTaxFormIndustrial() {
         click(By.xpath("(//input[contains(@id, 'cbDuty')])[1]"), true);
         click(By.cssSelector("input[value='payment-document']"), true);
-        fileUpload(By.xpath("//span[contains(@id, 'uploadGroup')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invetion/пп_об_оплате_гп.pdf"), true);
+        fileUpload(By.xpath("//span[contains(@id, 'uploadGroup')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/пп_об_оплате_гп.pdf"), true);
     }
 
 
