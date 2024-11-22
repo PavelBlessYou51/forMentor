@@ -26,7 +26,7 @@ public class SubmitApplicationInventionTests extends TestBase {
     @Test
     public void SubmitInventionApplicationWithPetitionTest () throws InterruptedException {
         app.session().login("ProkoshevPV", "qweR2304");
-        String sendingConfirm = app.submitter().sendApplicationWithPetition();
+        String sendingConfirm = app.submitter().sendInventionApplicationWithPetition();
         assertEquals("Пакет успешно подписан.", sendingConfirm);
     }
 

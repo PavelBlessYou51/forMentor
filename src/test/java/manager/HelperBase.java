@@ -103,14 +103,23 @@ public class HelperBase {
      * Метод для выбора элементов выпадающего списка типа select по индексу
      */
     protected void optionPicker(By locator, int index, boolean hasDelay) {
-        Select option = new Select(manager.driver.findElement(locator));
-        option.selectByIndex(index);
-        try {
-            TimeUnit.MILLISECONDS.sleep(400);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (hasDelay) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(400);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
+        for (var i = 1; i <= 10; i++) {
+            try {
+                Select option = new Select(manager.driver.findElement(locator));
+                option.selectByIndex(index);
+                return;
+            } catch (StaleElementReferenceException exception) {
+                System.out.println("Try to click, but get StaleElementReferenceException");
 
+            }
+        }
     }
 
     /**
@@ -174,9 +183,6 @@ public class HelperBase {
      */
     protected String getAbsolutePathToFile(String file) {
         String absolutePath = Paths.get(file).toAbsolutePath().toString();
-        File f = new File(absolutePath);
-        System.out.println(f.exists());
-        System.out.println(absolutePath);
         return absolutePath;
     }
 
@@ -195,6 +201,11 @@ public class HelperBase {
         File folder = new File(directoryPath);
         File[] listOfFiles = folder.listFiles();
         return listOfFiles;
+    }
+
+    protected void keyBoardTypes(Keys keyType) {
+        Actions action = new Actions(manager.driver);
+        action.sendKeys(keyType).perform();
     }
 
 
