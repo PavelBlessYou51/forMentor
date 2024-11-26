@@ -31,7 +31,7 @@ public class ApplicationManager {
     }
 
     /**
-     * Возвращает метод-помощник для взаимодействия с функционалом авторизации
+     * Возвращает класс-помощник для взаимодействия с функционалом авторизации
      */
     public LoginHelper session() {
         if (session == null) {
@@ -41,7 +41,7 @@ public class ApplicationManager {
     }
 
     /**
-     * Возвращает метод-помощник для взаимодействия с функционалом регистрации
+     * Возвращает класс-помощник для взаимодействия с функционалом регистрации
      */
     public RegistrationHelper registrator() {
         registrator = new RegistrationHelper(this);
@@ -50,7 +50,7 @@ public class ApplicationManager {
 
 
     /**
-     * Возвращает метод-помощник для взаимодействия с функционалом подачи заявок
+     * Возвращает класс-помощник для взаимодействия с функционалом подачи заявок
      */
     public SubmitHelper submitter() {
         submitter = new SubmitHelper(this);

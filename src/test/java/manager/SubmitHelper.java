@@ -8,6 +8,9 @@ import org.openqa.selenium.WebElement;
 
 import java.io.File;
 
+/**
+ * Класс-помощник. Содержит методы, связанные с подачей заявок
+ */
 public class SubmitHelper extends HelperBase {
 
     SubmitHelper(ApplicationManager manager) {
@@ -59,7 +62,6 @@ public class SubmitHelper extends HelperBase {
         selectSphereOfApplication("industrial");
         selectTypeOfApplication("ind_usualApp");
         fillIndustrialCommonInfoPart();
-        click(By.cssSelector("input[value='Далее']"), true);
         addNewApplicant();
         addNewInventor();
         click(By.cssSelector("input[value='Далее']"), true);
@@ -93,6 +95,26 @@ public class SubmitHelper extends HelperBase {
     }
 
     /**
+     * Метод подает PCT заявку
+     */
+    public String sendInventionPCTApplication() throws InterruptedException {
+        selectSphereOfApplication("invention");
+        selectTypeOfApplication("PCT");
+        fillPCTCommonInfoPart();
+        addNewApplicant();
+        addNewInventor();
+        click(By.cssSelector("input[value='Далее']"), false);
+        click(By.cssSelector("input[value='Далее']"), false);
+        fillPCTEditionalInfo();
+        fillPCTDocumentForm();
+        fillTaxFormInvention();
+        signInApplication();
+        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        return sendingConfirmation;
+    }
+
+
+    /**
      * Метод выбирает вид заявки
      */
     protected void selectSphereOfApplication(String typeSphere) {
@@ -112,6 +134,8 @@ public class SubmitHelper extends HelperBase {
             click(By.cssSelector("input[value='Подать евразийскую заявку']"), true);
         } else if ("ind_usualApp".equals(typeApp)) {
             click(By.cssSelector("input[value='Подать заявку']"), true);
+        } else if ("PCT".equals(typeApp)) {
+            click(By.cssSelector("input[value='Подать заявку EAPO-PCT']"), false);
         }
 
     }
@@ -199,8 +223,8 @@ public class SubmitHelper extends HelperBase {
      */
     protected void fillTaxFormInvention() {
         chooseDiscount("1");
-        click(By.id("form:j_idt1194:j_idt1227:j_idt1229:cbDuty001"), true);
-        click(By.id("form:j_idt1194:j_idt1512:j_idt1517:1"), true);
+        click(By.xpath("//input[contains(@id, 'cbDuty001')]"), true);
+        click(By.cssSelector("input[value='payment-document']"), true);
         fileUpload(By.className("rf-fu-inp"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/пп_об_оплате_гп.pdf"), true);
 
     }
@@ -302,6 +326,7 @@ public class SubmitHelper extends HelperBase {
     protected void fillIndustrialCommonInfoPart() {
         type(By.className("application-input"), "N" + getRandomInt(999), true);
         optionPicker(By.className("application-select-text"), getRandomInt(19), true);
+        click(By.cssSelector("input[value='Далее']"), true);
     }
 
     /**
@@ -373,7 +398,43 @@ public class SubmitHelper extends HelperBase {
         fileUpload(By.xpath("//span[contains(@id, 'uploadGroup')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/пп_об_оплате_гп.pdf"), true);
     }
 
+    /**
+     * Метод заполняет раздел №1 "Общая информация" PCT заявки
+     */
+    protected void fillPCTCommonInfoPart() {
+        EntityDataBase entity = new EntityDataBase();
+        String inventionName = entity.fakerRU.lorem().sentence();
+        type(By.xpath("//input[contains(@id, 'numInv')]"), "N" + getRandomInt(999), false);
+        type(By.xpath("//textarea[contains(@id, 'nameInv')]"), inventionName, false);
+        type(By.xpath("//input[contains(@id, 'pctNumber')]"), entity.countryCode + "2024/" + entity.fakerRU.number().digits(6), true);
+        keyBoardTypes(Keys.RETURN);
+        click(By.xpath("//input[contains(@id, 'PctDateInputDate')]"), true);
+        click(By.xpath("//div[contains(text(), 'Today')]"), true);
+        click(By.cssSelector("input[value='Далее']"), false);
+
+    }
+
+    /**
+     * Метод заполняет раздел №6 "Дополнительная информация" PCT заявки
+     */
+    protected void fillPCTEditionalInfo() {
+        click(By.xpath("//td[contains(text(), 'поданного')]/input[1]"), true);
+        click(By.xpath("//td[contains(text(), 'поданной')]/input[1]"), true);
+        click(By.xpath("//td[contains(text(), 'поданных')]/input[1]"), true);
+        click(By.cssSelector("input[value='Далее']"), false);
+    }
+
+    /**
+     * Метод заполняет раздел №7 "Документы" PCT заявки
+     */
+    protected void fillPCTDocumentForm() {
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload1')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Описание изобретения.pdf"), true);
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload3')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Формула изборетения.pdf"), true);
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload6')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Чертежи.pdf"), true);
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload19')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Верстак 3D-модель.STEP"), true);
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload12')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Реферат.pdf"), true);
+        click(By.cssSelector("input[value='Далее']"), false);
+
+    }
 
 }
-
-

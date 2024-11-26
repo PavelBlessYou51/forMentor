@@ -37,11 +37,17 @@ public class EntityDataBase {
         this.phoneNumber = "+" + fakerRU.number().digits(10);
     }
 
+    /**
+     * Метод устанавливает случайный код страны
+     */
     private void setCountryCode() {
         String[] listOfCountryCode = {"AM", "AZ", "BY", "KG", "KZ", "RU", "TJ", "TM"};
         countryCode = listOfCountryCode[fakerRU.number().numberBetween(0, 7)];
     }
 
+    /**
+     * Метод корректирует индекс в зависимости от установленного кода страны
+     */
     private void setPostCode() {
         if ("AM".equals(countryCode)) {
             postCode = fakerRU.number().digits(4);

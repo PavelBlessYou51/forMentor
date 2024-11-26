@@ -7,19 +7,14 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.List;
 import java.util.Random;
-
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static org.apache.commons.lang3.ArrayUtils.isEmpty;
-
 /**
- * Базовый класс-родитель для всех методов-помощников. Содержит общие методы для взаимодействия с элементами страниц.
+ * Базовый класс-родитель для всех классов-помощников. Содержит общие методы для взаимодействия с элементами страниц.
  */
 public class HelperBase {
     protected final ApplicationManager manager;
@@ -33,7 +28,7 @@ public class HelperBase {
 
     /**
      * Метод для заполнения полей символами.
-     * Метод адаптирован под обновление страницы при заполнении поле различных форм.
+     * Метод адаптирован под обновление страницы при заполнении полей различных форм.
      */
     protected void type(By locator, String text, boolean hasDelay) {
         for (var i = 1; i <= 3; i++) {
@@ -56,7 +51,7 @@ public class HelperBase {
 
     /**
      * Метод осуществляет ЛКМ по веб-элементу.
-     * Метод адаптирован под обновление страницы при заполнении поле различных форм.
+     * Метод адаптирован под обновление страницы при заполнении полей различных форм.
      */
     protected void click(By locator, boolean hasDelay) {
         for (var i = 1; i <= 10; i++) {
@@ -179,7 +174,7 @@ public class HelperBase {
     }
 
     /**
-     * Метод возвращает абсолютный путь к файлу по относительному
+     * Метод возвращает абсолютный путь к файлу по относительному пути
      */
     protected String getAbsolutePathToFile(String file) {
         String absolutePath = Paths.get(file).toAbsolutePath().toString();
@@ -203,6 +198,9 @@ public class HelperBase {
         return listOfFiles;
     }
 
+    /**
+     * Метод имитирует нажатие клавиш на клавиатуре
+     */
     protected void keyBoardTypes(Keys keyType) {
         Actions action = new Actions(manager.driver);
         action.sendKeys(keyType).perform();

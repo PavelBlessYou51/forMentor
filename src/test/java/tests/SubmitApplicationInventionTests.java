@@ -30,6 +30,18 @@ public class SubmitApplicationInventionTests extends TestBase {
         assertEquals("Пакет успешно подписан.", sendingConfirm);
     }
 
+    /**
+     * Тест PCT заявки
+     */
+    @Test
+    public void SubmitInventionPCTApplicationTest () throws InterruptedException {
+        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        String sendingConfirm = app.submitter().sendInventionPCTApplication();
+        assertEquals("Пакет успешно подписан.", sendingConfirm);
+    }
+
+
+
 
 }
 
