@@ -206,6 +206,23 @@ public class HelperBase {
         action.sendKeys(keyType).perform();
     }
 
+    /**
+     * Метод получает и возвращает номер отправленной заявки
+     */
+    protected String getNumberOfApplication() {
+        String rawMessage = getTextFromElement(By.xpath("//span[contains(text(), 'Номер заявки')]"));
+        String appNumber = rawMessage.split(" ")[1];
+        return appNumber;
+    }
+
+//    protected void applicationWriter(String fileName, String ) {
+//
+//    }
+
+
+
+
+
 
 }
 

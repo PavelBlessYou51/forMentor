@@ -81,7 +81,7 @@ public class SubmitHelper extends HelperBase {
         selectSphereOfApplication("industrial");
         selectTypeOfApplication("ind_usualApp");
         fillIndustrialCommonInfoPart();
-        click(By.cssSelector("input[value='Далее']"), true);
+//        click(By.cssSelector("input[value='Далее']"), true);
         addNewApplicant();
         addNewInventor();
         click(By.cssSelector("input[value='Далее']"), true);
@@ -176,7 +176,6 @@ public class SubmitHelper extends HelperBase {
             fillPersonData("applicant");
             keyBoardTypes(Keys.RETURN);
             click(By.cssSelector("input[value='Далее']"), true);
-//            click(By.cssSelector("input[value='Далее']"), true);
             hasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Заявители')]"));
             if (hasHeader) {
                 deletePerson();
@@ -192,7 +191,7 @@ public class SubmitHelper extends HelperBase {
         while (HasHeader) {
             click(By.xpath("//input[contains(@value, 'Добавить нового')]"), true);
             fillPersonData("inventor");
-            click(By.cssSelector("input[value='Далее']"), true);
+            keyBoardTypes(Keys.RETURN);
             click(By.cssSelector("input[value='Далее']"), true);
             HasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Документы')]"));
             if (HasHeader) {
@@ -207,16 +206,19 @@ public class SubmitHelper extends HelperBase {
      */
     protected void fillDocumentForm(String appType) {
         if ("invention".equals(appType)) {
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt813:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt835:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt901:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
-            fileUpload(By.cssSelector("span[id='form:j_idt811:j_idt1062:uploadGroup'] input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"), true);
+            fileUpload(By.xpath("(//div[contains(@id, 'upload1')]//input)[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
+            fileUpload(By.xpath("//div[contains(@id, 'upload2')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
+            fileUpload(By.xpath("//div[contains(@id, 'upload4')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
+            fileUpload(By.xpath("//div[contains(@id, 'upload11')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"), true);
+            uploadRandom3DFile();
         } else if ("industrial".equals(appType)) {
             fileUpload(By.xpath("//div[contains(@id, 'upload16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
             fileUpload(By.xpath("//div[contains(@id, 'upload18')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"), true);
         }
         click(By.cssSelector("input[value='Далее']"), true);
     }
+
+
 
     /**
      * Метод заполняет раздел №8 "Расчет пошлин" заявки на изобретения
@@ -433,8 +435,15 @@ public class SubmitHelper extends HelperBase {
         fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload6')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Чертежи.pdf"), true);
         fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload19')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Верстак 3D-модель.STEP"), true);
         fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload12')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Реферат.pdf"), true);
+
         click(By.cssSelector("input[value='Далее']"), false);
 
+    }
+
+    protected void uploadRandom3DFile() {
+        File[] listOf3DFile = getListOfFiles(getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/3D_formats"));
+        String pathTo3DFile = listOf3DFile[getRandomInt(listOf3DFile.length - 1)].getPath();
+        fileUpload(By.xpath("//div[contains(@id, 'upload14')]//input"), getAbsolutePathToFile(pathTo3DFile), true);
     }
 
 }

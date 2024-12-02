@@ -36,7 +36,7 @@ public class RegistrationHelper extends HelperBase {
         type(By.name("form:j_idt224"), person.surname, true);
         type(By.name("form:j_idt228"), person.name, false);
         type(By.name("form:j_idt232"), person.patronymic, false);
-        type(By.id("form:email"), person.email, true);
+        type(By.cssSelector("input[id='form:email']"), person.email, true);
         type(By.id("form:emailToConfirm"), person.email, true);
         type(By.name("form:j_idt244"), person.passport, false);
         type(By.id("form:appeal"), person.callTo, false);
@@ -53,9 +53,8 @@ public class RegistrationHelper extends HelperBase {
     public void fillRegistrationFormForOrganisation() throws InterruptedException {
         goToRegisterPage();
         OrganisationData oraganisation = new OrganisationData();
-        optionPicker(By.id("form:radioPanelId"), 2, false);
-        optionPicker(By.id("form:j_idt258:j_idt262"), getRandomInt(3), true);
-        optionPicker(By.name("form:j_idt204"), getRandomInt(8), true);
+        optionPicker(By.xpath("//select[contains(@id, 'RadioPanelId')]"), 2, false);
+        optionPicker(By.xpath("//span[contains(@id, 'CountryMenu')]//select"), getRandomInt(8), true);
         type(By.name("form:j_idt224"), oraganisation.surname, false);
         type(By.name("form:j_idt228"), oraganisation.name, false);
         type(By.name("form:j_idt232"), oraganisation.patronymic, true);
@@ -63,6 +62,7 @@ public class RegistrationHelper extends HelperBase {
         type(By.id("form:emailToConfirm"), oraganisation.email, true);
         type(By.name("form:j_idt249"), oraganisation.position, false);
         type(By.name("form:j_idt254"), oraganisation.organisationName, false);
+        optionPicker(By.id("form:j_idt258:j_idt262"), getRandomInt(3), true);
         type(By.id("form:appeal"), oraganisation.callTo, false);
         type(By.name("form:j_idt272"), oraganisation.postCode, false);
         type(By.name("form:j_idt276"), oraganisation.address, false);
@@ -78,7 +78,7 @@ public class RegistrationHelper extends HelperBase {
         String regNumber;
         String email;
         PatentAgent patentAgent = new PatentAgent(agentType);
-        optionPicker(By.id("form:radioPanelId"), 1, false);
+        optionPicker(By.xpath("//select[contains(@id, 'RadioPanel')]"), 1, false);
         if ("industrial".equals(agentType)) {
             click(By.id("form:certificationTypeRadio:1"), false);
             regNumber = patentAgent.agentRegNumberIndustrialdesign[getRandomInt(3)];
