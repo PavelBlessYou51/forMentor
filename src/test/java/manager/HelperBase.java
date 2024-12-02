@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
+import java.io.*;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
@@ -100,7 +100,7 @@ public class HelperBase {
     protected void optionPicker(By locator, int index, boolean hasDelay) {
         if (hasDelay) {
             try {
-                TimeUnit.MILLISECONDS.sleep(400);
+                TimeUnit.MILLISECONDS.sleep(450);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -158,7 +158,7 @@ public class HelperBase {
         element.sendKeys(path);
         if (hasDelay) {
             try {
-                TimeUnit.MILLISECONDS.sleep(400);
+                TimeUnit.MILLISECONDS.sleep(450);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -206,22 +206,48 @@ public class HelperBase {
         action.sendKeys(keyType).perform();
     }
 
+
     /**
-     * Метод получает и возвращает номер отправленной заявки
+     * Метод записывает номер заявки в указанный файл
      */
-    protected String getNumberOfApplication() {
-        String rawMessage = getTextFromElement(By.xpath("//span[contains(text(), 'Номер заявки')]"));
-        String appNumber = rawMessage.split(" ")[1];
+    protected void applicationNumbersWriter(String path) {
+        String absPath = getAbsolutePathToFile(path);
+        fileCreator(absPath);
+        String appNumber = extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
+        try {
+            FileWriter fw = new FileWriter(path, true);
+            fw.write(appNumber + "\n");
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    /**
+     * Метод извлекает номер заявки
+     */
+    protected String extractAppNumber(By locator) {
+        String rawElementContent = getTextFromElement(locator);
+        String appNumber = rawElementContent.split(" ")[2];
         return appNumber;
     }
 
-//    protected void applicationWriter(String fileName, String ) {
-//
-//    }
+    /**
+     * Метод проверяет наличие файла по указанному пути и создает его, если файл отсутствует
+     */
+    protected void fileCreator(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
-
-
-
+    }
 
 
 }

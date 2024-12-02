@@ -33,6 +33,7 @@ public class SubmitHelper extends HelperBase {
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
         return sendingConfirmation;
     }
 
@@ -52,6 +53,7 @@ public class SubmitHelper extends HelperBase {
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
         return sendingConfirmation;
     }
 
@@ -71,6 +73,7 @@ public class SubmitHelper extends HelperBase {
         fillTaxFormIndustrial();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
         return sendingConfirmation;
     }
 
@@ -91,6 +94,7 @@ public class SubmitHelper extends HelperBase {
         fillTaxFormIndustrial();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
         return sendingConfirmation;
     }
 
@@ -110,6 +114,7 @@ public class SubmitHelper extends HelperBase {
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
         return sendingConfirmation;
     }
 
