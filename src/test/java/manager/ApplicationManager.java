@@ -13,6 +13,7 @@ public class ApplicationManager {
     private LoginHelper session;
     private RegistrationHelper registrator;
     private SubmitHelper submitter;
+    private SaveAppHelper sender;
 
     /**
      * Инициализатор браузера. Масштабирует окно браузера на максимальный размер экрана
@@ -55,6 +56,14 @@ public class ApplicationManager {
     public SubmitHelper submitter() {
         submitter = new SubmitHelper(this);
         return submitter;
+    }
+
+    /**
+     * Возвращает класс-помощник для взаимодействия с функционалом сохранения заявок и досылок в Soprano
+     */
+    public SaveAppHelper sender() {
+        sender = new SaveAppHelper(this);
+        return sender;
     }
 
 

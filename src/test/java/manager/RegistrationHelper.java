@@ -35,7 +35,7 @@ public class RegistrationHelper extends HelperBase {
         optionPicker(By.name("form:j_idt204"), getRandomInt(8), true);
         type(By.name("form:j_idt224"), person.surname, true);
         type(By.name("form:j_idt228"), person.name, false);
-        type(By.name("form:j_idt232"), person.patronymic, false);
+        type(By.name("form:j_idt232"), person.patronymic, true);
         type(By.cssSelector("input[id='form:email']"), person.email, true);
         type(By.id("form:emailToConfirm"), person.email, true);
         type(By.name("form:j_idt244"), person.passport, false);

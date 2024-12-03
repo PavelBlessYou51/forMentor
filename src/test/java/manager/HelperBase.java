@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
@@ -98,20 +99,20 @@ public class HelperBase {
      * Метод для выбора элементов выпадающего списка типа select по индексу
      */
     protected void optionPicker(By locator, int index, boolean hasDelay) {
-        if (hasDelay) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(450);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
         for (var i = 1; i <= 10; i++) {
             try {
                 Select option = new Select(manager.driver.findElement(locator));
+                if (hasDelay) {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(400);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 option.selectByIndex(index);
                 return;
             } catch (StaleElementReferenceException exception) {
-                System.out.println("Try to click, but get StaleElementReferenceException");
+                System.out.println("Try to pick the option, but get StaleElementReferenceException");
 
             }
         }
@@ -155,12 +156,20 @@ public class HelperBase {
      */
     protected void fileUpload(By locator, String path, boolean hasDelay) {
         WebElement element = presenceOfElement(locator);
-        element.sendKeys(path);
-        if (hasDelay) {
+        for (int i = 0; i < 5; i++) {
             try {
-                TimeUnit.MILLISECONDS.sleep(450);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                element.sendKeys(path);
+                if (hasDelay) {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(400);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return;
+            } catch (StaleElementReferenceException exception) {
+                System.out.println("Try to upload, but get StaleElementReferenceException");
+
             }
         }
     }
@@ -249,7 +258,35 @@ public class HelperBase {
 
     }
 
+    /**
+     * Метод номера заявок из указанного файла
+     */
+    protected List<String> applicationNumbersReader(String path) {
+        try {
+            List<String> numbers = Files.readAllLines(Paths.get(path).toAbsolutePath());
+            return numbers;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        return null;
+    }
+
+
+    /**
+     * Метод выбирает вид заявки
+     */
+    protected void selectSphereOfApplication(String typeSphere) {
+        if ("invention".equals(typeSphere)) {
+            click(By.xpath("//span[contains(text(), 'Изобретения')]"), true);
+        } else if ("industrial".equals(typeSphere)) {
+            click(By.xpath("//span[contains(text(), 'Промышленные')]"), true);
+        }
+
+    }
 }
+
+
+
 
 

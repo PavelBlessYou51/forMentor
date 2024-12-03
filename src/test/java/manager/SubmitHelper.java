@@ -120,18 +120,6 @@ public class SubmitHelper extends HelperBase {
 
 
     /**
-     * Метод выбирает вид заявки
-     */
-    protected void selectSphereOfApplication(String typeSphere) {
-        if ("invention".equals(typeSphere)) {
-            click(By.xpath("//span[contains(text(), 'Изобретения')]"), true);
-        } else if ("industrial".equals(typeSphere)) {
-            click(By.xpath("//span[contains(text(), 'Промышленные')]"), true);
-        }
-
-    }
-
-    /**
      * Метод выбирает тип заявки
      */
     protected void selectTypeOfApplication(String typeApp) {
