@@ -259,6 +259,16 @@ public class HelperBase {
     }
 
     /**
+     * Метод удаляет все файлы из указанной директории
+     */
+    public void fileDeleter (String path) {
+        File[] listOfFile = getListOfFiles(getAbsolutePathToFile(path));
+        for (File file : listOfFile) {
+            file.delete();
+        }
+    }
+
+    /**
      * Метод номера заявок из указанного файла
      */
     protected List<String> applicationNumbersReader(String path) {
@@ -284,6 +294,7 @@ public class HelperBase {
         }
 
     }
+
 }
 
 
