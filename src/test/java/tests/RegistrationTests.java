@@ -1,5 +1,7 @@
 package tests;
 
+import bd_manager.JdbcManager;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -38,6 +40,16 @@ public class RegistrationTests extends TestBase{
     public void patentAgentRegistration (String agentType) throws InterruptedException {
         app.registrator().fillRegistrationFormForPatentAgent(agentType);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
+
+    }
+
+    /**
+     * Метод удаляет из тестовой БД зарегистрированных патентных поверенных
+     */
+    @AfterAll
+    public static void deletePatientAgents() {
+        JdbcManager jdbc = new JdbcManager();
+        JdbcManager.pationAgentDeleter();
 
     }
 

@@ -94,7 +94,7 @@ public class SubmitAndSaveAppsTests extends TestBase {
         }
 
         /**
-         * Метод удаляет списки файлы со списками заявок после выполнения всех тестов
+         * Метод удаляет списки файлы со списками заявок после выполнения всех тестов во вложенном классе
          */
         @AfterAll
         public static void cleaner() {

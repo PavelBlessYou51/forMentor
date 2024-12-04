@@ -9,15 +9,13 @@ public class JdbcManager {
     }
 
     public static void pationAgentDeleter() {
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.2.75:50000/EAPOFORM", "root", "root");
-             Statement stmt = conn.createStatement();
-        ) {
-            ResultSet rs = stmt.executeQuery("DELETE FROM portaluser WHERE agentid IN (589, 587, 586, 111, 112, 113)");
-            System.out.println(rs);
-            System.out.println("Hello");
-
-
-        } catch (SQLException e) {
+        try {
+            Class.forName("com.ibm.db2.jcc.DB2Driver");
+            Connection conn = DriverManager.getConnection("jdbc:db2://192.168.2.75:50000/EAPOFORM", "db2admin", "Passw0rd");
+            PreparedStatement del = conn.prepareStatement("DELETE FROM portaluser WHERE userid IN ('NechaevMA', 'RykovVV', 'KiselevaTS', 'PogosyanAA', 'SubbotinaLA', 'MarkovcevaDV')");
+            del.execute();
+            conn.close();
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
