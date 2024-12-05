@@ -14,6 +14,7 @@ public class ApplicationManager {
     private RegistrationHelper registrator;
     private SubmitHelper submitter;
     private SaveAppHelper sender;
+    private CertificateHelper pinCode;
 
     /**
      * Инициализатор браузера. Масштабирует окно браузера на максимальный размер экрана
@@ -64,6 +65,14 @@ public class ApplicationManager {
     public SaveAppHelper sender() {
         sender = new SaveAppHelper(this);
         return sender;
+    }
+
+    /**
+     * Возвращает класс-помощник для взаимодействия с функционалом отзыва и выпуска пин-кода
+     */
+    public CertificateHelper pinCode() {
+        pinCode = new CertificateHelper(this);
+        return pinCode;
     }
 
 

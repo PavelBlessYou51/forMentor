@@ -291,6 +291,8 @@ public class HelperBase {
             click(By.xpath("//span[contains(text(), 'Изобретения')]"), true);
         } else if ("industrial".equals(typeSphere)) {
             click(By.xpath("//span[contains(text(), 'Промышленные')]"), true);
+        } else if ("profile".equals(typeSphere)) {
+            click(By.xpath("//span[contains(text(), 'Профиль')]"), true);
         }
 
     }
