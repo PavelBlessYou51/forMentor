@@ -2,15 +2,18 @@ package manager;
 
 import org.openqa.selenium.By;
 
-import java.util.concurrent.TimeUnit;
-
-
+/**
+ * Класс содержит методы для работы с сертификатом пользователя ЕАПО-онлайн
+ */
 public class CertificateHelper extends HelperBase {
 
     public CertificateHelper(ApplicationManager manager) {
         super(manager);
     }
 
+    /**
+     * Метод деактивирует существующий сертификат
+     */
     public String certificateDeactivation() {
         selectSphereOfApplication("profile");
         selectCertificateAction("deactivate");
@@ -19,7 +22,9 @@ public class CertificateHelper extends HelperBase {
         return confirmation;
     }
 
-
+    /**
+     * Метод активирует новый сертификат
+     */
     public String certificateActivation() {
         selectSphereOfApplication("profile");
         selectCertificateAction("activate");
@@ -28,7 +33,9 @@ public class CertificateHelper extends HelperBase {
         return activationConfirm;
     }
 
-
+    /**
+     * Метод переходит в раздел отзыва или выпуска сертификата
+     */
     protected void selectCertificateAction(String action) {
         if ("deactivate".equals(action)) {
             click(By.xpath("//span[contains(text(), 'Отзыв сертификата')]"), true);
@@ -38,11 +45,18 @@ public class CertificateHelper extends HelperBase {
 
     }
 
+    /**
+     * Метод выполняет ввод пин-кода и отзывает сертификат
+     */
     protected void deactivate(String pinCode) {
         type(By.xpath("//input[contains(@id, 'pin-input')]"), pinCode, false);
         click(By.cssSelector("input[value='Отозвать сертификат']"), false);
     }
 
+
+    /**
+     * Метод заполняет форму выпуска нового сертификата и выпускает его
+     */
     protected void fillCirtificateForm(String lastName, String firstName, String patronymic, String email, String pinCode) {
         type(By.xpath("(//input[@class='application-input'])[1]"), lastName, true);
         type(By.xpath("(//input[@class='application-input'])[2]"), firstName, true);
@@ -53,6 +67,10 @@ public class CertificateHelper extends HelperBase {
         click(By.xpath("//input[contains(@id, 'issue-certificate')]"), true);
     }
 
+
+    /**
+     * Метод получает сообщение об успешном выпуске сертификата
+     */
     protected String getActivationConfirm() {
         String rawConfirm = getTextFromElement(By.xpath("//div[contains(text(), 'У вас есть сертификат')]"));
         String confirm = rawConfirm.split(", ")[0].strip();

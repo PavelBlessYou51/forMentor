@@ -7,10 +7,17 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
+/**
+ * Класс содержит тесты отзыва и выпуска сертификата с установленным порядком выполнения
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CertificateTests extends TestBase {
 
 
+    /**
+     * Тест отзыва сертификата
+     */
     @Test
     @Order(1)
     public void certificateDeactivation() {
@@ -19,6 +26,9 @@ public class CertificateTests extends TestBase {
         assertEquals("У вас нет действительного сертификата.", deactivationConfirm);
     }
 
+    /**
+     * Тест выпуска сертификата
+     */
     @Test
     @Order(2)
     public void certificateActivation() {

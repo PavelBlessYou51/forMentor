@@ -49,7 +49,7 @@ public class RegistrationTests extends TestBase{
     @AfterAll
     public static void deletePatientAgents() {
         JdbcManager jdbc = new JdbcManager();
-        JdbcManager.pationAgentDeleter();
+        jdbc.pationAgentDeleter();
 
     }
 
