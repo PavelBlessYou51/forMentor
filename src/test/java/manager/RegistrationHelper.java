@@ -32,13 +32,13 @@ public class RegistrationHelper extends HelperBase {
         goToRegisterPage();
         PersonData person = new PersonData();
         optionPicker(By.xpath("//select[contains(@id, 'regRadioPanelId')]"), 0, false);
-        optionPicker(By.name("form:j_idt204"), getRandomInt(8), true);
-        type(By.name("form:j_idt224"), person.surname, true);
-        type(By.name("form:j_idt228"), person.name, false);
-        type(By.name("form:j_idt232"), person.patronymic, true);
+        optionPicker(By.xpath("//span[contains(@id, 'gridCountryMenu')]/div/select"), getRandomInt(8), true);
+        type(By.xpath("//input[contains(@id, 'input-lastname')]"), person.surname, true);
+        type(By.xpath("//input[contains(@id, 'input-firstname')]"), person.name, false);
+        type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[3]"), person.patronymic, true);
         type(By.cssSelector("input[id='form:email']"), person.email, true);
         type(By.id("form:emailToConfirm"), person.email, true);
-        type(By.name("form:j_idt244"), person.passport, false);
+        type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[6]"), person.passport, false);
         type(By.id("form:appeal"), person.callTo, false);
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[2]/input"), person.postCode, false);
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[4]/input"), person.address, false);
@@ -87,8 +87,8 @@ public class RegistrationHelper extends HelperBase {
         } else {
             regNumber = patentAgent.agentRegNumberInvention[getRandomInt(3)];
         }
-        click(By.name("form:j_idt218"), false);
-        type(By.name("form:j_idt218"), regNumber, false);
+        click(By.cssSelector("input[class='reg-input-field-required']"), false);
+        type(By.cssSelector("input[class='reg-input-field-required']"), regNumber, true);
         click(By.id("form:btnCheckUser"), false);
         email = getElementAttrValue(By.id("form:email"), "value");
         type(By.id("form:emailToConfirm"), email, false);

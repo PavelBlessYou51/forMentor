@@ -18,7 +18,7 @@ public class LoginHelper extends HelperBase {
         click(By.xpath("//a[contains(text(), 'Войти')]"), false);
         type(By.id("j_username"), login, false);
         type(By.id("j_password"), password, false);
-        click(By.name("j_idt292"), false);
+        click(By.cssSelector("input[value='Вход']"), false);
     }
 
     /**
