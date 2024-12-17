@@ -271,14 +271,13 @@ public class HelperBase {
     /**
      * Метод номера заявок из указанного файла
      */
-    protected List<String> applicationNumbersReader(String path) {
+    public List<String> applicationNumbersReader(String path) {
         try {
             List<String> numbers = Files.readAllLines(Paths.get(path).toAbsolutePath());
             return numbers;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -286,12 +285,12 @@ public class HelperBase {
     /**
      * Метод выбирает вид заявки
      */
-    protected void selectSphereOfApplication(String typeSphere) {
-        if ("invention".equals(typeSphere)) {
+    protected void selectSectionOfAccount(String typeSection) {
+        if ("invention".equals(typeSection)) {
             click(By.xpath("//span[contains(text(), 'Изобретения')]"), true);
-        } else if ("industrial".equals(typeSphere)) {
+        } else if ("industrial".equals(typeSection)) {
             click(By.xpath("//span[contains(text(), 'Промышленные')]"), true);
-        } else if ("profile".equals(typeSphere)) {
+        } else if ("profile".equals(typeSection)) {
             click(By.xpath("//span[contains(text(), 'Профиль')]"), true);
         }
 

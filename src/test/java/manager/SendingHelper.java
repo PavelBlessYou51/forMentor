@@ -11,9 +11,9 @@ import java.io.File;
 /**
  * Класс-помощник. Содержит методы, связанные с подачей заявок
  */
-public class SubmitHelper extends HelperBase {
+public class SendingHelper extends HelperBase {
 
-    SubmitHelper(ApplicationManager manager) {
+    SendingHelper(ApplicationManager manager) {
         super(manager);
     }
 
@@ -21,7 +21,7 @@ public class SubmitHelper extends HelperBase {
      * Метод подает заявки на изобретения (с приоритетом и без)
      */
     public String sendInventionApplication(String priorityType) throws InterruptedException {
-        selectSphereOfApplication("invention");
+        selectSectionOfAccount("invention");
         selectTypeOfApplication("inv_EuroApp");
         fillInventionCommonInfoPart(priorityType);
         addNewApplicant();
@@ -29,7 +29,7 @@ public class SubmitHelper extends HelperBase {
         click(By.cssSelector("input[value='Далее']"), true);
         click(By.cssSelector("input[value='Далее']"), true);
         fillEditionalInfo(false);
-        fillDocumentForm("invention");
+        fillAppsDocumentForm("invention");
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -41,7 +41,7 @@ public class SubmitHelper extends HelperBase {
      * Метод подает заявку на изобретение с ходатайством
      */
     public String sendInventionApplicationWithPetition() throws InterruptedException {
-        selectSphereOfApplication("invention");
+        selectSectionOfAccount("invention");
         selectTypeOfApplication("inv_EuroApp");
         fillInventionCommonInfoPart("withoutPreority");
         addNewApplicant();
@@ -49,7 +49,7 @@ public class SubmitHelper extends HelperBase {
         click(By.cssSelector("input[value='Далее']"), true);
         click(By.cssSelector("input[value='Далее']"), true);
         fillEditionalInfo(true);
-        fillDocumentForm("invention");
+        fillAppsDocumentForm("invention");
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -58,51 +58,10 @@ public class SubmitHelper extends HelperBase {
     }
 
     /**
-     * Метод подает заявку на ПО
-     */
-    public String sendIndustrialApplication(int countOfSamples) throws InterruptedException {
-        selectSphereOfApplication("industrial");
-        selectTypeOfApplication("ind_usualApp");
-        fillIndustrialCommonInfoPart();
-        addNewApplicant();
-        addNewInventor();
-        click(By.cssSelector("input[value='Далее']"), true);
-        click(By.cssSelector("input[value='Далее']"), true);
-        fillDocumentForm("industrial");
-        fillIndustrialPrototypeWithEdditionalSamples(countOfSamples);
-        fillTaxFormIndustrial();
-        signInApplication();
-        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
-        return sendingConfirmation;
-    }
-
-    /**
-     * Метод подает заявку на ПО c указанным приоритетом
-     */
-    public String sendIndustrialApplicationWithPriority(String priorityType) throws InterruptedException {
-        selectSphereOfApplication("industrial");
-        selectTypeOfApplication("ind_usualApp");
-        fillIndustrialCommonInfoPart();
-//        click(By.cssSelector("input[value='Далее']"), true);
-        addNewApplicant();
-        addNewInventor();
-        click(By.cssSelector("input[value='Далее']"), true);
-        click(By.cssSelector("input[value='Далее']"), true);
-        fillDocumentForm("industrial");
-        fillIndustrialPrototypeWithPriority(priorityType);
-        fillTaxFormIndustrial();
-        signInApplication();
-        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
-        return sendingConfirmation;
-    }
-
-    /**
      * Метод подает PCT заявку
      */
     public String sendInventionPCTApplication() throws InterruptedException {
-        selectSphereOfApplication("invention");
+        selectSectionOfAccount("invention");
         selectTypeOfApplication("PCT");
         fillPCTCommonInfoPart();
         addNewApplicant();
@@ -118,6 +77,62 @@ public class SubmitHelper extends HelperBase {
         return sendingConfirmation;
     }
 
+    /**
+     * Метод подает заявку на ПО
+     */
+    public String sendIndustrialApplication(int countOfSamples) throws InterruptedException {
+        selectSectionOfAccount("industrial");
+        selectTypeOfApplication("ind_usualApp");
+        fillIndustrialCommonInfoPart();
+        addNewApplicant();
+        addNewInventor();
+        click(By.cssSelector("input[value='Далее']"), true);
+        click(By.cssSelector("input[value='Далее']"), true);
+        fillAppsDocumentForm("industrial");
+        fillIndustrialPrototypeWithEdditionalSamples(countOfSamples);
+        fillTaxFormIndustrial();
+        signInApplication();
+        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
+        return sendingConfirmation;
+    }
+
+    /**
+     * Метод подает заявку на ПО c указанным приоритетом
+     */
+    public String sendIndustrialApplicationWithPriority(String priorityType) throws InterruptedException {
+        selectSectionOfAccount("industrial");
+        selectTypeOfApplication("ind_usualApp");
+        fillIndustrialCommonInfoPart();
+        addNewApplicant();
+        addNewInventor();
+        click(By.cssSelector("input[value='Далее']"), true);
+        click(By.cssSelector("input[value='Далее']"), true);
+        fillAppsDocumentForm("industrial");
+        fillIndustrialPrototypeWithPriority(priorityType);
+        fillTaxFormIndustrial();
+        signInApplication();
+        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
+        return sendingConfirmation;
+    }
+
+
+    /**
+     * Метод подает дополнение к заявке на изобретение
+     */
+    public String sendAdditionForInventionApp(String appNumber) {
+        selectSectionOfAccount("invention");
+        selectTypeOfApplication("inv_addition");
+        typeAppNumberForAddition(appNumber);
+        fillAdditionDocumentForm("invention");
+        fillTaxFormInvention();
+        signInApplication();
+        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        return sendingConfirmation;
+
+    }
+
 
     /**
      * Метод выбирает тип заявки
@@ -129,6 +144,8 @@ public class SubmitHelper extends HelperBase {
             click(By.cssSelector("input[value='Подать заявку']"), true);
         } else if ("PCT".equals(typeApp)) {
             click(By.cssSelector("input[value='Подать заявку EAPO-PCT']"), false);
+        } else if ("inv_addition".equals(typeApp)) {
+            click(By.cssSelector("input[value='Подать досылку']"), false);
         }
 
     }
@@ -195,9 +212,9 @@ public class SubmitHelper extends HelperBase {
     }
 
     /**
-     * Метод заполняет раздел №7 в изобретениях и №6 в ПО "Документы"
+     * Метод заполняет раздел №7 "Документы" в изобретениях и №6 в ПО
      */
-    protected void fillDocumentForm(String appType) {
+    protected void fillAppsDocumentForm(String appType) {
         if ("invention".equals(appType)) {
             fileUpload(By.xpath("(//div[contains(@id, 'upload1')]//input)[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
             fileUpload(By.xpath("//div[contains(@id, 'upload2')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
@@ -205,6 +222,23 @@ public class SubmitHelper extends HelperBase {
             fileUpload(By.xpath("//div[contains(@id, 'upload11')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"), true);
             uploadRandom3DFile();
         } else if ("industrial".equals(appType)) {
+            fileUpload(By.xpath("//div[contains(@id, 'upl" +
+                    "oad16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
+            fileUpload(By.xpath("//div[contains(@id, 'upload18')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"), true);
+        }
+        click(By.cssSelector("input[value='Далее']"), true);
+    }
+
+    /**
+     * Метод заполняет раздел №1 "Документы" в изобретениях и ПО
+     */
+    private void fillAdditionDocumentForm(String additionType) {
+        if ("invention".equals(additionType)) {
+            fileUpload(By.xpath("(//div[contains(@id, 'upload1')]//input)[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
+            fileUpload(By.xpath("//div[contains(@id, 'upload3')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
+            fileUpload(By.xpath("//div[contains(@id, 'upload12')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
+            uploadRandom3DFile();
+        } else if ("industrial".equals(additionType)) {
             fileUpload(By.xpath("//div[contains(@id, 'upload16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
             fileUpload(By.xpath("//div[contains(@id, 'upload18')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"), true);
         }
@@ -238,7 +272,7 @@ public class SubmitHelper extends HelperBase {
      * Метод подписывает и подает заявки
      */
     public void signInApplication() {
-        click(By.xpath("//input[@value='Подписать и подать заявку']"), true);
+        click(By.xpath("//input[contains(@value, 'Подписать и подать ')]"), true);
         click(By.xpath("//input[@value='Подписать и подать']"), true);
     }
 
@@ -433,10 +467,22 @@ public class SubmitHelper extends HelperBase {
 
     }
 
+    /**
+     * Метод загружает случайный 3D файл
+     */
     protected void uploadRandom3DFile() {
         File[] listOf3DFile = getListOfFiles(getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/3D_formats"));
         String pathTo3DFile = listOf3DFile[getRandomInt(listOf3DFile.length - 1)].getPath();
-        fileUpload(By.xpath("//div[contains(@id, 'upload14')]//input"), getAbsolutePathToFile(pathTo3DFile), true);
+        fileUpload(By.xpath("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']"), getAbsolutePathToFile(pathTo3DFile), true);
     }
+
+    /**
+     * Метод заполняет номер заявки для досылки
+     */
+    private void typeAppNumberForAddition(String appNumber) {
+        type(By.xpath("(//input[contains(@name, 'inputBox')])[11]"), appNumber, false);
+        click(By.xpath("//input[contains(@id, 'buttonAddSendId')]"), true);
+    }
+
 
 }

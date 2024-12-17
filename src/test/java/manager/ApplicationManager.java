@@ -12,8 +12,8 @@ public class ApplicationManager {
     protected WebDriver driver;
     private LoginHelper session;
     private RegistrationHelper registrator;
-    private SubmitHelper submitter;
-    private SaveAppHelper sender;
+    private SendingHelper sender;
+    private SaveAppAndAdditionHelper saver;
     private CertificateHelper pinCode;
 
     /**
@@ -54,17 +54,17 @@ public class ApplicationManager {
     /**
      * Возвращает класс-помощник для взаимодействия с функционалом подачи заявок
      */
-    public SubmitHelper submitter() {
-        submitter = new SubmitHelper(this);
-        return submitter;
+    public SendingHelper sender() {
+        sender = new SendingHelper(this);
+        return sender;
     }
 
     /**
      * Возвращает класс-помощник для взаимодействия с функционалом сохранения заявок и досылок в Soprano
      */
-    public SaveAppHelper sender() {
-        sender = new SaveAppHelper(this);
-        return sender;
+    public SaveAppAndAdditionHelper saver() {
+        saver = new SaveAppAndAdditionHelper(this);
+        return saver;
     }
 
     /**

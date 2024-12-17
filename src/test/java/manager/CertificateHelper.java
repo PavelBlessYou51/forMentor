@@ -15,7 +15,7 @@ public class CertificateHelper extends HelperBase {
      * Метод деактивирует существующий сертификат
      */
     public String certificateDeactivation() {
-        selectSphereOfApplication("profile");
+        selectSectionOfAccount("profile");
         selectCertificateAction("deactivate");
         deactivate("123456");
         String confirmation = getTextFromElement(By.xpath("//div[contains(text(), 'У вас нет действительного сертификата.')]")).strip();
@@ -26,7 +26,7 @@ public class CertificateHelper extends HelperBase {
      * Метод активирует новый сертификат
      */
     public String certificateActivation() {
-        selectSphereOfApplication("profile");
+        selectSectionOfAccount("profile");
         selectCertificateAction("activate");
         fillCirtificateForm("Prokoshev", "Pavel", "Vladimirovich", "prokoshevpavel@mail.ru", "123456");
         String activationConfirm = getActivationConfirm();
