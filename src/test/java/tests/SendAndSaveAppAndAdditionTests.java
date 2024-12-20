@@ -106,11 +106,11 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
 
     @Nested
     @Order(4)
-    public class SubmitIndustrialAdditionTests {
+    public class SubmitAdditionTests {
 
 
         /**
-         * Фабричная функция для предоставления номеров заявок в тест подачи досылок
+         * Фабричная функция для предоставления номеров заявок по ИЗО в тест подачи досылок
          */
         static List<String> InventionAppNumbersProvider() throws IOException {
             List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/inventionAppNumbers.txt").toAbsolutePath());
@@ -128,6 +128,25 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
             assertEquals("Пакет успешно подписан.", sendingConfirm);
         }
 
+        /**
+         * Фабричная функция для предоставления номеров заявок по ПО в тест подачи досылок
+         */
+        static List<String> IndustrialAppNumbersProvider() throws IOException {
+            List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/industrialAppNumbers.txt").toAbsolutePath());
+            return listOfApps;
+        }
+
+        /**
+         * Параметризированный тест подачи досылок по ПО
+         */
+        @ParameterizedTest
+        @MethodSource("IndustrialAppNumbersProvider")
+        public void SubmitIndustrialAdditionalTest(String appNumber) {
+            app.session().login("ProkoshevPV", "qweR2304");
+            String sendingConfirm = app.sender().sendAdditionForIndustrialApp(appNumber);
+            assertEquals("Пакет успешно подписан.", sendingConfirm);
+        }
+
 
     }
 
@@ -140,7 +159,7 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          */
         @ParameterizedTest
         @ValueSource(strings = {"invention", "industrial"})
-        public void saveInventionApp(String appType) {
+        public void saveAdditionToApp(String appType) {
             app.session().login("ProkoshevPV1", "0j2Z7O8G");
             boolean result = app.saver().saveDocsToSoprano(appType, "досылки");
             assertTrue(result);

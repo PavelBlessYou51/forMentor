@@ -7,6 +7,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Класс-помощник. Содержит методы, связанные с подачей заявок
@@ -33,7 +34,9 @@ public class SendingHelper extends HelperBase {
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
+        if ("Пакет успешно подписан.".equals(sendingConfirmation)) {
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
+        }
         return sendingConfirmation;
     }
 
@@ -53,7 +56,9 @@ public class SendingHelper extends HelperBase {
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
+        if ("Пакет успешно подписан.".equals(sendingConfirmation)) {
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
+        }
         return sendingConfirmation;
     }
 
@@ -73,7 +78,9 @@ public class SendingHelper extends HelperBase {
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
+        if ("Пакет успешно подписан.".equals(sendingConfirmation)) {
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt");
+        }
         return sendingConfirmation;
     }
 
@@ -93,7 +100,9 @@ public class SendingHelper extends HelperBase {
         fillTaxFormIndustrial();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
+        if ("Пакет успешно подписан.".equals(sendingConfirmation)) {
+            applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
+        }
         return sendingConfirmation;
     }
 
@@ -113,7 +122,9 @@ public class SendingHelper extends HelperBase {
         fillTaxFormIndustrial();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
+        if ("Пакет успешно подписан.".equals(sendingConfirmation)) {
+            applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt");
+        }
         return sendingConfirmation;
     }
 
@@ -123,13 +134,41 @@ public class SendingHelper extends HelperBase {
      */
     public String sendAdditionForInventionApp(String appNumber) {
         selectSectionOfAccount("invention");
-        selectTypeOfApplication("inv_addition");
+        selectTypeOfApplication("addition");
         typeAppNumberForAddition(appNumber);
-        fillAdditionDocumentForm("invention");
+        fillAdditionDocumentForm();
         fillTaxFormInvention();
         signInApplication();
         String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
         return sendingConfirmation;
+
+    }
+
+    /**
+     * Метод подает дополнение к заявке на ПО
+     */
+    public String sendAdditionForIndustrialApp(String appNumber) {
+        selectSectionOfAccount("industrial");
+        selectTypeOfApplication("addition");
+        typeAppNumberForAddition(appNumber);
+        fillAppsDocumentForm("industrial");
+        fillIndustrialPrototypeInAddition();
+        fillTaxFormIndustrial();
+        signInApplication();
+        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
+        return sendingConfirmation;
+    }
+
+    private void fillIndustrialPrototypeInAddition() {
+        List<WebElement> listOfIndustrialSamples = manager.driver.findElements(By.cssSelector("input[title='Развернуть']"));
+        int countOfSamples = listOfIndustrialSamples.size();
+        for (int i = 1; i <= countOfSamples; i++) {
+            String locator = String.format("(//input[@title='Развернуть'])[%s]", i);
+            click(By.xpath(locator), true);
+            addDocuments(i - 1);
+        }
+        click(By.cssSelector("input[value='Далее']"), true);
+
 
     }
 
@@ -144,7 +183,7 @@ public class SendingHelper extends HelperBase {
             click(By.cssSelector("input[value='Подать заявку']"), true);
         } else if ("PCT".equals(typeApp)) {
             click(By.cssSelector("input[value='Подать заявку EAPO-PCT']"), false);
-        } else if ("inv_addition".equals(typeApp)) {
+        } else if ("addition".equals(typeApp)) {
             click(By.cssSelector("input[value='Подать досылку']"), false);
         }
 
@@ -222,8 +261,7 @@ public class SendingHelper extends HelperBase {
             fileUpload(By.xpath("//div[contains(@id, 'upload11')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"), true);
             uploadRandom3DFile();
         } else if ("industrial".equals(appType)) {
-            fileUpload(By.xpath("//div[contains(@id, 'upl" +
-                    "oad16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
+            fileUpload(By.xpath("//div[contains(@id, 'upload16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
             fileUpload(By.xpath("//div[contains(@id, 'upload18')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"), true);
         }
         click(By.cssSelector("input[value='Далее']"), true);
@@ -232,19 +270,13 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №1 "Документы" в изобретениях и ПО
      */
-    private void fillAdditionDocumentForm(String additionType) {
-        if ("invention".equals(additionType)) {
-            fileUpload(By.xpath("(//div[contains(@id, 'upload1')]//input)[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
-            fileUpload(By.xpath("//div[contains(@id, 'upload3')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
-            fileUpload(By.xpath("//div[contains(@id, 'upload12')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
-            uploadRandom3DFile();
-        } else if ("industrial".equals(additionType)) {
-            fileUpload(By.xpath("//div[contains(@id, 'upload16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
-            fileUpload(By.xpath("//div[contains(@id, 'upload18')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"), true);
-        }
+    private void fillAdditionDocumentForm() {
+        fileUpload(By.xpath("(//div[contains(@id, 'upload1')]//input)[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
+        fileUpload(By.xpath("//div[contains(@id, 'upload3')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
+        fileUpload(By.xpath("//div[contains(@id, 'upload12')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
+        uploadRandom3DFile();
         click(By.cssSelector("input[value='Далее']"), true);
     }
-
 
 
     /**
@@ -403,15 +435,24 @@ public class SendingHelper extends HelperBase {
         type(By.xpath(String.format("//textarea[contains(@id, 'repeatDesign:%s:design:dgnNameInv')]", locatorNumber)), prototypeName, true);
         type(By.xpath(String.format("//textarea[contains(@id, 'repeatDesign:%s:design:dgnNameProduct')]", locatorNumber)), productIndication, true);
         randomOptionPicker(By.xpath(String.format("//select[contains(@id, 'repeatDesign:%s:design:selectLocSubCls')]", locatorNumber)));
+        addDocuments(locatorNumber);
+    }
+
+    /**
+     * Метод загружает документы в разделе №7 "Промышленные образцы" заявки на ПО
+     */
+    private void addDocuments(int locatorNumber) {
         File[] listOfFile = getListOfFiles(getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/prototype_picture"));
         for (int i = 1; i <= 7; i++) {
             String selectLocator = String.format("(//select[contains(@id, 'repeatDesign:%s:design')][count(option)=8][not(contains(@id, 'selectLocSubCls'))])[%s]", locatorNumber, i);
             optionPicker(By.xpath(selectLocator), i, true);
         }
         for (int k = 1; k <= 7; k++) {
-            String uploadLocator = String.format("(//div[contains(@id, 'upload%s')][contains(@id, 'repeatDesign:%s:design')]//input)[1]", k, locatorNumber);
+            String uploadLocator = String.format("//div[contains(@id, 'upload%s')][contains(@id, 'repeatDesign:%s:design')]//input", k, locatorNumber);
             fileUpload(By.xpath(uploadLocator), listOfFile[k - 1].getAbsolutePath(), true);
         }
+
+
         fileUpload(By.xpath(String.format("//div[contains(@id, 'upload8')][contains(@id, 'repeatDesign:%s:design')]//input", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/3d_model.STEP"), true);
         fileUpload(By.xpath(String.format("//div[contains(@id, 'upload9')][contains(@id, 'repeatDesign:%s:design')]//input", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/чертеж_общего_вид_изд.jpg"), true);
         fileUpload(By.xpath(String.format("//div[contains(@id, 'upload10')][contains(@id, 'repeatDesign:%s:design')]//input", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/конфекционная_карта.pdf"), true);
@@ -480,7 +521,7 @@ public class SendingHelper extends HelperBase {
      * Метод заполняет номер заявки для досылки
      */
     private void typeAppNumberForAddition(String appNumber) {
-        type(By.xpath("(//input[contains(@name, 'inputBox')])[11]"), appNumber, false);
+        type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
         click(By.xpath("//input[contains(@id, 'buttonAddSendId')]"), true);
     }
 

@@ -58,10 +58,10 @@ public class CertificateHelper extends HelperBase {
      * Метод заполняет форму выпуска нового сертификата и выпускает его
      */
     protected void fillCirtificateForm(String lastName, String firstName, String patronymic, String email, String pinCode) {
-        type(By.xpath("(//input[@class='application-input'])[1]"), lastName, true);
-        type(By.xpath("(//input[@class='application-input'])[2]"), firstName, true);
-        type(By.xpath("(//input[@class='application-input'])[3]"), patronymic, true);
-        type(By.xpath("(//input[@class='application-input'])[4]"), email, true);
+//        type(By.xpath("(//input[@class='application-input'])[1]"), lastName, true);
+//        type(By.xpath("(//input[@class='application-input'])[2]"), firstName, true);
+//        type(By.xpath("(//input[@class='application-input'])[3]"), patronymic, true);
+//        type(By.xpath("(//input[@class='application-input'])[4]"), email, true);
         type(By.xpath("(//input[@class='application-input'])[5]"), pinCode, true);
         type(By.xpath("(//input[@class='application-input'])[6]"), pinCode, true);
         click(By.xpath("//input[contains(@id, 'issue-certificate')]"), true);

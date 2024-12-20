@@ -34,11 +34,11 @@ public class HelperBase {
     protected void type(By locator, String text, boolean hasDelay) {
         for (var i = 1; i <= 3; i++) {
             try {
+                WebElement element = presenceOfElement(locator);
+                element.sendKeys(text);
                 if (hasDelay) {
                     TimeUnit.MILLISECONDS.sleep(400);
                 }
-                WebElement element = presenceOfElement(locator);
-                element.sendKeys(text);
                 return;
             } catch (StaleElementReferenceException exception) {
                 System.out.println("Try to type, but get StaleElementReferenceException");
@@ -57,11 +57,11 @@ public class HelperBase {
     protected void click(By locator, boolean hasDelay) {
         for (var i = 1; i <= 10; i++) {
             try {
+                WebElement element = presenceOfElement(locator);
+                element.click();
                 if (hasDelay) {
                     TimeUnit.MILLISECONDS.sleep(400);
                 }
-                WebElement element = presenceOfElement(locator);
-                element.click();
                 return;
             } catch (StaleElementReferenceException exception) {
                 System.out.println("Try to click, but get StaleElementReferenceException");
@@ -101,7 +101,8 @@ public class HelperBase {
     protected void optionPicker(By locator, int index, boolean hasDelay) {
         for (var i = 1; i <= 10; i++) {
             try {
-                Select option = new Select(manager.driver.findElement(locator));
+                Select option = new Select(presenceOfElement(locator));
+                option.selectByIndex(index);
                 if (hasDelay) {
                     try {
                         TimeUnit.MILLISECONDS.sleep(400);
@@ -109,11 +110,12 @@ public class HelperBase {
                         throw new RuntimeException(e);
                     }
                 }
-                option.selectByIndex(index);
+                option.selectByIndex(index); // Костыль. Не удалять!
                 return;
             } catch (StaleElementReferenceException exception) {
                 System.out.println("Try to pick the option, but get StaleElementReferenceException");
-
+            } catch (NoSuchElementException exception) {
+                System.out.println("Try to pick the option, but get NoSuchElementException");
             }
         }
     }
@@ -131,7 +133,7 @@ public class HelperBase {
      * Метод явного ожидания присутствия веб-элемента на странице
      */
     protected WebElement presenceOfElement(By locator) {
-        WebElement element = new WebDriverWait(manager.driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(locator));
+        WebElement element = new WebDriverWait(manager.driver, Duration.ofSeconds(15)).until(ExpectedConditions.presenceOfElementLocated(locator));
         return element;
     }
 
@@ -161,7 +163,7 @@ public class HelperBase {
                 element.sendKeys(path);
                 if (hasDelay) {
                     try {
-                        TimeUnit.MILLISECONDS.sleep(400);
+                        TimeUnit.MILLISECONDS.sleep(500);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
