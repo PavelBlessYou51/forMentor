@@ -5,7 +5,7 @@ import java.sql.*;
 public class JdbcManager {
 
     public static void main(String[] args) {
-        pationAgentDeleter();
+
     }
 
     public static void pationAgentDeleter() {

@@ -211,7 +211,7 @@ public class SendingHelper extends HelperBase {
                 startsOpenShowing(entity.fakerRU.number().digits(6));
             }
         }
-        click(By.id("form:j_idt110:nextButtonId"), true);
+        click(By.cssSelector("input[value='Далее']"), true);
 
     }
 
@@ -255,14 +255,14 @@ public class SendingHelper extends HelperBase {
      */
     protected void fillAppsDocumentForm(String appType) {
         if ("invention".equals(appType)) {
-            fileUpload(By.xpath("(//div[contains(@id, 'upload1')]//input)[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
-            fileUpload(By.xpath("//div[contains(@id, 'upload2')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
-            fileUpload(By.xpath("//div[contains(@id, 'upload4')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
-            fileUpload(By.xpath("//div[contains(@id, 'upload11')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"), true);
+            fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
+            fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[2]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
+            fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[5]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
+            fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[12]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/заявление.pdf"), true);
             uploadRandom3DFile();
         } else if ("industrial".equals(appType)) {
-            fileUpload(By.xpath("//div[contains(@id, 'upload16')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
-            fileUpload(By.xpath("//div[contains(@id, 'upload18')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"), true);
+            fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/доверенность.pdf"), true);
+            fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[2]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/письмо_заявителя.pdf"), true);
         }
         click(By.cssSelector("input[value='Далее']"), true);
     }
@@ -271,9 +271,9 @@ public class SendingHelper extends HelperBase {
      * Метод заполняет раздел №1 "Документы" в изобретениях и ПО
      */
     private void fillAdditionDocumentForm() {
-        fileUpload(By.xpath("(//div[contains(@id, 'upload1')]//input)[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
-        fileUpload(By.xpath("//div[contains(@id, 'upload3')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
-        fileUpload(By.xpath("//div[contains(@id, 'upload12')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
+        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
+        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[2]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
+        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[5]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
         uploadRandom3DFile();
         click(By.cssSelector("input[value='Далее']"), true);
     }
@@ -448,16 +448,18 @@ public class SendingHelper extends HelperBase {
             optionPicker(By.xpath(selectLocator), i, true);
         }
         for (int k = 1; k <= 7; k++) {
-            String uploadLocator = String.format("//div[contains(@id, 'upload%s')][contains(@id, 'repeatDesign:%s:design')]//input", k, locatorNumber);
+            String uploadLocator = String.format("(//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file'])[%s]", locatorNumber, k);
             fileUpload(By.xpath(uploadLocator), listOfFile[k - 1].getAbsolutePath(), true);
         }
-
-
-        fileUpload(By.xpath(String.format("//div[contains(@id, 'upload8')][contains(@id, 'repeatDesign:%s:design')]//input", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/3d_model.STEP"), true);
-        fileUpload(By.xpath(String.format("//div[contains(@id, 'upload9')][contains(@id, 'repeatDesign:%s:design')]//input", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/чертеж_общего_вид_изд.jpg"), true);
-        fileUpload(By.xpath(String.format("//div[contains(@id, 'upload10')][contains(@id, 'repeatDesign:%s:design')]//input", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/конфекционная_карта.pdf"), true);
-        fileUpload(By.xpath(String.format("//div[contains(@id, 'upload11')][contains(@id, 'repeatDesign:%s:design')]//input", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/описание_пром_образца.pdf"), true);
+        fileUpload(By.xpath(String.format("//table[contains(@id, 'designFileLoad')]//tr[position()=9]//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/3d_model.STEP"), true);
+        fileUpload(By.xpath(String.format("//table[contains(@id, 'designFileLoad')]//tr[position()=11]//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/чертеж_общего_вид_изд.jpg"), true);
+        fileUpload(By.xpath(String.format("//table[contains(@id, 'designFileLoad')]//tr[position()=12]//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/конфекционная_карта.pdf"), true);
+        fileUpload(By.xpath(String.format("//table[contains(@id, 'designFileLoad')]//tr[position()=13]//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_industrial/описание_пром_образца.pdf"), true);
     }
+
+
+
+    // //span[contains(text(), 'Изображение промышленного образца')]/ancestor::tr/td//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:0:design')]//input[@type='file']
 
     /**
      * Метод заполняет раздел №8 "Расчет пошлин" заявки на ПО
@@ -498,12 +500,11 @@ public class SendingHelper extends HelperBase {
      * Метод заполняет раздел №7 "Документы" PCT заявки
      */
     protected void fillPCTDocumentForm() {
-        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload1')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Описание изобретения.pdf"), true);
-        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload3')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Формула изборетения.pdf"), true);
-        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload6')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Чертежи.pdf"), true);
-        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload19')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Верстак 3D-модель.STEP"), true);
-        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload12')]//input)[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Реферат.pdf"), true);
-
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload')]//input[@type='file'])[1]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Описание изобретения.pdf"), true);
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload')]//input[@type='file'])[3]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Формула изборетения.pdf"), true);
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload')]//input[@type='file'])[6]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Чертежи.pdf"), true);
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload')]//input[@type='file'])[12]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Верстак 3D-модель.STEP"), true);
+        fileUpload(By.xpath(String.format("(//div[contains(@id, 'upload')]//input[@type='file'])[13]")), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_PCT/Реферат.pdf"), true);
         click(By.cssSelector("input[value='Далее']"), false);
 
     }
