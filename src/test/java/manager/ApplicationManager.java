@@ -15,6 +15,7 @@ public class ApplicationManager {
     private SendingHelper sender;
     private SaveAppAndAdditionHelper saver;
     private CertificateHelper pinCode;
+    private JdbcHelper jdbc;
 
     /**
      * Инициализатор браузера. Масштабирует окно браузера на максимальный размер экрана
@@ -73,6 +74,14 @@ public class ApplicationManager {
     public CertificateHelper pinCode() {
         pinCode = new CertificateHelper(this);
         return pinCode;
+    }
+
+    /**
+     * Возвращает класс-помощник для взаимодействия с JDBS
+     */
+    public JdbcHelper jdbc() {
+        jdbc = new JdbcHelper(this);
+        return jdbc;
     }
 
 

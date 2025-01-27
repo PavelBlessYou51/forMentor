@@ -28,7 +28,7 @@ public class RegistrationHelper extends HelperBase {
     /**
      * Метод заполняется форму регистрации для физического лица
      */
-    public void fillRegistrationFormForPerson() throws InterruptedException {
+    public String fillRegistrationFormForPerson() {
         goToRegisterPage();
         PersonData person = new PersonData();
         optionPicker(By.xpath("//select[contains(@id, 'regRadioPanelId')]"), 0, false);
@@ -44,13 +44,13 @@ public class RegistrationHelper extends HelperBase {
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[4]/input"), person.address, false);
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[6]/input"), person.phoneNumber, false);
         click(By.id("form:btnSelfRegistrationUser"), false);
-
+        return person.surname;
     }
 
     /**
      * Метод заполняется форму регистрации для юридического лица
      */
-    public void fillRegistrationFormForOrganisation() throws InterruptedException {
+    public String fillRegistrationFormForOrganisation() {
         goToRegisterPage();
         int randomCountryNumber = getRandomInt(8);
         OrganisationData oraganisation = new OrganisationData(randomCountryNumber);
@@ -70,6 +70,7 @@ public class RegistrationHelper extends HelperBase {
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[6]/input"), oraganisation.phoneNumber, false);
         type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[7]"), oraganisation.uniqueID, false);
         click(By.id("form:btnSelfRegistrationUser"), false);
+        return oraganisation.surname;
     }
 
     /**
@@ -98,7 +99,7 @@ public class RegistrationHelper extends HelperBase {
     /**
      * Метод получающий сообщение об отправке запроса на регистрацию
      */
-    public String getRegistrationRequestMessageConfirm() throws InterruptedException {
+    public String getRegistrationRequestMessageConfirm() {
         String massege = getTextFromElement(By.cssSelector("li span[class='error-message']")).split("\\.")[0];
         return massege;
     }

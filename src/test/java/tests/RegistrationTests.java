@@ -1,6 +1,6 @@
 package tests;
 
-import bd_manager.JdbcManager;
+import manager.JdbcHelper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,18 +17,22 @@ public class RegistrationTests extends TestBase{
      * Тест проверяет отправку запроса на регистрацию физического лица
      */
     @Test
-    public void personRegistration () throws InterruptedException {
-        app.registrator().fillRegistrationFormForPerson();
+    public void personRegistration () {
+        String surname = app.registrator().fillRegistrationFormForPerson();
+        int resultCount = app.jdbc().checkRegisteredEntity(surname, false);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
+        assertEquals(1, resultCount);
     }
 
     /**
      * Тест проверяет отправку запроса на регистрацию юридического лица
      */
     @Test
-    public void organisationRegistration () throws InterruptedException {
-        app.registrator().fillRegistrationFormForOrganisation();
+    public void organisationRegistration () {
+        String surname = app.registrator().fillRegistrationFormForOrganisation();
+        int resultCount = app.jdbc().checkRegisteredEntity(surname, true);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
+        assertEquals(1, resultCount);
     }
 
     /**
@@ -37,19 +41,23 @@ public class RegistrationTests extends TestBase{
      */
     @ParameterizedTest
     @ValueSource(strings = { "invention", "industrial" })
-    public void patentAgentRegistration (String agentType) throws InterruptedException {
+    public void patentAgentRegistration (String agentType) {
         app.registrator().fillRegistrationFormForPatentAgent(agentType);
+        int resultCount = app.jdbc().checkRegisteredAgent();
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
+        assertEquals(1, resultCount);
 
     }
 
     /**
-     * Метод удаляет из тестовой БД зарегистрированных патентных поверенных
+     * Метод удаляет из тестовой БД зарегистрированные сущности и закрывает соединение с БД
      */
     @AfterAll
     public static void deletePatientAgents() {
-        JdbcManager jdbc = new JdbcManager();
+        JdbcHelper jdbc = app.jdbc();
         jdbc.pationAgentDeleter();
+        jdbc.personAndOrganisationDeleter();
+        jdbc.closePortalConnection();
 
     }
 
