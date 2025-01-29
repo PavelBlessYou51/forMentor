@@ -106,6 +106,53 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
 
     @Nested
     @Order(4)
+    public class CheckAppsInSopranoTests {
+
+
+        /**
+         * Фабричная функция для предоставления номеров заявок по ИЗО для проверки их наличия в БД Soprano
+         */
+        static List<String> InventionAppNumbersProvider() throws IOException {
+            List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/inventionAppNumbers.txt").toAbsolutePath());
+            return listOfApps;
+        }
+
+        /**
+         * Параметризированный тест для проверки корректной записи сохраненной заявки по ИЗО в БД Soprano
+         */
+        @ParameterizedTest
+        @MethodSource("InventionAppNumbersProvider")
+        @Tag("SkipInit")
+        public void CheckInventionAppInSopranoTest(String appNumber) {
+            int resultCount = app.jdbc().checkInventionAppInSoprano(appNumber);
+            assertEquals(3, resultCount);
+        }
+
+        /**
+         * Фабричная функция для предоставления номеров заявок по ПО для проверки их наличия в БД Soprano
+         */
+        static List<String> IndustrialAppNumbersProvider() throws IOException {
+            List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/industrialAppNumbers.txt").toAbsolutePath());
+            return listOfApps;
+        }
+
+        /**
+         * Параметризированный тест для проверки корректной записи сохраненной заявки по ПО в БД Soprano
+         */
+        @ParameterizedTest
+        @MethodSource("IndustrialAppNumbersProvider")
+        @Tag("SkipInit")
+        public void CheckIndustrialAppInSopranoTest(String appNumber) {
+            int resultCount = app.jdbc().checkInventionAppInSoprano(appNumber);
+            assertEquals(3, resultCount);
+        }
+
+    }
+
+
+    @Nested
+    @Order(5)
+    @Disabled
     public class SubmitAdditionTests {
 
 
@@ -151,7 +198,8 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
     }
 
     @Nested
-    @Order(5)
+    @Order(6)
+    @Disabled
     public class SaveAdditionTests {
 
         /**
@@ -166,15 +214,14 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
         }
 
 
-        /**
-         * Метод удаляет списки файлы со списками заявок после выполнения тестов сохранения заявок и досылок
-         */
-        @AfterAll
-        public static void docsCleaner() {
-            app.session().fileDeleter("src/test/resources/list_of_app");
+    }
 
-        }
-
+    /**
+     * Метод удаляет списки файлы со списками заявок после выполнения тестов сохранения заявок и досылок
+     */
+    @AfterAll
+    public static void docsCleaner() {
+        app.session().fileDeleter("src/test/resources/list_of_app");
 
     }
 

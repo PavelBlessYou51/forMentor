@@ -44,6 +44,7 @@ public class SaveAppAndAdditionHelper extends HelperBase {
             String confirmation = getTextFromElement(By.className("error-message"));
             if (!(String.format("Заявка %s успешно сохранена в Soprano.", application).equals(confirmation) || String.format("Досылка для заявки %s сохранена в Soprano.", application).equals(confirmation))) {
                 result = false;
+                System.out.printf("Заявка %s не сохранена!", application);
                 break;
             }
         }
