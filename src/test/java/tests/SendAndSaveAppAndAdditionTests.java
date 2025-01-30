@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Класс содержить тестовые классы с методами подачи и сохранения заявок в Soprano
+ * Класс содержит тестовые классы с методами подачи и сохранения заявок в Soprano
  */
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class SendAndSaveAppAndAdditionTests extends TestBase {
@@ -213,6 +213,51 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
             assertTrue(result);
         }
 
+
+    }
+
+    @Nested
+    @Order(7)
+    public class CheckAdditionInSopranoTests {
+
+
+        /**
+         * Фабричная функция для предоставления номеров заявок по ИЗО для проверки их наличия досылок в Soprano
+         */
+        static List<String> InventionAdditionNumbersProvider() throws IOException {
+            List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/inventionAppNumbers.txt").toAbsolutePath());
+            return listOfApps;
+        }
+
+        /**
+         * Параметризированный тест для проверки корректной записи сохраненной досылки по ИЗО в БД Soprano
+         */
+        @ParameterizedTest
+        @MethodSource("InventionAdditionNumbersProvider")
+        @Tag("SkipInit")
+        public void CheckInventionAppInSopranoTest(String appNumber) {
+            int resultCount = app.jdbc().checkInventionAdditionInSoprano(appNumber);
+            assertEquals(2, resultCount);
+        }
+
+        /**
+         * Фабричная функция для предоставления номеров досылок по ПО для проверки их наличия в БД Soprano
+         */
+        static List<String> IndustrialAdditionNumbersProvider() throws IOException {
+            List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/industrialAppNumbers.txt").toAbsolutePath());
+            return listOfApps;
+        }
+
+        /**
+         * Параметризированный тест для проверки корректной записи сохраненной досылки по ПО в БД Soprano
+         */
+        @ParameterizedTest
+        @MethodSource("IndustrialAdditionNumbersProvider")
+        @Tag("SkipInit")
+        public void CheckIndustrialAppInSopranoTest(String appNumber) {
+            int resultCount = app.jdbc().checkInventionAdditionInSoprano(appNumber);
+            assertEquals(2, resultCount);
+        }
 
     }
 
