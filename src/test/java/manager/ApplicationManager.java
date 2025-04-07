@@ -16,6 +16,8 @@ public class ApplicationManager {
     private SaveAppAndAdditionHelper saver;
     private CertificateHelper pinCode;
     private JdbcHelper jdbc;
+    private R2dbcHelper r2dbc;
+
 
     /**
      * Инициализатор браузера. Масштабирует окно браузера на максимальный размер экрана
@@ -82,6 +84,14 @@ public class ApplicationManager {
     public JdbcHelper jdbc() {
         jdbc = new JdbcHelper(this);
         return jdbc;
+    }
+
+    /**
+     * Возвращает класс-помощник для взаимодействия с R2DBS
+     */
+    public R2dbcHelper r2dbc() {
+        r2dbc = new R2dbcHelper(this);
+        return r2dbc;
     }
 
 

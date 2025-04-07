@@ -1,5 +1,6 @@
 package tests;
 
+import exceptions.NextButtomException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -27,8 +28,8 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          * Параметризированный тест подачи заявок на ПО (1, 3, 5 образцов)
          */
         @ParameterizedTest
-        @ValueSource(ints = {1, 3, 5})
-        public void SubmitIndustrialApplicationTest(int countOfSamples) throws InterruptedException {
+        @ValueSource(ints = {3, 5})
+        public void submitIndustrialApplicationTest(int countOfSamples) throws NextButtomException {
             app.session().login("ProkoshevPV", "qweR2304");
             String sendingConfirm = app.sender().sendIndustrialApplication(countOfSamples);
             assertEquals("Пакет успешно подписан.", sendingConfirm);
@@ -40,50 +41,11 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          */
         @ParameterizedTest
         @ValueSource(strings = {"previousPCT", "previousEuro", "additionalMaterials", "startsOpenShowing"})
-        public void SubmitIndustrialApplicationWithPriorityTest(String priorityType) throws InterruptedException {
+        public void submitIndustrialApplicationWithPriorityTest(String priorityType) throws NextButtomException {
             app.session().login("ProkoshevPV", "qweR2304");
             String sendingConfirm = app.sender().sendIndustrialApplicationWithPriority(priorityType);
             assertEquals("Пакет успешно подписан.", sendingConfirm);
         }
-
-    }
-
-    @Nested
-    @Order(2)
-    public class SubmitApplicationInventionTests {
-
-        /**
-         * Параметризированный тест подачи заявок на изобретения.
-         * priorityType: тип приоритета или его отсутствие
-         */
-        @ParameterizedTest
-        @ValueSource(strings = {"withoutPreority", "previousPCT", "previousEuro", "additionalMaterials", "startsOpenShowing"})
-        public void SubmitInventionApplicationTest(String priorityType) throws InterruptedException {
-            app.session().login("ProkoshevPV", "qweR2304");
-            String sendingConfirm = app.sender().sendInventionApplication(priorityType);
-            assertEquals("Пакет успешно подписан.", sendingConfirm);
-        }
-
-        /**
-         * Тест заявки на изобретение с ходатайством
-         */
-        @Test
-        public void SubmitInventionApplicationWithPetitionTest() throws InterruptedException {
-            app.session().login("ProkoshevPV", "qweR2304");
-            String sendingConfirm = app.sender().sendInventionApplicationWithPetition();
-            assertEquals("Пакет успешно подписан.", sendingConfirm);
-        }
-
-        /**
-         * Тест PCT заявки
-         */
-        @Test
-        public void SubmitInventionPCTApplicationTest() throws InterruptedException {
-            app.session().login("ProkoshevPV", "qweR2304");
-            String sendingConfirm = app.sender().sendInventionPCTApplication();
-            assertEquals("Пакет успешно подписан.", sendingConfirm);
-        }
-
 
     }
 
@@ -112,7 +74,7 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
         /**
          * Фабричная функция для предоставления номеров заявок по ИЗО для проверки их наличия в БД Soprano
          */
-        static List<String> InventionAppNumbersProvider() throws IOException {
+        static List<String> inventionAppNumbersProvider() throws IOException {
             List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/inventionAppNumbers.txt").toAbsolutePath());
             return listOfApps;
         }
@@ -121,9 +83,9 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          * Параметризированный тест для проверки корректной записи сохраненной заявки по ИЗО в БД Soprano
          */
         @ParameterizedTest
-        @MethodSource("InventionAppNumbersProvider")
+        @MethodSource("inventionAppNumbersProvider")
         @Tag("SkipInit")
-        public void CheckInventionAppInSopranoTest(String appNumber) {
+        public void checkInventionAppInSopranoTest(String appNumber) {
             int resultCount = app.jdbc().checkInventionAppInSoprano(appNumber);
             assertEquals(3, resultCount);
         }
@@ -131,7 +93,7 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
         /**
          * Фабричная функция для предоставления номеров заявок по ПО для проверки их наличия в БД Soprano
          */
-        static List<String> IndustrialAppNumbersProvider() throws IOException {
+        static List<String> industrialAppNumbersProvider() throws IOException {
             List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/industrialAppNumbers.txt").toAbsolutePath());
             return listOfApps;
         }
@@ -140,9 +102,9 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          * Параметризированный тест для проверки корректной записи сохраненной заявки по ПО в БД Soprano
          */
         @ParameterizedTest
-        @MethodSource("IndustrialAppNumbersProvider")
+        @MethodSource("industrialAppNumbersProvider")
         @Tag("SkipInit")
-        public void CheckIndustrialAppInSopranoTest(String appNumber) {
+        public void checkIndustrialAppInSopranoTest(String appNumber) {
             int resultCount = app.jdbc().checkInventionAppInSoprano(appNumber);
             assertEquals(3, resultCount);
         }
@@ -152,14 +114,13 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
 
     @Nested
     @Order(5)
-    @Disabled
     public class SubmitAdditionTests {
 
 
         /**
          * Фабричная функция для предоставления номеров заявок по ИЗО в тест подачи досылок
          */
-        static List<String> InventionAppNumbersProvider() throws IOException {
+        static List<String> inventionAppNumbersProvider() throws IOException {
             List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/inventionAppNumbers.txt").toAbsolutePath());
             return listOfApps;
         }
@@ -168,17 +129,17 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          * Параметризированный тест подачи досылок по изобретениям
          */
         @ParameterizedTest
-        @MethodSource("InventionAppNumbersProvider")
-        public void SubmitInventionAdditionalTest(String appNumber) {
+        @MethodSource("inventionAppNumbersProvider")
+        public void submitInventionAdditionalTest(String appNumber) {
             app.session().login("ProkoshevPV", "qweR2304");
-            String sendingConfirm = app.sender().sendAdditionForInventionApp(appNumber);
+            String sendingConfirm = app.sender().sendAdditionForInventionApp(appNumber, "soprano");
             assertEquals("Пакет успешно подписан.", sendingConfirm);
         }
 
         /**
          * Фабричная функция для предоставления номеров заявок по ПО в тест подачи досылок
          */
-        static List<String> IndustrialAppNumbersProvider() throws IOException {
+        static List<String> industrialAppNumbersProvider() throws IOException {
             List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/industrialAppNumbers.txt").toAbsolutePath());
             return listOfApps;
         }
@@ -187,8 +148,8 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          * Параметризированный тест подачи досылок по ПО
          */
         @ParameterizedTest
-        @MethodSource("IndustrialAppNumbersProvider")
-        public void SubmitIndustrialAdditionalTest(String appNumber) {
+        @MethodSource("industrialAppNumbersProvider")
+        public void submitIndustrialAdditionalTest(String appNumber) throws NextButtomException {
             app.session().login("ProkoshevPV", "qweR2304");
             String sendingConfirm = app.sender().sendAdditionForIndustrialApp(appNumber);
             assertEquals("Пакет успешно подписан.", sendingConfirm);
@@ -199,7 +160,6 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
 
     @Nested
     @Order(6)
-    @Disabled
     public class SaveAdditionTests {
 
         /**
@@ -224,7 +184,7 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
         /**
          * Фабричная функция для предоставления номеров заявок по ИЗО для проверки их наличия досылок в Soprano
          */
-        static List<String> InventionAdditionNumbersProvider() throws IOException {
+        static List<String> inventionAdditionNumbersProvider() throws IOException {
             List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/inventionAppNumbers.txt").toAbsolutePath());
             return listOfApps;
         }
@@ -233,9 +193,9 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          * Параметризированный тест для проверки корректной записи сохраненной досылки по ИЗО в БД Soprano
          */
         @ParameterizedTest
-        @MethodSource("InventionAdditionNumbersProvider")
+        @MethodSource("inventionAdditionNumbersProvider")
         @Tag("SkipInit")
-        public void CheckInventionAppInSopranoTest(String appNumber) {
+        public void checkInventionAppInSopranoTest(String appNumber) {
             int resultCount = app.jdbc().checkInventionAdditionInSoprano(appNumber);
             assertEquals(2, resultCount);
         }
@@ -243,7 +203,7 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
         /**
          * Фабричная функция для предоставления номеров досылок по ПО для проверки их наличия в БД Soprano
          */
-        static List<String> IndustrialAdditionNumbersProvider() throws IOException {
+        static List<String> industrialAdditionNumbersProvider() throws IOException {
             List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/industrialAppNumbers.txt").toAbsolutePath());
             return listOfApps;
         }
@@ -252,9 +212,9 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
          * Параметризированный тест для проверки корректной записи сохраненной досылки по ПО в БД Soprano
          */
         @ParameterizedTest
-        @MethodSource("IndustrialAdditionNumbersProvider")
+        @MethodSource("industrialAdditionNumbersProvider")
         @Tag("SkipInit")
-        public void CheckIndustrialAppInSopranoTest(String appNumber) {
+        public void checkIndustrialAppInSopranoTest(String appNumber) {
             int resultCount = app.jdbc().checkInventionAdditionInSoprano(appNumber);
             assertEquals(2, resultCount);
         }

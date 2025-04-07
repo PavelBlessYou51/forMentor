@@ -1,5 +1,6 @@
 package manager;
 
+import com.github.javafaker.Faker;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +56,7 @@ public class HelperBase {
      * Метод осуществляет ЛКМ по веб-элементу.
      * Метод адаптирован под обновление страницы при заполнении полей различных форм.
      */
-    protected void click(By locator, boolean hasDelay) {
+    public void click(By locator, boolean hasDelay) {
         for (var i = 1; i <= 10; i++) {
             try {
                 WebElement element = presenceOfElement(locator);
@@ -70,9 +72,6 @@ public class HelperBase {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-//            catch (TimeoutException exception) {
-//                System.out.println("Try to click, but get TimeoutException");
-//            }
         }
 
 
@@ -81,7 +80,7 @@ public class HelperBase {
     /**
      * Метод для получения текста, содержащегося в веб-элементе
      */
-    protected String getTextFromElement(By locator) {
+    public String getTextFromElement(By locator) {
         String elemText = presenceOfElement(locator).getText();
         return elemText;
     }
@@ -124,9 +123,13 @@ public class HelperBase {
      * Метод для выбора случайного элемента выпадающего списка типа select
      */
     protected void randomOptionPicker(By locator) {
-        Select option = new Select(manager.driver.findElement(locator));
+        Select option = new Select(presenceOfElement(locator));
         List<WebElement> listOfOptions = option.getOptions();
-        option.selectByIndex(getRandomInt(listOfOptions.size() - 1));
+        int index = getRandomInt(listOfOptions.size() - 1);
+        if(index == 0) {
+            index++;
+        }
+        option.selectByIndex(index);
     }
 
     /**
@@ -138,19 +141,19 @@ public class HelperBase {
     }
 
     /**
-     * Метод явного ожидания кликабельности веб-элемента на странице
-     */
-    protected WebElement elementIsClickable(By locator) {
-        WebElement element = new WebDriverWait(manager.driver, Duration.ofSeconds(10)).until(ExpectedConditions.elementToBeClickable(locator));
-        return element;
-    }
-
-    /**
      * Метод возвращает случайное число от 0 до переданного значения
      */
     protected int getRandomInt(int ceil) {
         Random rand = new Random();
         return rand.nextInt(ceil);
+    }
+
+    /**
+     * Метод формирует случайный номер заявки
+     */
+    protected String getRandomAppNumber() {
+        Faker fakerRU = new Faker(new Locale("ru"));
+        return fakerRU.number().digits(9);
     }
 
     /**
@@ -177,12 +180,20 @@ public class HelperBase {
     }
 
     /**
-     * Метод перемещает курсор к документу
+     * Метод загружает документ на портале и ждет окончания загрузки
      */
-    protected void moveToTheElement(WebElement element) {
-        Actions action = new Actions(manager.driver);
-        action.moveToElement(element).perform();
+    protected void fileUploadWithCheck(String locator, String path) {
+        WebElement element = presenceOfElement(By.xpath(locator));
+        element.sendKeys(path);
+        waitingFor(locator + "/ancestor::tr[position()=1]//input[@title='Cохранить файл на диск']", 45);
+
     }
+
+    protected void waitingFor(String locator, int secToWait) {
+        WebDriverWait wait = new WebDriverWait(manager.driver, Duration.ofSeconds(secToWait));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
+    }
+
 
     /**
      * Метод возвращает абсолютный путь к файлу по относительному пути
@@ -221,10 +232,9 @@ public class HelperBase {
     /**
      * Метод записывает номер заявки в указанный файл
      */
-    protected void applicationNumbersWriter(String path) {
+    public void applicationNumbersWriter(String path, String appNumber) {
         String absPath = getAbsolutePathToFile(path);
         fileCreator(absPath);
-        String appNumber = extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         try {
             FileWriter fw = new FileWriter(path, true);
             fw.write(appNumber + "\n");
@@ -239,7 +249,7 @@ public class HelperBase {
     /**
      * Метод извлекает номер заявки
      */
-    protected String extractAppNumber(By locator) {
+    public String extractAppNumber(By locator) {
         String rawElementContent = getTextFromElement(locator);
         String appNumber = rawElementContent.split(" ")[2];
         return appNumber;
@@ -263,7 +273,7 @@ public class HelperBase {
     /**
      * Метод удаляет все файлы из указанной директории
      */
-    public void fileDeleter (String path) {
+    public void fileDeleter(String path) {
         File[] listOfFile = getListOfFiles(getAbsolutePathToFile(path));
         for (File file : listOfFile) {
             file.delete();
@@ -287,7 +297,7 @@ public class HelperBase {
     /**
      * Метод выбирает вид заявки
      */
-    protected void selectSectionOfAccount(String typeSection) {
+    public void selectSectionOfAccount(String typeSection) {
         if ("invention".equals(typeSection)) {
             click(By.xpath("//span[contains(text(), 'Изобретения')]"), true);
         } else if ("industrial".equals(typeSection)) {
@@ -297,6 +307,7 @@ public class HelperBase {
         }
 
     }
+
 
 }
 

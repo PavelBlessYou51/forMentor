@@ -53,7 +53,7 @@ public class RegistrationTests extends TestBase{
      * Метод удаляет из тестовой БД зарегистрированные сущности и закрывает соединение с БД
      */
     @AfterAll
-    public static void deletePatientAgents() {
+    public static void tearDown() {
         JdbcHelper jdbc = app.jdbc();
         jdbc.pationAgentDeleter();
         jdbc.personAndOrganisationDeleter();

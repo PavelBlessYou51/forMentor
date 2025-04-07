@@ -17,6 +17,16 @@ public class SaveAppAndAdditionHelper extends HelperBase {
     /**
      * Метод запускает процесс сохранения заявок и досылок в Soprano и возвращает true, если все заявки успешно сохранены
      */
+    public void saveDocToSoprano(String docType, String appNumber) {
+        click(By.xpath(String.format("//a[contains(text(), 'Полученные %s')]", docType)), false);
+        findDoc(appNumber);
+        openDoc();
+        saveDoc();
+    }
+
+    /**
+     * Метод запускает процесс сохранения заявок и досылок в Soprano и возвращает true, если все заявки успешно сохранены
+     */
     public boolean saveDocsToSoprano(String appType, String docType) {
         selectSectionOfAccount(appType);
         click(By.xpath(String.format("//a[contains(text(), 'Полученные %s')]", docType)), false);

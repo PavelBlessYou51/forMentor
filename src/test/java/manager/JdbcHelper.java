@@ -11,11 +11,13 @@ public class JdbcHelper extends HelperBase {
 
     private Connection portalConnection;
     private Connection sopranoConnection;
+    private Connection madrasConnection;
 
     public JdbcHelper(ApplicationManager manager) {
         super(manager);
         setPortalConnection();
         setSopranoConnection();
+        setMadrasConnection();
     }
 
     /**
@@ -37,12 +39,26 @@ public class JdbcHelper extends HelperBase {
     public void setSopranoConnection() {
         try {
             if (sopranoConnection == null) {
-                sopranoConnection = DriverManager.getConnection("jdbc:mysql://192.168.2.197:3306/", "observer", "J]K0VtpN");
+                sopranoConnection = DriverManager.getConnection("jdbc:mysql://192.168.2.197:3306/", "root", "ckfdfrgcc");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Метод устанавливает соединение с БД Madras
+     */
+    public void setMadrasConnection() {
+        try {
+            if (madrasConnection == null) {
+                madrasConnection = DriverManager.getConnection("jdbc:mysql://192.168.2.11:3306/dms", "dms", "dms");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /**
      * Метод закрывает соединение с БД
@@ -152,6 +168,89 @@ public class JdbcHelper extends HelperBase {
         try {
             String sql = "SELECT COUNT(*) AS Result FROM patent_test.history where idappli = (SELECT idappli FROM patent_test.ptappli where extidappli = ?)";
             PreparedStatement preparedStatement = sopranoConnection.prepareStatement(sql);
+            preparedStatement.setString(1, appNumber);
+            ResultSet result = preparedStatement.executeQuery();
+            result.next();
+            return result.getInt("Result");
+        } catch (SQLException e) {
+            System.out.println("Checking of entity registration is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Метод для получения номера PCT заявки для дальнейшей подачи заявки
+     */
+    public String getPCTData() {
+        try {
+            String sql = "SELECT NOPCTEP FROM patent_test.pctref\n"+
+                    "WHERE DTPCTAPPLI > '2010-01-01'\n"+
+                    "ORDER BY DTPCTAPPLI\n" +
+                    "LIMIT 1;";
+            Statement statement = sopranoConnection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            return resultSet.getString(1);
+        } catch(SQLException e) {
+            System.out.println("Getting PCT number is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Метод для удаления записи о PCT заявки из pctref
+     */
+    public void deletePCTRecord(String PCTNumber) {
+        try {
+            String sql = "DELETE\n" +
+                    "FROM patent_test.pctref\n" +
+                    "WHERE NOPCTEP = ?";
+            PreparedStatement preparedStatement = sopranoConnection.prepareStatement(sql);
+            preparedStatement.setString(1, PCTNumber);
+            int result = preparedStatement.executeUpdate();
+            if(result != 1) {
+                throw new SQLException();
+            }
+        } catch (SQLException e) {
+            System.out.println("Deleting PCT number is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Метод возвращает заявку для подачи выделенной заявки на ИЗО
+     */
+    public String getInventionApp() {
+        try {
+            Statement statement = sopranoConnection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT EXTIDAPPLI\n" +
+                    "FROM patent_test.ptappli p\n" +
+                    "JOIN patent_test.apply a\n" +
+                    "ON p.IDAPPLI = a.IDAPPLI\n" +
+                    "WHERE a.IDPERSON = 14157 AND EXTIDAPPLI REGEXP '.{4}9.{4}'\n" +
+                    "ORDER BY EXTIDAPPLI DESC\n" +
+                    "LIMIT 1");
+            result.next();
+            return result.getString("EXTIDAPPLI");
+        } catch (SQLException e) {
+            System.out.println("Getting of application for sending an allocated application is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Метод возвращает количество сохраненных в Madras документов по заявке
+     */
+    public int checkDocsInMadras(String appNumber) {
+        try {
+            String sql = "SELECT COUNT(*) AS Result\n" +
+                    "FROM tph035_package t35 \n" +
+                    "INNER JOIN tph014_document t14 ON t14.docpckkey = t35.pckkey \n" +
+                    "LEFT JOIN tph013_docctl t13 ON t14.DOCDCTKEY = t13.DCTKEY \n" +
+                    "LEFT JOIN tph016_docnote t16 ON t16.DNTDOCKEY = t14.DOCKEY\n" +
+                    "WHERE t35.PCKORIAPPNUMBER = ? AND t35.PCKDATEFORMAL = CURDATE()\n" +
+                    "ORDER BY pckdateformal, pckseqnumber";
+            PreparedStatement preparedStatement = madrasConnection.prepareStatement(sql);
             preparedStatement.setString(1, appNumber);
             ResultSet result = preparedStatement.executeQuery();
             result.next();
