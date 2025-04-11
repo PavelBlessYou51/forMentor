@@ -14,4 +14,4 @@ src/test/resources/list_of_app
 *.ipr
 
 src/test/java/Debag.java
-src/test/java/Mail.java
+cd

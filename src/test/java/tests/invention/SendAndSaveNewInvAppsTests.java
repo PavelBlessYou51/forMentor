@@ -1,4 +1,4 @@
-package tests.invention.send_apps;
+package tests.invention;
 
 import exceptions.NextButtomException;
 import manager.JdbcHelper;
@@ -145,6 +145,14 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
         JdbcHelper jdbc = app.jdbc();
         jdbc.closePortalConnection();
 
+    }
+
+    /**
+     * Метод удаляет файл с заявками
+     */
+    @AfterAll
+    public static void docsCleaner() {
+        app.session().fileDeleter("src/test/resources/list_of_app");
     }
 
 }

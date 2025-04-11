@@ -63,27 +63,6 @@ public class SendingHelper extends HelperBase {
         return sendingConfirmation;
     }
 
-
-    /**
-     * Метод подает дополнение к заявке на изобретение
-     */
-    public String sendAdditionForInventionApp(String appNumber, String forTesting) {
-        selectSectionOfAccount("invention");
-        selectTypeOfApplication("addition");
-        typeAppNumberForAddition(appNumber);
-        if ("soprano".equals(forTesting)) {
-            fillAdditionDocumentForm();
-        } else {
-            fillAdditionDocFormForMadras();
-        }
-        fillTaxFormInvention();
-        signInApplication();
-        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        return sendingConfirmation;
-
-    }
-
-
     /**
      * Метод подает дополнение к заявке на ПО
      */
@@ -117,7 +96,7 @@ public class SendingHelper extends HelperBase {
 
 
     /**
-     * Метод выбирает тип заявки
+     * Метод выбирает тип заявки\дополнений\заявлений
      */
     public void selectTypeOfApplication(String typeApp) {
         if ("euroApp".equals(typeApp)) {
@@ -128,6 +107,8 @@ public class SendingHelper extends HelperBase {
             click(By.cssSelector("input[value='Переход заявки PCT на региональную фазу ']"), false);
         } else if ("addition".equals(typeApp)) {
             click(By.cssSelector("input[value='Подать досылку']"), false);
+        } else if ("changedApp".equals(typeApp)) {
+            click(By.cssSelector("input[value='Подать измененное заявление']"), false);
         }
 
     }
@@ -223,7 +204,7 @@ public class SendingHelper extends HelperBase {
             click(By.cssSelector("input[value='Далее']"), true);
             HasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Представители')]"));
             if (HasHeader) {
-                deletePerson(1);
+                deletePerson(2);
             }
         }
 
@@ -620,5 +601,12 @@ public class SendingHelper extends HelperBase {
         click(By.xpath("//input[contains(@id, 'buttonDivSendId')]"), true);
     }
 
+    /**
+     * Метод заполняет номер заявки для подачи измененного заявления
+     */
+    public void typeAppNumberForChangedApp(String appNumber) {
+        type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
+        click(By.xpath("//input[contains(@id, 'buttonChangeSendId')]"), true);
+    }
 
 }

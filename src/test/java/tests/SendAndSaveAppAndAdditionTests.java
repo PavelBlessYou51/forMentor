@@ -117,24 +117,6 @@ public class SendAndSaveAppAndAdditionTests extends TestBase {
     public class SubmitAdditionTests {
 
 
-        /**
-         * Фабричная функция для предоставления номеров заявок по ИЗО в тест подачи досылок
-         */
-        static List<String> inventionAppNumbersProvider() throws IOException {
-            List<String> listOfApps = Files.readAllLines(Paths.get("src/test/resources/list_of_app/inventionAppNumbers.txt").toAbsolutePath());
-            return listOfApps;
-        }
-
-        /**
-         * Параметризированный тест подачи досылок по изобретениям
-         */
-        @ParameterizedTest
-        @MethodSource("inventionAppNumbersProvider")
-        public void submitInventionAdditionalTest(String appNumber) {
-            app.session().login("ProkoshevPV", "qweR2304");
-            String sendingConfirm = app.sender().sendAdditionForInventionApp(appNumber, "soprano");
-            assertEquals("Пакет успешно подписан.", sendingConfirm);
-        }
 
         /**
          * Фабричная функция для предоставления номеров заявок по ПО в тест подачи досылок

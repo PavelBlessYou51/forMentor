@@ -182,7 +182,7 @@ public class HelperBase {
     /**
      * Метод загружает документ на портале и ждет окончания загрузки
      */
-    protected void fileUploadWithCheck(String locator, String path) {
+    public void fileUploadWithCheck(String locator, String path) {
         WebElement element = presenceOfElement(By.xpath(locator));
         element.sendKeys(path);
         waitingFor(locator + "/ancestor::tr[position()=1]//input[@title='Cохранить файл на диск']", 45);
@@ -198,7 +198,7 @@ public class HelperBase {
     /**
      * Метод возвращает абсолютный путь к файлу по относительному пути
      */
-    protected String getAbsolutePathToFile(String file) {
+    public String getAbsolutePathToFile(String file) {
         String absolutePath = Paths.get(file).toAbsolutePath().toString();
         return absolutePath;
     }

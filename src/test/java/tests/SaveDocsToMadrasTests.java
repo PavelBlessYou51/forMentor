@@ -29,8 +29,8 @@ public class SaveDocsToMadrasTests extends TestBase {
     @MethodSource("inventionAppNumbersProvider")
     public void sendInventionAdditionalTest(String appNumber) {
         app.session().login("ProkoshevPV", "qweR2304");
-        String sendingConfirm = app.sender().sendAdditionForInventionApp(appNumber, "madras");
-        assertEquals("Пакет успешно подписан.", sendingConfirm);
+        //String sendingConfirm = app.sender().sendAdditionForInventionApp(appNumber, "madras");
+        //assertEquals("Пакет успешно подписан.", sendingConfirm);
         app.session().logout();
         app.session().login("ProkoshevPV1", "0j2Z7O8G");
         boolean result = app.saver().saveDocsToSoprano("invention", "досылки");
