@@ -33,7 +33,7 @@ public class LoginHelper extends HelperBase {
      */
     public String[] getConfirmLoginMessage() {
         String[] messageText = new String[2];
-        String welcomeText = getTextFromElement(By.id("form:j_idt9:userRoleText")).split(", ")[0];
+        String welcomeText = getTextFromElement(By.cssSelector("span[id*='userRoleText']")).split(", ")[0];
         String exitText = getTextFromElement(By.cssSelector("a[class='logged-in-welcome logged-out']"));
         messageText[0] = welcomeText;
         messageText[1] = exitText;
