@@ -131,8 +131,8 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
         for(String number : appNumbers) {
             int count = app.jdbc().checkDocsInMadras(number);
             actualCount.add(count);
-            Collections.sort(actualCount);
         }
+        Collections.sort(actualCount);
         ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(10, 10, 20));
         assertEquals(expectedCount, actualCount);
     }
