@@ -109,6 +109,8 @@ public class SendingHelper extends HelperBase {
             click(By.cssSelector("input[value^='Направить ответ']"), false);
         } else if ("changedApp".equals(typeApp)) {
             click(By.cssSelector("input[value='Подать измененное заявление']"), false);
+        } else if("additionWithDate".equals(typeApp)) {
+            click(By.cssSelector("input[value^='Направить доп. материалы с указанием даты']"), false);
         }
 
     }
@@ -608,6 +610,14 @@ public class SendingHelper extends HelperBase {
     public void typeAppNumberForChangedApp(String appNumber) {
         type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
         click(By.xpath("//input[contains(@id, 'buttonChangeSendId')]"), true);
+    }
+
+    /**
+     * Метод заполняет номер заявки и дату для подачи доп. материалов с указанием даты
+     */
+    public void typeAppNumberForAdditionWithDate(String appNumber) {
+        type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
+        click(By.xpath("//input[contains(@id, 'buttonAddSendIdWithSubmitDate')]"), true);
     }
 
 }

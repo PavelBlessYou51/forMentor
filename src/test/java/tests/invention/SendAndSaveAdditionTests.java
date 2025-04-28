@@ -375,6 +375,73 @@ public class SendAndSaveAdditionTests extends TestBase {
     }
 
     /**
+     * Класс с тестами подачи досылок на ИЗО с указанием даты
+     */
+    @Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class SendAdditionWithDateTests {
+
+        @Test
+        @Order(1)
+        public void submitAdditionWithDateTest() throws InterruptedException {
+            app.session().login("ProkoshevPV", "qweR2304");
+            app.sender().selectSectionOfAccount("invention");
+            app.sender().selectTypeOfApplication("euroApp");
+            app.sender().fillInventionCommonInfoPart("withoutPriority");
+            app.sender().addNewApplicants(1);
+            app.sender().addNewInventors(1);
+            for (int i = 0; i < 3; i++) {
+                app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            }
+            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", app.sender().getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().fillTaxFormInvention();
+            app.sender().signInApplication();
+            String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
+            app.session().logout();
+            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.sender().selectSectionOfAccount("invention");
+            app.saver().saveDocToSoprano("заявки", appNumber);
+            app.sender().click(By.xpath("//span[contains(text(), 'Подача заявок')]"), true);
+            app.sender().selectTypeOfApplication("additionWithDate");
+            app.sender().typeAppNumberForAdditionWithDate(appNumber);
+            app.sender().fillAdditionDocumentForm();
+            app.sender().fillTaxFormInvention();
+            app.sender().signInApplication();
+            String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
+            assertEquals("Пакет успешно подписан.", sendingConfirmation);
+            app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
+            app.sender().click(By.cssSelector("input[value='Продолжить']"), true);
+            app.saver().saveDocToSoprano("досылки", appNumber);
+            String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
+            assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), savingConfirmation); // проверка наличия сообщения об успешной записи в Soprano
+            int sopranoRecords = app.jdbc().checkInventionAdditionInSoprano(appNumber);
+            assertEquals(2, sopranoRecords); // проверка формирования записей в Soprano
+        }
+
+        @Test
+        @Order(2)
+        @Tag("SkipInit")
+        public void checkSaveDocsToMadrasTest() {
+            try {
+                Thread.sleep(90000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            List<String> appNumbers = app.sender().applicationNumbersReader("src/test/resources/list_of_app/inventionAdditionNumbers.txt");
+            ArrayList<Integer> actualCount = new ArrayList<>();
+            for (String number : appNumbers) {
+                int count = app.jdbc().checkDocsInMadras(number);
+                actualCount.add(count);
+            }
+            Collections.sort(actualCount);
+            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(15));
+            assertEquals(expectedCount, actualCount);
+        }
+
+    }
+
+    /**
      * Метод закрывает соединение с БД
      */
     @AfterAll

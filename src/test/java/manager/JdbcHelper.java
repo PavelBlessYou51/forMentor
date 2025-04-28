@@ -78,7 +78,7 @@ public class JdbcHelper extends HelperBase {
     public void pationAgentDeleter() {
         try {
             Statement statement = portalConnection.createStatement();
-            int del = statement.executeUpdate("DELETE FROM portaluser WHERE userid IN ('NechaevMA', 'RykovVV', 'KiselevaTS', 'PogosyanAA', 'SubbotinaLA', 'MarkovcevaDV')");
+            int del = statement.executeUpdate("DELETE FROM portaluser WHERE userid IN ('NechaevMA', 'RykovVV', 'KiselevaTS', 'PogosyanAA', 'SubbotinaLA', 'MarkovtsevaDV')");
             System.out.printf("Deleted %d agents!\n", del);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -126,7 +126,7 @@ public class JdbcHelper extends HelperBase {
     public int checkRegisteredAgent() {
         try {
             Statement statement = portalConnection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT COUNT(*) AS CountOfEntities FROM portaluser WHERE userid IN ('NechaevMA', 'RykovVV', 'KiselevaTS', 'PogosyanAA', 'SubbotinaLA', 'MarkovcevaDV')");
+            ResultSet result = statement.executeQuery("SELECT COUNT(*) AS CountOfEntities FROM portaluser WHERE userid IN ('NechaevMA', 'RykovVV', 'KiselevaTS', 'PogosyanAA', 'SubbotinaLA', 'MarkovtsevaDV')");
             result.next();
             return result.getInt("CountOfEntities");
         } catch (SQLException e) {
