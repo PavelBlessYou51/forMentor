@@ -126,11 +126,30 @@ public class JdbcHelper extends HelperBase {
     public int checkRegisteredAgent() {
         try {
             Statement statement = portalConnection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT COUNT(*) AS CountOfEntities FROM portaluser WHERE userid IN ('NechaevMA', 'RykovVV', 'KiselevaTS', 'PogosyanAA', 'SubbotinaLA', 'MarkovcevaDV')");
+            ResultSet result = statement.executeQuery("SELECT COUNT(*) AS CountOfAgents FROM portaluser WHERE userid IN ('NechaevMA', 'RykovVV', 'KiselevaTS', 'PogosyanAA', 'SubbotinaLA', 'MarkovcevaDV')");
             result.next();
-            return result.getInt("CountOfEntities");
+            return result.getInt("CountOfAgents");
         } catch (SQLException e) {
             System.out.println("Checking of agent registration is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+    * Метод возвращает количество записей в БД
+    */
+    public int getNumberOfPortalUserEntries(boolean hasDelay) {
+        try {
+            Statement statement = portalConnection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT COUNT(*) AS CountOfAgents FROM portaluser");
+            result.next();
+            if (hasDelay) {
+                TimeUnit.MILLISECONDS.sleep(400);
+            }
+            return result.getInt("CountOfAgents");
+        } catch (SQLException e) {
+            System.out.println("Getting Number of entries is failed");
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
