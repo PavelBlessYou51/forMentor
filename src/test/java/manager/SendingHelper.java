@@ -106,9 +106,11 @@ public class SendingHelper extends HelperBase {
         } else if ("PCT".equals(typeApp)) {
             click(By.cssSelector("input[value='Переход заявки PCT на региональную фазу ']"), false);
         } else if ("addition".equals(typeApp)) {
-            click(By.cssSelector("input[value='Подать досылку']"), false);
+            click(By.cssSelector("input[value^='Направить ответ']"), false);
         } else if ("changedApp".equals(typeApp)) {
             click(By.cssSelector("input[value='Подать измененное заявление']"), false);
+        } else if("additionWithDate".equals(typeApp)) {
+            click(By.cssSelector("input[value^='Направить доп. материалы с указанием даты']"), false);
         }
 
     }
@@ -264,7 +266,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №1 "Документы" при подаче досылки по ИЗО для тестов сохранения в Madras
      */
-    private void fillAdditionDocFormForMadras() {
+    public void fillAdditionDocFormForMadras() {
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание(не_сжим_17_Мб%).pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[2]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Формула_(цветной_файл)%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[3]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Чертежи_(%).pdf"));
@@ -283,13 +285,14 @@ public class SendingHelper extends HelperBase {
 
 
     /**
-     * Метод заполняет раздел №1 "Документы" в изобретениях и ПО
+     * Метод заполняет раздел №7 "Документы" в изобретениях и ПО
      */
-    private void fillAdditionDocumentForm() {
-        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/описание.pdf"), true);
-        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[2]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/формула.pdf"), true);
-        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[5]"), getAbsolutePathToFile("src/test/resources/file_to_upload/docs_for_invention/реферат.pdf"), true);
+    public void fillAdditionDocumentForm() {
+        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание(не_сжим_17_Мб%).pdf"));
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
+        click(By.xpath("//input[@title='Добавить документ']"), true);
+        randomOptionPicker(By.xpath("//select"));
+        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[10]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Письмо_заявителя%.pdf"));
         click(By.cssSelector("input[value='Далее']"), true);
     }
 
@@ -588,7 +591,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет номер заявки для досылки
      */
-    private void typeAppNumberForAddition(String appNumber) {
+    public void typeAppNumberForAddition(String appNumber) {
         type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
         click(By.xpath("//input[contains(@id, 'buttonAddSendId')]"), true);
     }
@@ -607,6 +610,14 @@ public class SendingHelper extends HelperBase {
     public void typeAppNumberForChangedApp(String appNumber) {
         type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
         click(By.xpath("//input[contains(@id, 'buttonChangeSendId')]"), true);
+    }
+
+    /**
+     * Метод заполняет номер заявки и дату для подачи доп. материалов с указанием даты
+     */
+    public void typeAppNumberForAdditionWithDate(String appNumber) {
+        type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
+        click(By.xpath("//input[contains(@id, 'buttonAddSendIdWithSubmitDate')]"), true);
     }
 
 }
