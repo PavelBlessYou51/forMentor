@@ -2,6 +2,7 @@ package tests;
 
 import manager.JdbcHelper;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -22,6 +23,7 @@ public class RegistrationTests extends TestBase{
         int resultCount = app.jdbc().checkRegisteredEntity(surname, false);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
         assertEquals(1, resultCount);
+        app.quit();
     }
 
     /**
@@ -33,6 +35,8 @@ public class RegistrationTests extends TestBase{
         int resultCount = app.jdbc().checkRegisteredEntity(surname, true);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
         assertEquals(1, resultCount);
+        app.quit();
+
     }
 
     /**
@@ -42,11 +46,13 @@ public class RegistrationTests extends TestBase{
     @ParameterizedTest
     @ValueSource(strings = { "invention", "industrial" })
     public void patentAgentRegistration (String agentType) {
+        int numberOfEntities = app.jdbc().getNumberOfPortalUserEntries(false);
         app.registrator().fillRegistrationFormForPatentAgent(agentType);
-        int resultCount = app.jdbc().checkRegisteredAgent();
+        int numberOfEntitiesAfterRegistration = app.jdbc().getNumberOfPortalUserEntries(true);
+        int resultCount = numberOfEntitiesAfterRegistration - numberOfEntities;
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
         assertEquals(1, resultCount);
-
+        app.quit();
     }
 
     /**

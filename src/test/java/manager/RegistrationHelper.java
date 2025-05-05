@@ -4,7 +4,6 @@ import model.OrganisationData;
 import model.PatentAgent;
 import model.PersonData;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 
 /**
  * Класс-помощник. Содержит методы, связанные с регистрацией
@@ -39,6 +38,7 @@ public class RegistrationHelper extends HelperBase {
         type(By.cssSelector("input[id='form:email']"), person.email, true);
         type(By.id("form:emailToConfirm"), person.email, true);
         type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[6]"), person.passport, false);
+        randomOptionPicker(By.xpath("(//select)[3]"));
         type(By.id("form:appeal"), person.callTo, false);
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[2]/input"), person.postCode, false);
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[4]/input"), person.address, false);
@@ -63,7 +63,8 @@ public class RegistrationHelper extends HelperBase {
         type(By.id("form:emailToConfirm"), oraganisation.email, true);
         type(By.xpath("//div[@class='registration-content-input-post']/input"), oraganisation.position, false);
         type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[6]"), oraganisation.organisationName, false);
-        optionPicker(By.xpath("(//select[@class='reg-input-field-required'])[3] "), getRandomInt(3), true);
+        //optionPicker(By.xpath("(//select[@class='reg-input-field-required'])[3] "), getRandomInt(3), true);
+        randomOptionPicker(By.xpath("(//select)[3]"));
         type(By.id("form:appeal"), oraganisation.callTo, false);
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[2]/input"), oraganisation.postCode, false);
         type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[4]/input"), oraganisation.address, false);
@@ -75,11 +76,14 @@ public class RegistrationHelper extends HelperBase {
 
     /**
      * Метод заполняется форму регистрации переданного типа поверенного
+     *
+     * @return
      */
-    public void fillRegistrationFormForPatentAgent(String agentType) {
+    public String fillRegistrationFormForPatentAgent(String agentType) {
         goToRegisterPage();
         String regNumber;
         String email;
+        String surnamePatentAgent;
         PatentAgent patentAgent = new PatentAgent(agentType);
         optionPicker(By.xpath("//select[contains(@id, 'RadioPanel')]"), 1, false);
         if ("industrial".equals(agentType)) {
@@ -91,9 +95,11 @@ public class RegistrationHelper extends HelperBase {
         click(By.cssSelector("input[class='reg-input-field-required']"), false);
         type(By.cssSelector("input[class='reg-input-field-required']"), regNumber, true);
         click(By.id("form:btnCheckUser"), false);
+        surnamePatentAgent = getElementSurnameValue(By.id("form:registration-input-lastname"), "value");
         email = getElementAttrValue(By.id("form:email"), "value");
         type(By.id("form:emailToConfirm"), email, false);
         click(By.id("form:btnSelfRegistrationUser"), false);
+        return surnamePatentAgent;
     }
 
     /**
@@ -104,3 +110,5 @@ public class RegistrationHelper extends HelperBase {
         return massege;
     }
 }
+
+
