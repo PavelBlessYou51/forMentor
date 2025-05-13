@@ -149,7 +149,16 @@ public class HelperBase {
     }
 
     /**
-     * Метод возвращает случайное число от 0 до переданного значения
+     * Метод явного ожидания присутствия списка элементов на странице
+     */
+    protected List<WebElement> presenceOfElements(By locator) {
+        List<WebElement> elements = new WebDriverWait(manager.driver, Duration.ofSeconds(15)).until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+        return elements;
+    }
+
+    /**
+     * Метод возвращает случайное число от [0, ceil)
+     * @param ceil int - верхняя граница
      */
     protected int getRandomInt(int ceil) {
         Random rand = new Random();

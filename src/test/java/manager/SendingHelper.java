@@ -6,8 +6,11 @@ import model.PersonData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -17,65 +20,6 @@ public class SendingHelper extends HelperBase {
 
     SendingHelper(ApplicationManager manager) {
         super(manager);
-    }
-
-    /**
-     * Метод подает заявку на ПО
-     */
-    public String sendIndustrialApplication(int countOfSamples) throws NextButtomException {
-        selectSectionOfAccount("industrial");
-        selectTypeOfApplication("ind_usualApp");
-        fillIndustrialCommonInfoPart();
-        addNewApplicants(1);
-        addNewInventors(1);
-        click(By.cssSelector("input[value='Далее']"), true);
-        click(By.cssSelector("input[value='Далее']"), true);
-        fillAppDocumentForm("industrial");
-        fillIndustrialPrototypeWithAdditionalSamples(countOfSamples);
-        fillTaxFormIndustrial();
-        signInApplication();
-        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        if ("Пакет успешно подписан.".equals(sendingConfirmation)) {
-            applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt", "12312312");
-        }
-        return sendingConfirmation;
-    }
-
-    /**
-     * Метод подает заявку на ПО c указанным приоритетом
-     */
-    public String sendIndustrialApplicationWithPriority(String priorityType) throws NextButtomException {
-        selectSectionOfAccount("industrial");
-        selectTypeOfApplication("ind_usualApp");
-        fillIndustrialCommonInfoPart();
-        addNewApplicants(1);
-        addNewInventors(1);
-        click(By.cssSelector("input[value='Далее']"), true);
-        click(By.cssSelector("input[value='Далее']"), true);
-        fillAppDocumentForm("industrial");
-        fillIndustrialPrototypeWithAllPriorities(0);
-        fillTaxFormIndustrial();
-        signInApplication();
-        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        if ("Пакет успешно подписан.".equals(sendingConfirmation)) {
-            applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt", "12312312");
-        }
-        return sendingConfirmation;
-    }
-
-    /**
-     * Метод подает дополнение к заявке на ПО
-     */
-    public String sendAdditionForIndustrialApp(String appNumber) throws NextButtomException {
-        selectSectionOfAccount("industrial");
-        selectTypeOfApplication("addition");
-        typeAppNumberForAddition(appNumber);
-        fillAppDocumentForm("industrial");
-        fillIndustrialPrototypeInAddition();
-        fillTaxFormIndustrial();
-        signInApplication();
-        String sendingConfirmation = getTextFromElement(By.cssSelector("span[class='error-message']"));
-        return sendingConfirmation;
     }
 
     /**
@@ -440,12 +384,12 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Промышленные образцы" заявки на ПО, добавляя образцы
      */
-    public void fillIndustrialPrototypeWithAdditionalSamples(int countOfSamples) {
+    public void fillIndustrialPrototypeWithAdditionalSamples(int countOfSamples, boolean allDocs) {
         for (int l = 0; l < countOfSamples; l++) {
             if (l != 0) {
                 click(By.cssSelector("input[value='Добавить новый промышленный образец']"), true);
             }
-            fillIndustrialPrototype(l, true);
+            fillIndustrialPrototype(l, allDocs);
         }
         click(By.cssSelector("input[value='Далее']"), true);
     }
@@ -480,8 +424,9 @@ public class SendingHelper extends HelperBase {
 
     /**
      * Метод заполняет раздел №7 "Промышленные образцы" заявки на ПО
+     * @param locatorNumber int - отсчет с 0
      */
-    protected void fillIndustrialPrototype(int locatorNumber, boolean allDocs) {
+    public void fillIndustrialPrototype(int locatorNumber, boolean allDocs) {
         EntityDataBase entity = new EntityDataBase();
         String prototypeName = entity.fakerRU.lorem().sentence();
         String productIndication = entity.fakerRU.lorem().sentence();
@@ -620,4 +565,12 @@ public class SendingHelper extends HelperBase {
         click(By.xpath("//input[contains(@id, 'buttonAddSendIdWithSubmitDate')]"), true);
     }
 
+    /**
+     * Метод удаляет один случайный промышленный образец
+     */
+    public void deleteRandomSample() {
+        List<WebElement> sampleOpeners = presenceOfElements(By.xpath("//input[@title='Развернуть']"));
+        sampleOpeners.get(getRandomInt(sampleOpeners.size())).click();
+        click(By.cssSelector("input[value='Удалить промышленный образец']"), true);
+    }
 }
