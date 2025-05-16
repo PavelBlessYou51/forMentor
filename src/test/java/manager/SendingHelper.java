@@ -204,7 +204,6 @@ public class SendingHelper extends HelperBase {
         randomOptionPicker(By.xpath("//select"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[13]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
         click(By.cssSelector("input[value='Далее']"), true);
-        click(By.cssSelector("input[value='Далее']"), true);
     }
 
     /**
@@ -223,7 +222,6 @@ public class SendingHelper extends HelperBase {
         click(By.xpath("//input[@title='Добавить документ']"), true);
         randomOptionPicker(By.xpath("//select"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[10]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Письмо_заявителя%.pdf"));
-        click(By.cssSelector("input[value='Далее']"), true);
         click(By.cssSelector("input[value='Далее']"), true);
     }
 
@@ -480,6 +478,8 @@ public class SendingHelper extends HelperBase {
         click(By.cssSelector("input[value='payment-document']"), true);
         fileUpload(By.xpath("//span[contains(@id, 'uploadGroup')]//input"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Пп_об_оплате_ГП%.pdf"), true);
     }
+
+
 
     /**
      * Метод заполняет раздел №1 "Общая информация" PCT заявки

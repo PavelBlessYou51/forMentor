@@ -28,7 +28,7 @@ public class CertificateHelper extends HelperBase {
     public String certificateActivation() {
         selectSectionOfAccount("profile");
         selectCertificateAction("activate");
-        fillCirtificateForm("Prokoshev", "Pavel", "Vladimirovich", "prokoshevpavel@mail.ru", "123456");
+        fillCirtificateForm("123456");
         String activationConfirm = getActivationConfirm();
         return activationConfirm;
     }
@@ -57,9 +57,9 @@ public class CertificateHelper extends HelperBase {
     /**
      * Метод заполняет форму выпуска нового сертификата и выпускает его
      */
-    protected void fillCirtificateForm(String lastName, String firstName, String patronymic, String email, String pinCode) {
-        type(By.xpath("(//input[@class='application-input'])[5]"), pinCode, true);
-        type(By.xpath("(//input[@class='application-input'])[6]"), pinCode, true);
+    protected void fillCirtificateForm(String pinCode) {
+        type(By.xpath("(//input[@class='application-input'])[7]"), pinCode, true);
+        type(By.xpath("(//input[@class='application-input'])[8]"), pinCode, true);
         click(By.xpath("//input[contains(@id, 'issue-certificate')]"), true);
     }
 

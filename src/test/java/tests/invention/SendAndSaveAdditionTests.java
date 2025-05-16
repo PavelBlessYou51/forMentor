@@ -241,7 +241,6 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectTypeOfApplication("addition");
             app.sender().typeAppNumberForAddition(appNumber);
             app.sender().fillAdditionDocumentForm();
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -332,7 +331,6 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectTypeOfApplication("addition");
             app.sender().typeAppNumberForAddition(appNumber);
             app.sender().fillAdditionDocumentForm();
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));

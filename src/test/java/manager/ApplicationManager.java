@@ -48,7 +48,9 @@ public class ApplicationManager {
      * Возвращает класс-помощник для взаимодействия с функционалом регистрации
      */
     public RegistrationHelper registrator() {
-        registrator = new RegistrationHelper(this);
+        if (registrator == null) {
+            registrator = new RegistrationHelper(this);
+        }
         return registrator;
     }
 
@@ -57,7 +59,9 @@ public class ApplicationManager {
      * Возвращает класс-помощник для взаимодействия с функционалом подачи заявок
      */
     public SendingHelper sender() {
-        sender = new SendingHelper(this);
+        if (sender == null) {
+            sender = new SendingHelper(this);
+        }
         return sender;
     }
 
@@ -65,7 +69,9 @@ public class ApplicationManager {
      * Возвращает класс-помощник для взаимодействия с функционалом сохранения заявок и досылок в Soprano
      */
     public SaveAppAndAdditionHelper saver() {
-        saver = new SaveAppAndAdditionHelper(this);
+        if (saver == null) {
+            saver = new SaveAppAndAdditionHelper(this);
+        }
         return saver;
     }
 
@@ -73,7 +79,9 @@ public class ApplicationManager {
      * Возвращает класс-помощник для взаимодействия с функционалом отзыва и выпуска пин-кода
      */
     public CertificateHelper pinCode() {
-        pinCode = new CertificateHelper(this);
+        if (pinCode == null) {
+            pinCode = new CertificateHelper(this);
+        }
         return pinCode;
     }
 
@@ -81,7 +89,9 @@ public class ApplicationManager {
      * Возвращает класс-помощник для взаимодействия с JDBS
      */
     public JdbcHelper jdbc() {
-        jdbc = new JdbcHelper(this);
+        if (jdbc == null) {
+            jdbc = new JdbcHelper(this);
+        }
         return jdbc;
     }
 
