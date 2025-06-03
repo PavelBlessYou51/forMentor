@@ -62,11 +62,54 @@ public class SendAndSaveAdditionTests extends TestBase {
         assertEquals(2, sopranoRecords); // проверка формирования записей в Soprano
     }
 
+
+    /**
+     * Тест подачи досылки с 1 ПО с указанием даты
+     */
+    @Test
+    @Order(2)
+    public void submitIndEuroAdditionWithDateTest() throws NextButtomException {
+        app.session().login("ProkoshevPV", "qweR2304");
+        app.sender().selectSectionOfAccount("industrial");
+        app.sender().selectTypeOfApplication("euroApp");
+        app.sender().fillIndustrialCommonInfoPart();
+        app.sender().addNewApplicants(1);
+        app.sender().addNewInventors(1);
+        app.sender().addNewRepresentative();
+        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().fillIndustrialPrototypeWithAdditionalSamples(1, false);
+        app.sender().fillTaxFormIndustrial();
+        app.sender().signInApplication();
+        String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
+        app.session().logout();
+        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.sender().selectSectionOfAccount("industrial");
+        app.saver().saveDocToSoprano("заявки", appNumber);
+        app.sender().selectSectionOfAccount("industrial");
+        app.sender().selectSectionOfAccount("industrial");
+        app.sender().selectTypeOfApplication("additionIndWithDate");
+        app.sender().typeAppNumberForAdditionWithDate(appNumber);
+        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().fillIndustrialPrototypeInAddition(true);
+        app.sender().fillTaxFormIndustrial();
+        app.sender().signInApplication();
+        String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
+        assertEquals("Пакет успешно подписан.", sendingConfirmation);
+        app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
+        app.sender().click(By.cssSelector("input[value='Продолжить']"), true);
+        app.saver().saveDocToSoprano("досылки", appNumber);
+        String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
+        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), savingConfirmation); // проверка наличия сообщения об успешной записи в Soprano
+        int sopranoRecords = app.jdbc().checkInventionAdditionInSoprano(appNumber);
+        assertEquals(2, sopranoRecords); // проверка формирования записей в Soprano
+    }
+
     /**
      * Тест подачи досылки с 3 ПО только обязательные документы
      */
     @Test
-    @Order(2)
+    @Order(3)
     public void submitIndEuroAdditionWithThreeSamplesTest() throws NextButtomException {
         app.session().login("ProkoshevPV", "qweR2304");
         app.sender().selectSectionOfAccount("industrial");
@@ -113,7 +156,7 @@ public class SendAndSaveAdditionTests extends TestBase {
      * по проведенным тестам
      */
     @Test
-    @Order(3)
+    @Order(4)
     @Tag("SkipInit")
     public void checkSaveDocsToMadrasTest() {
         try {
@@ -128,7 +171,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             actualCount.add(count);
         }
         Collections.sort(actualCount);
-        ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(21, 39));
+        ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(21, 33, 39));
         assertEquals(expectedCount, actualCount);
     }
 

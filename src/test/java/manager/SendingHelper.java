@@ -18,25 +18,6 @@ public class SendingHelper extends HelperBase {
         super(manager);
     }
 
-    /**
-     * Метод заполняет промышленные образцы в досылке по ПО
-     */
-    public void fillIndustrialPrototypeInAddition(boolean allDocs) {
-        List<WebElement> listOfIndustrialSamples = manager.driver.findElements(By.cssSelector("input[title='Развернуть']"));
-        int countOfSamples = listOfIndustrialSamples.size();
-        for (int i = 1; i <= countOfSamples; i++) {
-            String locator = String.format("(//input[@title='Развернуть'])[%s]", i);
-            click(By.xpath(locator), true);
-            if (allDocs) {
-                addAllDocuments(i - 1);
-            } else {
-                addNecessaryDocuments(i - 1);
-            }
-        }
-        click(By.cssSelector("input[value='Далее']"), true);
-
-
-    }
 
 
     /**
@@ -55,7 +36,10 @@ public class SendingHelper extends HelperBase {
             click(By.cssSelector("input[value='Подать измененное заявление']"), false);
         } else if ("additionWithDate".equals(typeApp)) {
             click(By.cssSelector("input[value^='Направить доп. материалы с указанием даты']"), false);
+        } else if ("additionIndWithDate".equals(typeApp)) {
+            click(By.cssSelector("input[value='Подать досылку с указанием даты']"), false);
         }
+
 
     }
 
@@ -67,7 +51,6 @@ public class SendingHelper extends HelperBase {
         String inventionName = entity.fakerRU.lorem().sentence();
         type(By.xpath("//textarea[contains(@id, 'invName') or contains(@id, 'nameInv')]"), inventionName, true);
     }
-
 
     /**
      * Метод добавляет приоритет в разделе №1 "Общая информация" заявки на изобретение
@@ -91,6 +74,27 @@ public class SendingHelper extends HelperBase {
             click(By.cssSelector("input[value='exhibition-show']"), true);
             startsOpenShowing(entity.fakerRU.number().digits(6));
         }
+    }
+
+
+    /**
+     * Метод заполняет промышленные образцы в досылке по ПО
+     */
+    public void fillIndustrialPrototypeInAddition(boolean allDocs) {
+        List<WebElement> listOfIndustrialSamples = manager.driver.findElements(By.cssSelector("input[title='Развернуть']"));
+        int countOfSamples = listOfIndustrialSamples.size();
+        for (int i = 1; i <= countOfSamples; i++) {
+            String locator = String.format("(//input[@title='Развернуть'])[%s]", i);
+            click(By.xpath(locator), true);
+            if (allDocs) {
+                addAllDocuments(i - 1);
+            } else {
+                addNecessaryDocuments(i - 1);
+            }
+        }
+        click(By.cssSelector("input[value='Далее']"), true);
+
+
     }
 
     /**
