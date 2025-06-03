@@ -108,6 +108,14 @@ class SendAndSaveNewIndAppsTests extends TestBase {
             assertEquals(expectedCount, actualCount);
         }
 
+        /**
+         * Метод удаляет файл с заявками
+         */
+        @AfterAll
+        public static void docsCleaner() {
+            app.session().fileDeleter("src/test/resources/list_of_app");
+        }
+
 
     }
 
@@ -158,7 +166,6 @@ class SendAndSaveNewIndAppsTests extends TestBase {
          */
         @Test
         @Order(2)
-        @Disabled
         public void submitIndAllocatedAppWithThreeSampleTest() {
             app.session().login("ProkoshevPV", "qweR2304");
             app.sender().selectSectionOfAccount("industrial");
@@ -211,7 +218,6 @@ class SendAndSaveNewIndAppsTests extends TestBase {
         @Test
         @Order(3)
         @Tag("SkipInit")
-        @Disabled
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(90000);
@@ -229,6 +235,14 @@ class SendAndSaveNewIndAppsTests extends TestBase {
             assertEquals(expectedCount, actualCount);
         }
 
+        /**
+         * Метод удаляет файл с заявками
+         */
+        @AfterAll
+        public static void docsCleaner() {
+            app.session().fileDeleter("src/test/resources/list_of_app");
+        }
+
     }
 
     /**
@@ -241,13 +255,5 @@ class SendAndSaveNewIndAppsTests extends TestBase {
 
     }
 
-
-    /**
-     * Метод удаляет файл с заявками
-     */
-    @AfterAll
-    public static void docsCleaner() {
-        app.session().fileDeleter("src/test/resources/list_of_app");
-    }
 
 }

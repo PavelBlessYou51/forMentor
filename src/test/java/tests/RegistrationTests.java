@@ -20,7 +20,7 @@ public class RegistrationTests extends TestBase{
     @Test
     public void personRegistration () {
         String surname = app.registrator().fillRegistrationFormForPerson();
-        int resultCount = app.jdbc().checkRegisteredEntity(surname, false);
+        int resultCount = app.jdbc().checkRegisteredEntity(surname, true);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
         assertEquals(1, resultCount);
         app.quit();
@@ -50,6 +50,7 @@ public class RegistrationTests extends TestBase{
         app.registrator().fillRegistrationFormForPatentAgent(agentType);
         int numberOfEntitiesAfterRegistration = app.jdbc().getNumberOfPortalUserEntries(true);
         int resultCount = numberOfEntitiesAfterRegistration - numberOfEntities;
+        System.out.println(resultCount);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
         assertEquals(1, resultCount);
         app.quit();

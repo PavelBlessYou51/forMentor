@@ -139,12 +139,12 @@ public class JdbcHelper extends HelperBase {
     */
     public int getNumberOfPortalUserEntries(boolean hasDelay) {
         try {
-            Statement statement = portalConnection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT COUNT(*) AS CountOfAgents FROM portaluser");
-            result.next();
             if (hasDelay) {
                 TimeUnit.MILLISECONDS.sleep(400);
             }
+            Statement statement = portalConnection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT COUNT(*) AS CountOfAgents FROM portaluser");
+            result.next();
             return result.getInt("CountOfAgents");
         } catch (SQLException e) {
             System.out.println("Getting Number of entries is failed");
@@ -270,6 +270,23 @@ public class JdbcHelper extends HelperBase {
                     "WHERE t35.PCKORIAPPNUMBER = ? AND t35.PCKDATEFORMAL = CURDATE()\n" +
                     "ORDER BY pckdateformal, pckseqnumber";
             PreparedStatement preparedStatement = madrasConnection.prepareStatement(sql);
+            preparedStatement.setString(1, appNumber);
+            ResultSet result = preparedStatement.executeQuery();
+            result.next();
+            return result.getInt("Result");
+        } catch (SQLException e) {
+            System.out.println("Checking of entity registration is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Метод возвращает количество сохраненных в Soprano приоритетов по указанной заявке
+     */
+    public int checkInventionAppPriorities(String appNumber) {
+        try {
+            String sql = "SELECT COUNT(*) as Result FROM patent_test.priority where idappli = (select idappli from patent_test.ptappli where extidappli = ?)";
+            PreparedStatement preparedStatement = sopranoConnection.prepareStatement(sql);
             preparedStatement.setString(1, appNumber);
             ResultSet result = preparedStatement.executeQuery();
             result.next();

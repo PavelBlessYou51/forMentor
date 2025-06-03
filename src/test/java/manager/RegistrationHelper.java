@@ -77,13 +77,11 @@ public class RegistrationHelper extends HelperBase {
     /**
      * Метод заполняется форму регистрации переданного типа поверенного
      *
-     * @return
      */
-    public String fillRegistrationFormForPatentAgent(String agentType) {
+    public void fillRegistrationFormForPatentAgent(String agentType) {
         goToRegisterPage();
         String regNumber;
         String email;
-        String surnamePatentAgent;
         PatentAgent patentAgent = new PatentAgent(agentType);
         optionPicker(By.xpath("//select[contains(@id, 'RadioPanel')]"), 1, false);
         if ("industrial".equals(agentType)) {
@@ -95,11 +93,9 @@ public class RegistrationHelper extends HelperBase {
         click(By.cssSelector("input[class='reg-input-field-required']"), false);
         type(By.cssSelector("input[class='reg-input-field-required']"), regNumber, true);
         click(By.id("form:btnCheckUser"), false);
-        surnamePatentAgent = getElementSurnameValue(By.id("form:registration-input-lastname"), "value");
         email = getElementAttrValue(By.id("form:email"), "value");
         type(By.id("form:emailToConfirm"), email, false);
         click(By.id("form:btnSelfRegistrationUser"), false);
-        return surnamePatentAgent;
     }
 
     /**

@@ -32,7 +32,8 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.session().login("ProkoshevPV", "qweR2304");
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("euroApp");
-            app.sender().fillInventionCommonInfoPart("withoutPriority");
+            app.sender().fillInventionCommonInfoPart();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().addNewApplicants(1);
             app.sender().addNewInventors(1);
             for (int i = 0; i < 3; i++) {
@@ -52,11 +53,12 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("changedApp");
             app.sender().typeAppNumberForChangedApp(appNumber);
-            app.sender().fillInventionCommonInfoPart("withoutPriority");
-            for (int i = 0; i < 5; i++) {
+            app.sender().fillInventionCommonInfoPart();
+            for (int i = 0; i < 6; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
             app.sender().fillAppDocumentFormForMadras();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -104,8 +106,8 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("changedApp");
             app.sender().typeAppNumberForChangedApp(appNumber);
-            app.sender().fillInventionCommonInfoPart("withoutPriority");
-            for (int i = 0; i < 5; i++) {
+            app.sender().fillInventionCommonInfoPart();
+            for (int i = 0; i < 6; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
             app.sender().fillPCTDocumentForm();
@@ -136,8 +138,8 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("allocatedApp");
             app.sender().typeAppNumberForAllocatedApp(appNumber);
-            app.sender().fillInventionCommonInfoPart("withoutPriority");
-            for (int i = 0; i < 5; i++) {
+            app.sender().fillInventionCommonInfoPart();
+            for (int i = 0; i < 6; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
             app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", app.sender().getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
@@ -154,8 +156,8 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("changedApp");
             app.sender().typeAppNumberForChangedApp(appNumber);
-            app.sender().fillInventionCommonInfoPart("withoutPriority");
-            for (int i = 0; i < 5; i++) {
+            app.sender().fillInventionCommonInfoPart();
+            for (int i = 0; i < 6; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
             app.sender().fillAppDocumentForm("invention");
@@ -200,6 +202,14 @@ public class SendAndSaveAdditionTests extends TestBase {
             assertEquals(expectedCount, actualCount);
         }
 
+        /**
+         * Метод удаляет файл с заявками
+         */
+        @AfterAll
+        public static void docsCleaner() {
+            app.session().fileDeleter("src/test/resources/list_of_app");
+        }
+
     }
 
     /**
@@ -241,6 +251,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectTypeOfApplication("addition");
             app.sender().typeAppNumberForAddition(appNumber);
             app.sender().fillAdditionDocumentForm();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -265,7 +276,8 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.session().login("ProkoshevPV", "qweR2304");
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("euroApp");
-            app.sender().fillInventionCommonInfoPart("withoutPriority");
+            app.sender().fillInventionCommonInfoPart();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().addNewApplicants(1);
             app.sender().addNewInventors(1);
             for (int i = 0; i < 3; i++) {
@@ -286,6 +298,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectTypeOfApplication("addition");
             app.sender().typeAppNumberForAddition(appNumber);
             app.sender().fillAdditionDocFormForMadras();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -312,8 +325,8 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("allocatedApp");
             app.sender().typeAppNumberForAllocatedApp(appNumber);
-            app.sender().fillInventionCommonInfoPart("withoutPriority");
-            for (int i = 0; i < 5; i++) {
+            app.sender().fillInventionCommonInfoPart();
+            for (int i = 0; i < 6; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
             app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", app.sender().getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
@@ -331,6 +344,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectTypeOfApplication("addition");
             app.sender().typeAppNumberForAddition(appNumber);
             app.sender().fillAdditionDocumentForm();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -370,6 +384,14 @@ public class SendAndSaveAdditionTests extends TestBase {
             assertEquals(expectedCount, actualCount);
         }
 
+        /**
+         * Метод удаляет файл с заявками
+         */
+        @AfterAll
+        public static void docsCleaner() {
+            app.session().fileDeleter("src/test/resources/list_of_app");
+        }
+
     }
 
     /**
@@ -385,7 +407,8 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.session().login("ProkoshevPV", "qweR2304");
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("euroApp");
-            app.sender().fillInventionCommonInfoPart("withoutPriority");
+            app.sender().fillInventionCommonInfoPart();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().addNewApplicants(1);
             app.sender().addNewInventors(1);
             for (int i = 0; i < 3; i++) {
@@ -404,6 +427,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().selectTypeOfApplication("additionWithDate");
             app.sender().typeAppNumberForAdditionWithDate(appNumber);
             app.sender().fillAdditionDocumentForm();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -437,6 +461,14 @@ public class SendAndSaveAdditionTests extends TestBase {
             assertEquals(expectedCount, actualCount);
         }
 
+        /**
+         * Метод удаляет файл с заявками
+         */
+        @AfterAll
+        public static void docsCleaner() {
+            app.session().fileDeleter("src/test/resources/list_of_app");
+        }
+
     }
 
     /**
@@ -449,11 +481,5 @@ public class SendAndSaveAdditionTests extends TestBase {
 
     }
 
-    /**
-     * Метод удаляет файл с заявками
-     */
-    @AfterAll
-    public static void docsCleaner() {
-        app.session().fileDeleter("src/test/resources/list_of_app");
-    }
+
 }

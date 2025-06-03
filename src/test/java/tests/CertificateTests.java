@@ -36,4 +36,6 @@ public class CertificateTests extends TestBase {
         String deactivationConfirm = app.pinCode().certificateActivation();
         assertEquals("У вас есть сертификат", deactivationConfirm);
     }
+
+
 }
