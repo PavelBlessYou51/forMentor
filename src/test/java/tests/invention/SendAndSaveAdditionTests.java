@@ -28,7 +28,7 @@ public class SendAndSaveAdditionTests extends TestBase {
          */
         @Test
         @Order(1)
-        public void submitChangedApplicationTest() {
+        public void submitChangedApplicationTest() throws NextButtomException {
             app.session().login("ProkoshevPV", "qweR2304");
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("euroApp");
@@ -403,7 +403,7 @@ public class SendAndSaveAdditionTests extends TestBase {
 
         @Test
         @Order(1)
-        public void submitAdditionWithDateTest() throws InterruptedException {
+        public void submitAdditionWithDateTest() throws InterruptedException, NextButtomException {
             app.session().login("ProkoshevPV", "qweR2304");
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("euroApp");

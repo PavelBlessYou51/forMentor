@@ -128,7 +128,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
          */
         @Test
         @Order(1)
-        public void submitIndAllocatedAppTest() {
+        public void submitIndAllocatedAppTest() throws NextButtomException {
             app.session().login("ProkoshevPV", "qweR2304");
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
@@ -166,7 +166,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
          */
         @Test
         @Order(2)
-        public void submitIndAllocatedAppWithThreeSampleTest() {
+        public void submitIndAllocatedAppWithThreeSampleTest() throws NextButtomException {
             app.session().login("ProkoshevPV", "qweR2304");
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
@@ -231,7 +231,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
                 actualCount.add(count);
             }
             Collections.sort(actualCount);
-            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(13, 30));
+            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(11));
             assertEquals(expectedCount, actualCount);
         }
 

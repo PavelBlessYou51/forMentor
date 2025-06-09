@@ -21,7 +21,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
      */
     @Test
     @Order(1)
-    public void submitInventionEuroApplicationTest() {
+    public void submitInventionEuroApplicationTest() throws NextButtomException {
         app.session().login("ProkoshevPV", "qweR2304");
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("euroApp");

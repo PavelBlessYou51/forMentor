@@ -53,7 +53,6 @@ public class RegistrationTests extends TestBase{
         System.out.println(resultCount);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
         assertEquals(1, resultCount);
-        app.quit();
     }
 
     /**

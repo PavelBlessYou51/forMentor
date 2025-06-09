@@ -4,6 +4,7 @@ import exceptions.NextButtomException;
 import model.EntityDataBase;
 import model.PersonData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
@@ -100,7 +101,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод добавляет нового заявителя и заполняет его данные
      */
-    public void addNewApplicants(int count) {
+    public void addNewApplicants(int count) throws NextButtomException {
         boolean hasHeader = true;
         int havePersons = 0;
         while (hasHeader) {
@@ -113,8 +114,14 @@ public class SendingHelper extends HelperBase {
                 fillPersonData("applicant", havePersons);
                 havePersons++;
             }
-            click(By.cssSelector("input[value='Далее']"), true);
-            click(By.cssSelector("input[value='Далее']"), true);
+            int loopCount = 0;
+            while (!isElementPresent(By.xpath("//input[@value='Добавить нового изобретателя' or @value='Добавить нового автора']"))) {
+                if (loopCount > 4) {
+                    throw new NextButtomException("Loop of next button!");
+                }
+                click(By.cssSelector("input[value='Далее']"), true);
+                loopCount++;
+            }
             hasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Заявители')]"));
             if (hasHeader) {
                 deletePerson(count);
@@ -126,7 +133,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод добавляет нового изобретателя\автора и заполняет его данные
      */
-    public void addNewInventors(int count) {
+    public void addNewInventors(int count) throws NextButtomException {
         boolean HasHeader = true;
         int havePersons = 0;
         while (HasHeader) {
@@ -139,8 +146,14 @@ public class SendingHelper extends HelperBase {
                 fillPersonData("inventor", havePersons);
                 havePersons++;
             }
-            click(By.cssSelector("input[value='Далее']"), true);
-            click(By.cssSelector("input[value='Далее']"), true);
+            int loopCount = 0;
+            while (!isElementPresent(By.xpath("//input[@value='Добавить нового представителя']"))) {
+                if (loopCount > 4) {
+                    throw new NextButtomException("Loop of next button!");
+                }
+                click(By.cssSelector("input[value='Далее']"), true);
+                loopCount++;
+            }
             HasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Изобретатели') or contains(text(), 'Авторы')]"));
             if (HasHeader) {
                 deletePerson(count);
