@@ -32,7 +32,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
         app.sender().fillAdditionalInfo("allPetitions");
-        app.sender().fillAppDocumentFormForMadras();
+        app.sender().fillAppDocumentFormForMadras(false);
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
         app.sender().fillTaxFormInvention();
         app.sender().signInApplication();
@@ -90,7 +90,25 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
     @Test
     @Order(3)
     public void submitAllocatedApplicationTest() throws NextButtomException {
-        String appNumber = app.jdbc().getInventionApp();
+        app.session().login("ProkoshevPV", "qweR2304");
+        app.sender().selectSectionOfAccount("invention");
+        app.sender().selectTypeOfApplication("euroApp");
+        app.sender().fillInventionCommonInfoPart();
+        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().addNewApplicants(1);
+        app.sender().addNewInventors(1);
+        for (int i = 0; i < 3; i++) {
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        }
+        app.sender().fillAppDocumentForm("invention");
+        app.sender().fillTaxFormInvention();
+        app.sender().signInApplication();
+        String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
+        app.session().logout();
+        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.sender().selectSectionOfAccount("invention");
+        app.saver().saveDocToSoprano("заявки", appNumber);
+        app.session().logout();
         app.session().login("ProkoshevPV", "qweR2304");
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("allocatedApp");
@@ -117,7 +135,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
     }
 
     /**
-     * Тест подачи выделенной заявки c 4 приоритетами разного вида
+     * Тест подачи евразийской заявки c 4 приоритетами разного вида
      */
     @Test
     @Order(4)
@@ -164,7 +182,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
     @Tag("SkipInit")
     public void checkSaveDocsToMadrasTest() {
         try {
-            Thread.sleep(90000);
+            Thread.sleep(120000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -175,7 +193,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
             actualCount.add(count);
         }
         Collections.sort(actualCount);
-        ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(10, 10, 10, 20));
+        ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(10, 10, 10, 19));
         assertEquals(expectedCount, actualCount);
     }
 

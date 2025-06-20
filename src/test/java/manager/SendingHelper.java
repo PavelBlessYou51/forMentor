@@ -4,7 +4,6 @@ import exceptions.NextButtomException;
 import model.EntityDataBase;
 import model.PersonData;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
@@ -107,6 +106,9 @@ public class SendingHelper extends HelperBase {
         while (hasHeader) {
             while (havePersons < count) {
                 click(By.cssSelector("input[value='Добавить нового заявителя']"), true);
+                while (havePersons == presenceOfElements(By.xpath("//input[contains(@value, 'Удалить')]")).size()) {
+                    click(By.cssSelector("input[value='Добавить нового заявителя']"), true);
+                }
                 if (isElementPresent(By.xpath("//span[@class='error-message']"))) {
                     deletePerson(havePersons--);
                     continue;
@@ -139,6 +141,9 @@ public class SendingHelper extends HelperBase {
         while (HasHeader) {
             while (havePersons < count) {
                 click(By.xpath("//input[contains(@value, 'Добавить нового')]"), true);
+                while (havePersons == presenceOfElements(By.xpath("//input[contains(@value, 'Удалить')]")).size()) {
+                    click(By.xpath("//input[contains(@value, 'Добавить нового')]"), true);
+                }
                 if (isElementPresent(By.xpath("//span[@class='error-message']"))) {
                     deletePerson(havePersons--);
                     continue;
@@ -211,7 +216,8 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Документы" в изобретениях для тестов сохранения в Madras
      */
-    public void fillAppDocumentFormForMadras() {
+    public void fillAppDocumentFormForMadras(boolean hasPriority) {
+        int fieldNumberModifier = 0;
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание(не_сжим_17_Мб%).pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[2]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Формула_(цветной_файл)%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[3]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Чертежи_(%).pdf"));
@@ -221,12 +227,15 @@ public class SendingHelper extends HelperBase {
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[8]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Основания_уменьшения_пошлины%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[9]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Доверенность%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[10]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Передача_права_на_евр_заявку%.pdf"));
-        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[11]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Права_на_приоритета%.pdf"));
-        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[12]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Письмо_заявителя%.pdf"));
+        if (hasPriority) {
+            fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[11]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Права_на_приоритета%.pdf"));
+            fieldNumberModifier++;
+        }
+        fileUploadWithCheck(String.format("(//div[contains(@id, 'upload')]//input[@type='file'])[%s]", fieldNumberModifier + 11), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Письмо_заявителя%.pdf"));
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
         click(By.xpath("//input[@title='Добавить документ']"), true);
         randomOptionPicker(By.xpath("//select"));
-        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[13]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
+        fileUploadWithCheck("//span[contains(@id, 'uploadOtherDocId')]//input", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
         click(By.cssSelector("input[value='Далее']"), true);
     }
 

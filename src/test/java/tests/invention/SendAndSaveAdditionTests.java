@@ -57,7 +57,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             for (int i = 0; i < 6; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
-            app.sender().fillAppDocumentFormForMadras();
+            app.sender().fillAppDocumentFormForMadras(false);
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
@@ -187,7 +187,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         @Tag("SkipInit")
         public void checkSaveDocsToMadrasTest() {
             try {
-                Thread.sleep(90000);
+                Thread.sleep(120000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -380,7 +380,7 @@ public class SendAndSaveAdditionTests extends TestBase {
                 actualCount.add(count);
             }
             Collections.sort(actualCount);
-            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(14, 15, 22));
+            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(12, 14, 22));
             assertEquals(expectedCount, actualCount);
         }
 

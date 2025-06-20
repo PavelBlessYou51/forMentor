@@ -162,7 +162,6 @@ class SendAndSaveNewIndAppsTests extends TestBase {
 
         /**
          * Тест подачи выделенной заявки с 3 ПО
-         * НЕ РАБОТАЕТ, баг фиксится
          */
         @Test
         @Order(2)
