@@ -13,7 +13,6 @@ src/test/resources/list_of_app
 *.iml
 *.ipr
 
-
 cd
 config.properties
 .idea
