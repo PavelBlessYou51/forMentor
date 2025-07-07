@@ -21,6 +21,7 @@ public class SendAndSaveAdditionTests extends TestBase {
      */
     @Test
     @Order(1)
+    @DisplayName("Тест подачи досылки с 1 ПО с загрузкой всех документов")
     public void submitIndEuroAdditionWithOneSampleTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
@@ -69,6 +70,7 @@ public class SendAndSaveAdditionTests extends TestBase {
      */
     @Test
     @Order(2)
+    @DisplayName("Тест подачи досылки с 1 ПО с указанием даты")
     public void submitIndEuroAdditionWithDateTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
@@ -111,6 +113,7 @@ public class SendAndSaveAdditionTests extends TestBase {
      */
     @Test
     @Order(3)
+    @DisplayName("Тест подачи досылки с 3 ПО только обязательные документы")
     public void submitIndEuroAdditionWithThreeSamplesTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
@@ -159,6 +162,7 @@ public class SendAndSaveAdditionTests extends TestBase {
     @Test
     @Order(4)
     @Tag("SkipInit")
+    @DisplayName("Тест проверки сохранения документов в Madras")
     public void checkSaveDocsToMadrasTest() {
         try {
             Thread.sleep(140000);

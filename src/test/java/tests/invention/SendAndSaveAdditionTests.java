@@ -24,11 +24,12 @@ public class SendAndSaveAdditionTests extends TestBase {
     class SendChangedApplicationTests {
 
         /**
-         * Тест подачи изменной евразийской заявки со всеми возможными документами.
+         * Тест подачи изменной евразийской заявки со всеми документами.
          * Подается новая первоначальная заявка
          */
         @Test
         @Order(1)
+        @DisplayName("Тест подачи изменной евразийской заявки со всеми документами")
         public void submitChangedApplicationTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -82,6 +83,7 @@ public class SendAndSaveAdditionTests extends TestBase {
          */
         @Test
         @Order(2)
+        @DisplayName("Тест подачи изменной PCT заявки")
         public void submitChangedPCTApplicationTest() throws NextButtomException {
             String PCTNumber = app.jdbc().getPCTData();
             app.jdbc().deletePCTRecord(PCTNumber);
@@ -133,6 +135,7 @@ public class SendAndSaveAdditionTests extends TestBase {
          */
         @Test
         @Order(3)
+        @DisplayName("Тест подачи измененной выделенной заявки")
         public void submitChangedAllocatedApplicationTest() throws NextButtomException {
             String appNumber = app.jdbc().getInventionApp();
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
@@ -186,6 +189,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         @Test
         @Order(4)
         @Tag("SkipInit")
+        @DisplayName("Тест проверки сохранения документов в Madras")
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(120000);
@@ -226,6 +230,7 @@ public class SendAndSaveAdditionTests extends TestBase {
          */
         @Test
         @Order(1)
+        @DisplayName("Тест подачи досылки PCT заявке")
         public void submitAdditionPCTApplicationTest() throws NextButtomException {
             String PCTNumber = app.jdbc().getPCTData();
             app.jdbc().deletePCTRecord(PCTNumber);
@@ -273,6 +278,7 @@ public class SendAndSaveAdditionTests extends TestBase {
          */
         @Test
         @Order(2)
+        @DisplayName("Тест подачи досылки со всеми документами по евразийской заявке")
         public void submitAdditionApplicationTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -320,6 +326,7 @@ public class SendAndSaveAdditionTests extends TestBase {
          */
         @Test
         @Order(3)
+        @DisplayName("Тест подачи досылки выделенной евразийской заявке")
         public void submitAdditionAllocatedApplicationTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -386,6 +393,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         @Test
         @Order(4)
         @Tag("SkipInit")
+        @DisplayName("Тест проверки сохранения документов в Madras")
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(120000);
@@ -420,8 +428,12 @@ public class SendAndSaveAdditionTests extends TestBase {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class SendAdditionWithDateTests {
 
+        /**
+         * Тест подачи досылки к евразийской заявке с указанием даты
+         */
         @Test
         @Order(1)
+        @DisplayName("Тест подачи досылки к евразийской заявке с указанием даты")
         public void submitAdditionWithDateTest() throws InterruptedException, NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -460,9 +472,14 @@ public class SendAndSaveAdditionTests extends TestBase {
             assertEquals(2, sopranoRecords); // проверка формирования записей в Soprano
         }
 
+        /**
+         * Тест для проверки сохранения документов в Madras
+         * по проведенным тестам
+         */
         @Test
         @Order(2)
         @Tag("SkipInit")
+        @DisplayName("Тест проверки сохранения документов в Madras")
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(90000);

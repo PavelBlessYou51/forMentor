@@ -1,9 +1,9 @@
 package tests;
 
 import fixture.ConfigProvider;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 
@@ -24,6 +24,7 @@ public class LoginTests extends TestBase {
      */
     @ParameterizedTest
     @MethodSource("userDataProvider")
+    @DisplayName("Тест тест логина")
     public void canLoginWithValidData(String login, String password) {
         app.session().login(login, password);
         assertArrayEquals(new String[]{"Добро пожаловать", "Выйти"}, app.session().getConfirmLoginMessage());

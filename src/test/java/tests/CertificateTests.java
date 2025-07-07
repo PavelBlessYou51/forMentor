@@ -1,10 +1,7 @@
 package tests;
 
 import fixture.ConfigProvider;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,6 +18,7 @@ public class CertificateTests extends TestBase {
      */
     @Test
     @Order(1)
+    @DisplayName("Тест деактивации сертификата пользователя")
     public void certificateDeactivation() {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         String deactivationConfirm = app.pinCode().certificateDeactivation();
@@ -32,6 +30,7 @@ public class CertificateTests extends TestBase {
      */
     @Test
     @Order(2)
+    @DisplayName("Тест активации сертификата пользователя")
     public void certificateActivation() {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         String deactivationConfirm = app.pinCode().certificateActivation();

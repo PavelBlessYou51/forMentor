@@ -26,6 +26,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
          */
         @Test
         @Order(1)
+        @DisplayName("Тест заявки на ПО без приоритета по 1 ПО с загрузкой всех возможных файлов")
         public void submitIndustrialEuroApplicationTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
@@ -58,6 +59,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
          */
         @Test
         @Order(2)
+        @DisplayName("Тест заявки на ПО без приоритета по 3 ПО с приоритетами (предшествующей + доп. мат. + открытый показ) и несколькими заявителями и авторами")
         public void submitIndustrialEuroApplicationWithPrioritiesTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
@@ -92,6 +94,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
         @Test
         @Order(3)
         @Tag("SkipInit")
+        @DisplayName("Тест проверки сохранения документов в Madras")
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(90000);
@@ -129,6 +132,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
          */
         @Test
         @Order(1)
+        @DisplayName("Тест подачи выделенной заявки с 1 ПО")
         public void submitIndAllocatedAppTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
@@ -166,6 +170,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
          */
         @Test
         @Order(2)
+        @DisplayName("Тест подачи выделенной заявки с 3 ПО")
         public void submitIndAllocatedAppWithThreeSampleTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
@@ -218,6 +223,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
         @Test
         @Order(3)
         @Tag("SkipInit")
+        @DisplayName("Тест проверки сохранения документов в Madras")
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(90000);

@@ -22,6 +22,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
      */
     @Test
     @Order(1)
+    @DisplayName("Тест подачи евразийской заявки со всеми документами")
     public void submitInventionEuroApplicationTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -56,6 +57,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
      */
     @Test
     @Order(2)
+    @DisplayName("Тест подачи PCT заявки")
     public void submitInventionPCTApplicationTest() throws NextButtomException {
         String PCTNumber = app.jdbc().getPCTData();
         app.jdbc().deletePCTRecord(PCTNumber);
@@ -90,6 +92,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
      */
     @Test
     @Order(3)
+    @DisplayName("Тест подачи выделенной евразийской заявки")
     public void submitAllocatedApplicationTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -140,6 +143,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
      */
     @Test
     @Order(4)
+    @DisplayName("Тест подачи евразийской заявки c 4 приоритетами разного вида")
     public void submitInventionEuroAppWithPrioritiesTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -181,6 +185,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
     @Test
     @Order(5)
     @Tag("SkipInit")
+    @DisplayName("Тест проверки сохранения документов в Madras")
     public void checkSaveDocsToMadrasTest() {
         try {
             Thread.sleep(120000);
