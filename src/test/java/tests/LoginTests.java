@@ -1,8 +1,13 @@
 package tests;
 
+import fixture.ConfigProvider;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,11 +23,7 @@ public class LoginTests extends TestBase {
      * Проверяет успешный logIN и logOUT
      */
     @ParameterizedTest
-    @CsvSource(value = {
-            "ProkoshevPV, qweR2304",
-            "EfimovSN, beatlestest",
-            "ProkoshevPV1, 0j2Z7O8G"
-    })
+    @MethodSource("userDataProvider")
     public void canLoginWithValidData(String login, String password) {
         app.session().login(login, password);
         assertArrayEquals(new String[]{"Добро пожаловать", "Выйти"}, app.session().getConfirmLoginMessage());
@@ -30,6 +31,16 @@ public class LoginTests extends TestBase {
         assertEquals("Войти", app.session().getConfirmLogoutMessage());
     }
 
+    /**
+     * фабричная функция для предоставления данных в параметризированный тест логина
+     */
+    static Stream<Arguments> userDataProvider() {
+        return Stream.of(
+                Arguments.arguments(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword()),
+                Arguments.arguments(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword()),
+                Arguments.arguments(ConfigProvider.getAdminEfimovLogin(), ConfigProvider.getAdminEfimovPassword())
+        );
+    }
 
 
 }

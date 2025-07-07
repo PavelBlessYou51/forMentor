@@ -1,6 +1,7 @@
 package tests.invention;
 
 import exceptions.NextButtomException;
+import fixture.ConfigProvider;
 import manager.JdbcHelper;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -29,7 +30,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         @Test
         @Order(1)
         public void submitChangedApplicationTest() throws NextButtomException {
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillInventionCommonInfoPart();
@@ -45,11 +46,11 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().signInApplication();
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("changedApp");
             app.sender().typeAppNumberForChangedApp(appNumber);
@@ -66,7 +67,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -84,7 +85,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         public void submitChangedPCTApplicationTest() throws NextButtomException {
             String PCTNumber = app.jdbc().getPCTData();
             app.jdbc().deletePCTRecord(PCTNumber);
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("PCT");
             app.sender().fillPCTCommonInfoPart(PCTNumber);
@@ -98,11 +99,11 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().signInApplication();
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("changedApp");
             app.sender().typeAppNumberForChangedApp(appNumber);
@@ -118,7 +119,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -134,7 +135,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         @Order(3)
         public void submitChangedAllocatedApplicationTest() throws NextButtomException {
             String appNumber = app.jdbc().getInventionApp();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("allocatedApp");
             app.sender().typeAppNumberForAllocatedApp(appNumber);
@@ -148,11 +149,11 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().signInApplication();
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("changedApp");
             app.sender().typeAppNumberForChangedApp(appNumber);
@@ -168,7 +169,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -198,7 +199,7 @@ public class SendAndSaveAdditionTests extends TestBase {
                 actualCount.add(count);
             }
             Collections.sort(actualCount);
-            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(15, 16, 26));
+            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(15, 16, 25));
             assertEquals(expectedCount, actualCount);
         }
 
@@ -228,7 +229,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         public void submitAdditionPCTApplicationTest() throws NextButtomException {
             String PCTNumber = app.jdbc().getPCTData();
             app.jdbc().deletePCTRecord(PCTNumber);
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("PCT");
             app.sender().fillPCTCommonInfoPart(PCTNumber);
@@ -242,11 +243,11 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().signInApplication();
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("addition");
             app.sender().typeAppNumberForAddition(appNumber);
@@ -258,7 +259,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("досылки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -273,7 +274,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         @Test
         @Order(2)
         public void submitAdditionApplicationTest() throws NextButtomException {
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillInventionCommonInfoPart();
@@ -289,11 +290,11 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().signInApplication();
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("addition");
             app.sender().typeAppNumberForAddition(appNumber);
@@ -305,7 +306,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("досылки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -320,8 +321,26 @@ public class SendAndSaveAdditionTests extends TestBase {
         @Test
         @Order(3)
         public void submitAdditionAllocatedApplicationTest() throws NextButtomException {
-            String appNumber = app.jdbc().getInventionApp();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
+            app.sender().selectSectionOfAccount("invention");
+            app.sender().selectTypeOfApplication("euroApp");
+            app.sender().fillInventionCommonInfoPart();
+            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().addNewApplicants(1);
+            app.sender().addNewInventors(1);
+            for (int i = 0; i < 3; i++) {
+                app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            }
+            app.sender().fillAppDocumentForm("invention");
+            app.sender().fillTaxFormInvention();
+            app.sender().signInApplication();
+            String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
+            app.session().logout();
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
+            app.sender().selectSectionOfAccount("invention");
+            app.saver().saveDocToSoprano("заявки", appNumber);
+            app.session().logout();
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("allocatedApp");
             app.sender().typeAppNumberForAllocatedApp(appNumber);
@@ -335,11 +354,11 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().signInApplication();
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("addition");
             app.sender().typeAppNumberForAddition(appNumber);
@@ -351,7 +370,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("досылки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -380,7 +399,7 @@ public class SendAndSaveAdditionTests extends TestBase {
                 actualCount.add(count);
             }
             Collections.sort(actualCount);
-            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(12, 14, 22));
+            ArrayList<Integer> expectedCount = new ArrayList<>(Arrays.asList(14, 15, 22));
             assertEquals(expectedCount, actualCount);
         }
 
@@ -404,7 +423,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         @Test
         @Order(1)
         public void submitAdditionWithDateTest() throws InterruptedException, NextButtomException {
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillInventionCommonInfoPart();
@@ -420,7 +439,7 @@ public class SendAndSaveAdditionTests extends TestBase {
             app.sender().signInApplication();
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
             app.saver().saveDocToSoprano("заявки", appNumber);
             app.sender().click(By.xpath("//span[contains(text(), 'Подача заявок')]"), true);

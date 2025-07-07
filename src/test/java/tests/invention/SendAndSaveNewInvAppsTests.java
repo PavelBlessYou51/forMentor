@@ -1,6 +1,7 @@
 package tests.invention;
 
 import exceptions.NextButtomException;
+import fixture.ConfigProvider;
 import manager.JdbcHelper;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -22,7 +23,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
     @Test
     @Order(1)
     public void submitInventionEuroApplicationTest() throws NextButtomException {
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillInventionCommonInfoPart();
@@ -41,7 +42,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
         app.saver().saveDocToSoprano("заявки", appNumber);
         String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -58,7 +59,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
     public void submitInventionPCTApplicationTest() throws NextButtomException {
         String PCTNumber = app.jdbc().getPCTData();
         app.jdbc().deletePCTRecord(PCTNumber);
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("PCT");
         app.sender().fillPCTCommonInfoPart(PCTNumber);
@@ -75,7 +76,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
         app.saver().saveDocToSoprano("заявки", appNumber);
         String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -90,7 +91,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
     @Test
     @Order(3)
     public void submitAllocatedApplicationTest() throws NextButtomException {
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillInventionCommonInfoPart();
@@ -105,11 +106,11 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
         app.sender().signInApplication();
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
         app.saver().saveDocToSoprano("заявки", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("allocatedApp");
         app.sender().typeAppNumberForAllocatedApp(appNumber);
@@ -125,7 +126,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
         appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
         app.saver().saveDocToSoprano("заявки", appNumber);
         String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -140,7 +141,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
     @Test
     @Order(4)
     public void submitInventionEuroAppWithPrioritiesTest() throws NextButtomException {
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillInventionCommonInfoPart();
@@ -162,7 +163,7 @@ public class SendAndSaveNewInvAppsTests extends TestBase {
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
         app.saver().saveDocToSoprano("заявки", appNumber);
         String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));

@@ -1,6 +1,7 @@
 package tests.industrial_sample;
 
 import exceptions.NextButtomException;
+import fixture.ConfigProvider;
 import manager.JdbcHelper;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -26,7 +27,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
         @Test
         @Order(1)
         public void submitIndustrialEuroApplicationTest() throws NextButtomException {
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
@@ -43,7 +44,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.saver().saveDocToSoprano("заявки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -58,7 +59,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
         @Test
         @Order(2)
         public void submitIndustrialEuroApplicationWithPrioritiesTest() throws NextButtomException {
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
@@ -75,7 +76,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.saver().saveDocToSoprano("заявки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -129,7 +130,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
         @Test
         @Order(1)
         public void submitIndAllocatedAppTest() throws NextButtomException {
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
@@ -146,13 +147,13 @@ class SendAndSaveNewIndAppsTests extends TestBase {
             assertEquals("Пакет успешно подписан.", sendingConfirmation); // проверка успешной отправки заявки
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.saver().saveDocToSoprano("заявки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals(String.format("Заявка %s успешно сохранена в Soprano.", appNumber), savingConfirmation); // проверка наличия сообщения об успешной записи в Soprano
             app.session().logout();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("allocatedApp");
             app.sender().typeAppNumberForAllocatedApp(appNumber);
@@ -166,7 +167,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
         @Test
         @Order(2)
         public void submitIndAllocatedAppWithThreeSampleTest() throws NextButtomException {
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
@@ -182,13 +183,13 @@ class SendAndSaveNewIndAppsTests extends TestBase {
             assertEquals("Пакет успешно подписан.", sendingConfirmation); // проверка успешной отправки заявки
             String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.saver().saveDocToSoprano("заявки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals(String.format("Заявка %s успешно сохранена в Soprano.", appNumber), savingConfirmation); // проверка наличия сообщения об успешной записи в Soprano
             app.session().logout();
-            app.session().login("ProkoshevPV", "qweR2304");
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("allocatedApp");
             app.sender().typeAppNumberForAllocatedApp(appNumber);
@@ -201,7 +202,7 @@ class SendAndSaveNewIndAppsTests extends TestBase {
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
             app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAppNumbers.txt", appNumber);
             app.session().logout();
-            app.session().login("ProkoshevPV1", "0j2Z7O8G");
+            app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.saver().saveDocToSoprano("заявки", appNumber);
             savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));

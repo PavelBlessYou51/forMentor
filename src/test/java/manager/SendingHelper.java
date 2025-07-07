@@ -72,7 +72,7 @@ public class SendingHelper extends HelperBase {
             additionalMaterials(entity.fakerRU.number().digits(6));
         } else if ("startsOpenShowing".equals(priorityType)) {
             click(By.cssSelector("input[value='exhibition-show']"), true);
-            startsOpenShowing(entity.fakerRU.number().digits(6));
+            startsOpenShowing("invention");
         }
     }
 
@@ -235,7 +235,7 @@ public class SendingHelper extends HelperBase {
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
         click(By.xpath("//input[@title='Добавить документ']"), true);
         randomOptionPicker(By.xpath("//select"));
-        fileUploadWithCheck("//span[contains(@id, 'uploadOtherDocId')]//input", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
+        fileUploadWithCheck("//span[contains(@id, 'uploadOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
         click(By.cssSelector("input[value='Далее']"), true);
     }
 
@@ -368,7 +368,7 @@ public class SendingHelper extends HelperBase {
     }
 
     /**
-     * Метод заполняет данные приоритета по предыдущей евразийской заявке при подаче заявки на изобретение
+     * Метод заполняет данные приоритета по предыдущей евразийской заявке
      */
     protected void previousEuroApplication(String prevApp) {
         click(By.xpath("//input[contains(@name, 'calPrioritetEurDateInputDate')]"), true);
@@ -377,7 +377,7 @@ public class SendingHelper extends HelperBase {
     }
 
     /**
-     * Метод заполняет данные приоритета по дате подачи доп материалов при подаче заявки на изобретение
+     * Метод заполняет данные приоритета по дате подачи доп материалов
      */
     protected void additionalMaterials(String prevApp) {
         click(By.xpath("//input[contains(@name, 'calPrioritetAddDateInputDate')]"), true);
@@ -386,15 +386,19 @@ public class SendingHelper extends HelperBase {
     }
 
     /**
-     * Метод заполняет данные приоритета по дате первого открытого показа при подаче заявки на изобретение
+     * Метод заполняет данные приоритета по дате первого открытого показа
      */
-    protected void startsOpenShowing(String prevApp) {
-        click(By.xpath("(//input[contains(@name, 'calPrioritetAddDateInputDate')])[2]"), true);
+    protected void startsOpenShowing(String appType) {
+        if (appType.equals("invention")) {
+            click(By.xpath("(//input[contains(@name, 'calPrioritetAddDateInputDate')])[2]"), true);
+        } else {
+            click(By.xpath("//input[contains(@name, 'calPrioritetExhDateInputDate')]"), true);
+        }
         click(By.xpath("//div[contains(text(), 'Today')]"), true);
     }
 
     /**
-     * Метод заполняет данные приоритета по предыдущей заявке при подаче заявки на изобретение
+     * Метод заполняет данные приоритета по предыдущей заявке
      */
     protected void chooseDiscount(String discountNum) {
         String locator = String.format("//div[@class='application-text']/input[position()=%s]", discountNum);
@@ -440,13 +444,13 @@ public class SendingHelper extends HelperBase {
                 previousPCTApplication(entity.fakerRU.number().digits(6), entity.countryCode);
             } else if (i == 1) {
                 optionPicker(By.xpath(prioritiesListLocator), 1, true);
-                previousEuroApplication(entity.fakerRU.number().digits(6));
+                additionalMaterials(entity.fakerRU.number().digits(6));
             } else if (i == 2) {
                 optionPicker(By.xpath(prioritiesListLocator), 2, true);
-                additionalMaterials(entity.fakerRU.number().digits(6));
+                previousEuroApplication(entity.fakerRU.number().digits(6));
             } else if (i == 3) {
                 optionPicker(By.xpath(prioritiesListLocator), 3, true);
-                startsOpenShowing(entity.fakerRU.number().digits(6));
+                startsOpenShowing("industrial");
             }
             fillIndustrialPrototype(i, false);
         }

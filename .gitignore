@@ -13,5 +13,12 @@ src/test/resources/list_of_app
 *.iml
 *.ipr
 
-src/test/java/Debag.java
+
 cd
+config.properties
+.idea
+build
+fcff
+fcff.pub
+GitLabKey
+GitLabKey.pub

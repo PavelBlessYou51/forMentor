@@ -1,5 +1,6 @@
 package manager;
 
+import fixture.ConfigProvider;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -23,7 +24,7 @@ public class ApplicationManager {
      */
     public void init() {
         driver = new ChromeDriver();
-        driver.get("https://portal8.eapo.org/olf");
+        driver.get(ConfigProvider.getBaseUrl());
         driver.manage().window().maximize();
     }
 

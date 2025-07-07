@@ -1,6 +1,7 @@
 package tests.industrial_sample;
 
 import exceptions.NextButtomException;
+import fixture.ConfigProvider;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import tests.TestBase;
@@ -21,7 +22,7 @@ public class SendAndSaveAdditionTests extends TestBase {
     @Test
     @Order(1)
     public void submitIndEuroAdditionWithOneSampleTest() throws NextButtomException {
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
@@ -35,11 +36,11 @@ public class SendAndSaveAdditionTests extends TestBase {
         app.sender().signInApplication();
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.saver().saveDocToSoprano("заявки", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("addition");
         app.sender().typeAppNumberForAddition(appNumber);
@@ -53,7 +54,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         assertEquals("Пакет успешно подписан.", sendingConfirmation);
         app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.saver().saveDocToSoprano("досылки", appNumber);
         String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -69,7 +70,7 @@ public class SendAndSaveAdditionTests extends TestBase {
     @Test
     @Order(2)
     public void submitIndEuroAdditionWithDateTest() throws NextButtomException {
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
@@ -83,7 +84,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         app.sender().signInApplication();
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.saver().saveDocToSoprano("заявки", appNumber);
         app.sender().selectSectionOfAccount("industrial");
@@ -111,7 +112,7 @@ public class SendAndSaveAdditionTests extends TestBase {
     @Test
     @Order(3)
     public void submitIndEuroAdditionWithThreeSamplesTest() throws NextButtomException {
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
@@ -125,11 +126,11 @@ public class SendAndSaveAdditionTests extends TestBase {
         app.sender().signInApplication();
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.saver().saveDocToSoprano("заявки", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("addition");
         app.sender().typeAppNumberForAddition(appNumber);
@@ -141,7 +142,7 @@ public class SendAndSaveAdditionTests extends TestBase {
         assertEquals("Пакет успешно подписан.", sendingConfirmation);
         app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
         app.session().logout();
-        app.session().login("ProkoshevPV1", "0j2Z7O8G");
+        app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.saver().saveDocToSoprano("досылки", appNumber);
         String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -160,7 +161,7 @@ public class SendAndSaveAdditionTests extends TestBase {
     @Tag("SkipInit")
     public void checkSaveDocsToMadrasTest() {
         try {
-            Thread.sleep(120000);
+            Thread.sleep(140000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

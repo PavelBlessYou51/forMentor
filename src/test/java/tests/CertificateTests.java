@@ -1,5 +1,6 @@
 package tests;
 
+import fixture.ConfigProvider;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ public class CertificateTests extends TestBase {
     @Test
     @Order(1)
     public void certificateDeactivation() {
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         String deactivationConfirm = app.pinCode().certificateDeactivation();
         assertEquals("У вас нет действительного сертификата.", deactivationConfirm);
     }
@@ -32,7 +33,7 @@ public class CertificateTests extends TestBase {
     @Test
     @Order(2)
     public void certificateActivation() {
-        app.session().login("ProkoshevPV", "qweR2304");
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         String deactivationConfirm = app.pinCode().certificateActivation();
         assertEquals("У вас есть сертификат", deactivationConfirm);
     }

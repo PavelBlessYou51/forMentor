@@ -1,5 +1,7 @@
 package manager;
 
+import fixture.ConfigProvider;
+
 import java.sql.*;
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +28,7 @@ public class JdbcHelper extends HelperBase {
     public void setPortalConnection() {
         try {
             if (portalConnection == null) {
-                portalConnection = DriverManager.getConnection("jdbc:db2://192.168.2.75:50000/EAPOFORM", "db2admin", "Passw0rd");
+                portalConnection = DriverManager.getConnection(ConfigProvider.getPortalUrl(), ConfigProvider.getPortalLogin(), ConfigProvider.getPortalPassword());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -39,7 +41,7 @@ public class JdbcHelper extends HelperBase {
     public void setSopranoConnection() {
         try {
             if (sopranoConnection == null) {
-                sopranoConnection = DriverManager.getConnection("jdbc:mysql://192.168.2.197:3306/", "root", "ckfdfrgcc");
+                sopranoConnection = DriverManager.getConnection(ConfigProvider.getSopranoUrl(), ConfigProvider.getSopranoLogin(), ConfigProvider.getSopranoPassword());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -52,7 +54,7 @@ public class JdbcHelper extends HelperBase {
     public void setMadrasConnection() {
         try {
             if (madrasConnection == null) {
-                madrasConnection = DriverManager.getConnection("jdbc:mysql://192.168.2.11:3306/dms", "dms", "dms");
+                madrasConnection = DriverManager.getConnection(ConfigProvider.getMadrasUrl(), ConfigProvider.getMadrasLogin(), ConfigProvider.getMadrasPassword());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
