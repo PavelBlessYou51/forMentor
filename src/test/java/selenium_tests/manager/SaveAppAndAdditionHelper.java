@@ -1,8 +1,6 @@
-package manager;
+package selenium_tests.manager;
 
 import org.openqa.selenium.By;
-
-import java.util.List;
 
 /**
  * Класс-помощник. Содержит методы для сохранения заявок в Soprano

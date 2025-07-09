@@ -1,10 +1,10 @@
-package tests.industrial_sample;
+package selenium_tests.tests.industrial_sample;
 
 import exceptions.NextButtomException;
 import fixture.ConfigProvider;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
-import tests.TestBase;
+import selenium_tests.tests.TestSeleniumBase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SendAndSaveAdditionTests extends TestBase {
+public class SendAndSaveAdditionTests extends TestSeleniumBase {
 
     /**
      * Тест подачи досылки с 1 ПО с загрузкой всех документов

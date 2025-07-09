@@ -1,4 +1,4 @@
-package manager;
+package selenium_tests.manager;
 
 import org.openqa.selenium.By;
 

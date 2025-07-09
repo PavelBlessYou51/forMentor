@@ -1,4 +1,4 @@
-package tests;
+package selenium_tests.tests;
 
 import fixture.ConfigProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Класс содержит тесты авторизации
  */
-public class LoginTests extends TestBase {
+public class LoginTests extends TestSeleniumBase {
 
 
     /**
@@ -25,7 +25,7 @@ public class LoginTests extends TestBase {
     @ParameterizedTest
     @MethodSource("userDataProvider")
     @DisplayName("Тест тест логина")
-    public void canLoginWithValidData(String login, String password) {
+    public void canLoginWithValidDataTest(String login, String password) {
         app.session().login(login, password);
         assertArrayEquals(new String[]{"Добро пожаловать", "Выйти"}, app.session().getConfirmLoginMessage());
         app.session().logout();

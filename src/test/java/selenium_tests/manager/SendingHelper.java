@@ -1,4 +1,4 @@
-package manager;
+package selenium_tests.manager;
 
 import exceptions.NextButtomException;
 import model.EntityDataBase;

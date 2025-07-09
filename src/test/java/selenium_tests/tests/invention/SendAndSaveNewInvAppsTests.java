@@ -1,11 +1,11 @@
-package tests.invention;
+package selenium_tests.tests.invention;
 
 import exceptions.NextButtomException;
 import fixture.ConfigProvider;
-import manager.JdbcHelper;
+import jdbc.JdbcHelper;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
-import tests.TestBase;
+import selenium_tests.tests.TestSeleniumBase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SendAndSaveNewInvAppsTests extends TestBase {
+public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
 
     /**
      * Тест евразийской заявки со всеми документами

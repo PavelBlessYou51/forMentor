@@ -1,11 +1,11 @@
-package tests.invention;
+package selenium_tests.tests.invention;
 
 import exceptions.NextButtomException;
 import fixture.ConfigProvider;
-import manager.JdbcHelper;
+import jdbc.JdbcHelper;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
-import tests.TestBase;
+import selenium_tests.tests.TestSeleniumBase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SendAndSaveAdditionTests extends TestBase {
+public class SendAndSaveAdditionTests extends TestSeleniumBase {
 
     /**
      * Класс с тестами подачи измененных заявлений на ИЗО

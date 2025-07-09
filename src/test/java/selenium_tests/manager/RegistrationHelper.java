@@ -1,4 +1,4 @@
-package manager;
+package selenium_tests.manager;
 
 import model.OrganisationData;
 import model.PatentAgent;

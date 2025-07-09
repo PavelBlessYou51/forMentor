@@ -1,6 +1,6 @@
-package tests;
+package selenium_tests.tests;
 
-import manager.JdbcHelper;
+import jdbc.JdbcHelper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,14 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Класс содержит тесты регистрации
  */
-public class RegistrationTests extends TestBase {
+public class RegistrationTests extends TestSeleniumBase {
 
     /**
      * Тест проверяет отправку запроса на регистрацию физического лица
      */
     @Test
     @DisplayName("Тест регистрации физического лица")
-    public void personRegistration() {
+    public void personRegistrationTest() {
         String surname = app.registrator().fillRegistrationFormForPerson();
         int resultCount = app.jdbc().checkRegisteredEntity(surname, true);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
@@ -32,7 +32,7 @@ public class RegistrationTests extends TestBase {
      */
     @DisplayName("Тест регистрации юридического лица")
     @Test
-    public void organisationRegistration() {
+    public void organisationRegistrationTest() {
         String surname = app.registrator().fillRegistrationFormForOrganisation();
         int resultCount = app.jdbc().checkRegisteredEntity(surname, true);
         assertEquals("Запрос на регистрацию успешно отправлен", app.registrator().getRegistrationRequestMessageConfirm());
@@ -48,7 +48,7 @@ public class RegistrationTests extends TestBase {
     @ParameterizedTest
     @ValueSource(strings = {"invention", "industrial"})
     @DisplayName("Тест регистрации патентного поверенного")
-    public void patentAgentRegistration(String agentType) {
+    public void patentAgentRegistrationTest(String agentType) {
         int numberOfEntities = app.jdbc().getNumberOfPortalUserEntries(false);
         app.registrator().fillRegistrationFormForPatentAgent(agentType);
         int numberOfEntitiesAfterRegistration = app.jdbc().getNumberOfPortalUserEntries(true);

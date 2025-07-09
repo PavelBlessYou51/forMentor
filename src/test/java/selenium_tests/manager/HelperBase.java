@@ -1,4 +1,4 @@
-package manager;
+package selenium_tests.manager;
 
 import com.github.javafaker.Faker;
 import org.openqa.selenium.*;
@@ -237,14 +237,6 @@ public class HelperBase {
         return listOfFiles;
     }
 
-    /**
-     * Метод имитирует нажатие клавиш на клавиатуре
-     */
-    protected void keyBoardTypes(Keys keyType) {
-        Actions action = new Actions(manager.driver);
-        action.sendKeys(keyType).perform();
-    }
-
 
     /**
      * Метод записывает номер заявки в указанный файл
@@ -312,7 +304,7 @@ public class HelperBase {
 
 
     /**
-     * Метод выбирает вид заявки
+     * Метод выбирает раздел аккаунта
      */
     public void selectSectionOfAccount(String typeSection) {
         if ("invention".equals(typeSection)) {

@@ -1,6 +1,7 @@
-package manager;
+package selenium_tests.manager;
 
 import fixture.ConfigProvider;
+import jdbc.JdbcHelper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -91,7 +92,7 @@ public class ApplicationManager {
      */
     public JdbcHelper jdbc() {
         if (jdbc == null) {
-            jdbc = new JdbcHelper(this);
+            jdbc = new JdbcHelper();
         }
         return jdbc;
     }

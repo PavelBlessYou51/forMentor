@@ -1,15 +1,13 @@
-package tests;
+package selenium_tests.tests;
 
-import manager.ApplicationManager;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
+import selenium_tests.manager.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
 /**
  * Базовый тестовый класс для запуска иницализации и завершения работы браузера
  */
-public class TestBase {
+public class TestSeleniumBase {
     protected static ApplicationManager app;
 
     /**

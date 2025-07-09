@@ -1,26 +1,27 @@
-package manager;
+package jdbc;
 
 import fixture.ConfigProvider;
 
 import java.sql.*;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
 /**
  * Класс-помощник. Содержит методы для работы с БД
  */
-public class JdbcHelper extends HelperBase {
+public class JdbcHelper {
 
     private Connection portalConnection;
     private Connection sopranoConnection;
     private Connection madrasConnection;
 
-    public JdbcHelper(ApplicationManager manager) {
-        super(manager);
+    public JdbcHelper() {
         setPortalConnection();
         setSopranoConnection();
         setMadrasConnection();
     }
+
 
     /**
      * Метод устанавливает соединение с БД портала
@@ -136,9 +137,10 @@ public class JdbcHelper extends HelperBase {
             throw new RuntimeException(e);
         }
     }
+
     /**
-    * Метод возвращает количество записей в БД
-    */
+     * Метод возвращает количество записей в БД
+     */
     public int getNumberOfPortalUserEntries(boolean hasDelay) {
         try {
             if (hasDelay) {
@@ -204,15 +206,15 @@ public class JdbcHelper extends HelperBase {
      */
     public String getPCTData() {
         try {
-            String sql = "SELECT NOPCTEP FROM patent_test.pctref\n"+
-                    "WHERE DTPCTAPPLI > '2010-01-01'\n"+
+            String sql = "SELECT NOPCTEP FROM patent_test.pctref\n" +
+                    "WHERE DTPCTAPPLI > '2010-01-01'\n" +
                     "ORDER BY DTPCTAPPLI\n" +
                     "LIMIT 1;";
             Statement statement = sopranoConnection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             resultSet.next();
             return resultSet.getString(1);
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Getting PCT number is failed!");
             throw new RuntimeException(e);
         }
@@ -229,7 +231,7 @@ public class JdbcHelper extends HelperBase {
             PreparedStatement preparedStatement = sopranoConnection.prepareStatement(sql);
             preparedStatement.setString(1, PCTNumber);
             int result = preparedStatement.executeUpdate();
-            if(result != 1) {
+            if (result != 1) {
                 throw new SQLException();
             }
         } catch (SQLException e) {
@@ -295,6 +297,40 @@ public class JdbcHelper extends HelperBase {
             return result.getInt("Result");
         } catch (SQLException e) {
             System.out.println("Checking of entity registration is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Метод возвращает номер заявки для тестов передачи прав\изменение адреса\наименования.
+     * Статусы для изменений по заявке lgstappli in (60,71,72,75)
+     * Статусы для изменений по патенту lgstappli in (100, 101)
+     */
+    public String getAppNumberForChanges(boolean isApp) {
+        String queryCountRows;
+        String queryAppNumber;
+        int randomAppNumber;
+        try {
+            if (isApp) {
+                queryCountRows = "select COUNT(*) as Result from patent_test.ptappli where lgstappli in (60,71,72,75)";
+            } else {
+                queryCountRows = "select COUNT(*) as Result from patent_test.ptappli where lgstappli in (100, 101)";
+            }
+            Statement statement = sopranoConnection.createStatement();
+            ResultSet resultSet = statement.executeQuery(queryCountRows);
+            resultSet.next();
+            randomAppNumber = new Random().nextInt(resultSet.getInt("Result")) + 1;
+            if (isApp) {
+                queryAppNumber = "select extidappli as Result from patent_test.ptappli where lgstappli in (60,71,72,75)";
+            } else {
+                queryAppNumber = "select extidappli as Result from patent_test.ptappli where lgstappli in (100, 101)";
+            }
+            statement = sopranoConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            resultSet = statement.executeQuery(queryAppNumber);
+            resultSet.absolute(randomAppNumber);
+            return resultSet.getString("Result");
+        } catch (SQLException e) {
+            System.out.println("Have no any apps for changes!");
             throw new RuntimeException(e);
         }
     }
