@@ -5,10 +5,29 @@ import model.PatentAgent;
 import model.PersonData;
 import org.openqa.selenium.By;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Класс-помощник. Содержит методы, связанные с регистрацией
  */
 public class RegistrationHelper extends HelperBase {
+
+    public static final Map<String, Integer> COUNTRY_CODES;
+
+    static {
+        HashMap<String, Integer> tempMap = new HashMap<>();
+        tempMap.put("AZ", 0);
+        tempMap.put("KG", 1);
+        tempMap.put("AM", 2);
+        tempMap.put("BY", 3);
+        tempMap.put("KZ", 4);
+        tempMap.put("TJ", 5);
+        tempMap.put("RU", 6);
+        tempMap.put("TM", 7);
+        COUNTRY_CODES = Collections.unmodifiableMap(tempMap);
+    }
 
     /**
      * Конструктор класса. Явно вызывает конструктор родителя
@@ -52,26 +71,25 @@ public class RegistrationHelper extends HelperBase {
      */
     public String fillRegistrationFormForOrganisation() {
         goToRegisterPage();
-        int randomCountryNumber = getRandomInt(8);
-        OrganisationData oraganisation = new OrganisationData(randomCountryNumber);
+        OrganisationData organisationData = new OrganisationData();
         optionPicker(By.xpath("//select[contains(@id, 'RadioPanelId')]"), 2, false);
-        optionPicker(By.xpath("//span[contains(@id, 'CountryMenu')]//select"), randomCountryNumber, true);
-        type(By.xpath("//input[contains(@id, 'input-lastname')]"), oraganisation.surname, false);
-        type(By.xpath("//input[contains(@id, 'input-firstname')]"), oraganisation.name, false);
-        type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[3]"), oraganisation.patronymic, true);
-        type(By.id("form:email"), oraganisation.email, true);
-        type(By.id("form:emailToConfirm"), oraganisation.email, true);
-        type(By.xpath("//div[@class='registration-content-input-post']/input"), oraganisation.position, false);
-        type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[6]"), oraganisation.organisationName, false);
+        optionPicker(By.xpath("//span[contains(@id, 'CountryMenu')]//select"), COUNTRY_CODES.get(organisationData.countryCode), true);
+        type(By.xpath("//input[contains(@id, 'input-lastname')]"), organisationData.surname, false);
+        type(By.xpath("//input[contains(@id, 'input-firstname')]"), organisationData.name, false);
+        type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[3]"), organisationData.patronymic, true);
+        type(By.id("form:email"), organisationData.email, true);
+        type(By.id("form:emailToConfirm"), organisationData.email, true);
+        type(By.xpath("//div[@class='registration-content-input-post']/input"), organisationData.position, false);
+        type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[6]"), organisationData.organisationName, false);
         //optionPicker(By.xpath("(//select[@class='reg-input-field-required'])[3] "), getRandomInt(3), true);
         randomOptionPicker(By.xpath("(//select)[3]"));
-        type(By.id("form:appeal"), oraganisation.callTo, false);
-        type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[2]/input"), oraganisation.postCode, false);
-        type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[4]/input"), oraganisation.address, false);
-        type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[6]/input"), oraganisation.phoneNumber, false);
-        type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[7]"), oraganisation.uniqueID, false);
+        type(By.id("form:appeal"), organisationData.callTo, false);
+        type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[2]/input"), organisationData.postCode, false);
+        type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[4]/input"), organisationData.address, false);
+        type(By.xpath("//span[contains(@id, 'contactsGridId')]/div[6]/input"), organisationData.phoneNumber, false);
+        type(By.xpath("(//div[@class='registration-content-input']/input[@class='reg-input-field-required'])[7]"), organisationData.uniqueID, false);
         click(By.id("form:btnSelfRegistrationUser"), false);
-        return oraganisation.surname;
+        return organisationData.surname;
     }
 
     /**

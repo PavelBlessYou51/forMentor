@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static utils.FileUtils.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
@@ -41,7 +42,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
         assertEquals("Пакет успешно подписан.", sendingConfirmation); // проверка успешной отправки заявки
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
-        app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
+        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
         app.session().logout();
         app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -76,7 +77,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
         assertEquals("Пакет успешно подписан.", sendingConfirmation); // проверка успешной отправки заявки
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
-        app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
+        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
         app.session().logout();
         app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -127,7 +128,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
         assertEquals("Пакет успешно подписан.", sendingConfirmation); // проверка успешной отправки заявки
         appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
-        app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
+        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
         app.session().logout();
         app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -165,7 +166,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
         assertEquals("Пакет успешно подписан.", sendingConfirmation); // проверка успешной отправки заявки
         String appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
-        app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
+        applicationNumbersWriter("src/test/resources/list_of_app/inventionAppNumbers.txt", appNumber);
         app.session().logout();
         app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -192,7 +193,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        List<String> appNumbers = app.sender().applicationNumbersReader("src/test/resources/list_of_app/inventionAppNumbers.txt");
+        List<String> appNumbers = applicationNumbersReader("src/test/resources/list_of_app/inventionAppNumbers.txt");
         ArrayList<Integer> actualCount = new ArrayList<>();
         for (String number : appNumbers) {
             int count = app.jdbc().checkDocsInMadras(number);
@@ -218,7 +219,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
      */
     @AfterAll
     public static void docsCleaner() {
-        app.session().fileDeleter("src/test/resources/list_of_app");
+        fileDeleter("src/test/resources/list_of_app");
     }
 
 }

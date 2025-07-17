@@ -9,6 +9,9 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.util.List;
 
+import static utils.FileUtils.getAbsolutePathToFile;
+import static utils.FileUtils.getListOfFiles;
+
 /**
  * Класс-помощник. Содержит методы, связанные с подачей заявок
  */
@@ -194,7 +197,7 @@ public class SendingHelper extends HelperBase {
             uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
             click(By.xpath("//input[@title='Добавить документ']"), true);
             randomOptionPicker(By.xpath("//select"));
-            fileUploadWithCheck("//div[contains(@id, 'repeatOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
+            fileUploadWithCheck("//div[contains(@id, 'repeatOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Перевод_док_о_правопреемстве.pdf"));
         } else if ("industrial".equals(appType)) {
             click(By.xpath("//input[@title='Добавить документ']"), true);
             optionPicker(By.xpath("//select"), 1, true);
@@ -235,7 +238,7 @@ public class SendingHelper extends HelperBase {
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
         click(By.xpath("//input[@title='Добавить документ']"), true);
         randomOptionPicker(By.xpath("//select"));
-        fileUploadWithCheck("//span[contains(@id, 'uploadOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
+        fileUploadWithCheck("//span[contains(@id, 'uploadOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Перевод_док_о_правопреемстве.pdf"));
         click(By.cssSelector("input[value='Далее']"), true);
     }
 
@@ -566,7 +569,7 @@ public class SendingHelper extends HelperBase {
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
         click(By.xpath("//input[contains(@id, 'addOtherDocId')]"), true);
         randomOptionPicker(By.xpath("//select"));
-        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[20]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"), true);
+        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[20]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Перевод_док_о_правопреемстве.pdf"), true);
         while (isElementPresent(By.xpath("//td[contains(text(), 'Документы')]"))) {
             click(By.cssSelector("input[value='Далее']"), true);
         }

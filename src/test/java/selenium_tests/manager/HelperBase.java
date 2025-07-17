@@ -2,10 +2,10 @@ package selenium_tests.manager;
 
 import com.github.javafaker.Faker;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.FileUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import static utils.FileUtils.getAbsolutePathToFile;
+import static utils.FileUtils.getListOfFiles;
 
 /**
  * Базовый класс-родитель для всех классов-помощников. Содержит общие методы для взаимодействия с элементами страниц.
@@ -99,9 +102,10 @@ public class HelperBase {
      * Метод для получения значения атрибута веб-элемента - фамилии ПП
      */
     protected String getElementSurnameValue(By locator, String attrSurname) {
-    String text = presenceOfElement(locator).getAttribute(attrSurname);
-    return text;
-}
+        String text = presenceOfElement(locator).getAttribute(attrSurname);
+        return text;
+    }
+
     /**
      * Метод для выбора элементов выпадающего списка типа select по индексу
      */
@@ -134,7 +138,7 @@ public class HelperBase {
         Select option = new Select(presenceOfElement(locator));
         List<WebElement> listOfOptions = option.getOptions();
         int index = getRandomInt(listOfOptions.size() - 1);
-        if(index == 0) {
+        if (index == 0) {
             index++;
         }
         option.selectByIndex(index);
@@ -158,6 +162,7 @@ public class HelperBase {
 
     /**
      * Метод возвращает случайное число от [0, ceil)
+     *
      * @param ceil int - верхняя граница
      */
     protected int getRandomInt(int ceil) {
@@ -213,14 +218,6 @@ public class HelperBase {
 
 
     /**
-     * Метод возвращает абсолютный путь к файлу по относительному пути
-     */
-    public String getAbsolutePathToFile(String file) {
-        String absolutePath = Paths.get(file).toAbsolutePath().toString();
-        return absolutePath;
-    }
-
-    /**
      * Метод проверяет наличие элемента в DOM
      */
     protected boolean isElementPresent(By locator) {
@@ -228,32 +225,6 @@ public class HelperBase {
         return !result;
     }
 
-    /**
-     * Метод проверяет список файлов в папке
-     */
-    protected File[] getListOfFiles(String directoryPath) {
-        File folder = new File(directoryPath);
-        File[] listOfFiles = folder.listFiles();
-        return listOfFiles;
-    }
-
-
-    /**
-     * Метод записывает номер заявки в указанный файл
-     */
-    public void applicationNumbersWriter(String path, String appNumber) {
-        String absPath = getAbsolutePathToFile(path);
-        fileCreator(absPath);
-        try {
-            FileWriter fw = new FileWriter(path, true);
-            fw.write(appNumber + "\n");
-            fw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
 
     /**
      * Метод извлекает номер заявки
@@ -262,44 +233,6 @@ public class HelperBase {
         String rawElementContent = getTextFromElement(locator);
         String appNumber = rawElementContent.split(" ")[2];
         return appNumber;
-    }
-
-    /**
-     * Метод проверяет наличие файла по указанному пути и создает его, если файл отсутствует
-     */
-    protected void fileCreator(String path) {
-        File file = new File(path);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-
-    /**
-     * Метод удаляет все файлы из указанной директории
-     */
-    public void fileDeleter(String path) {
-        File[] listOfFile = getListOfFiles(getAbsolutePathToFile(path));
-        for (File file : listOfFile) {
-            file.delete();
-        }
-    }
-
-    /**
-     * Метод номера заявок из указанного файла
-     */
-    public List<String> applicationNumbersReader(String path) {
-        try {
-            List<String> numbers = Files.readAllLines(Paths.get(path).toAbsolutePath());
-            return numbers;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 

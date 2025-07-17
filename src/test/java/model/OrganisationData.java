@@ -10,33 +10,33 @@ public class OrganisationData extends EntityDataBase {
     /**
      * Конструктор класса
      */
-    public OrganisationData (int countryNumber) {
+    public OrganisationData () {
         this.position = fakerRU.company().profession();
         this.organisationName = fakerRU.company().name();
-        setUniqueID(countryNumber);
+        setUniqueID(countryCode);
     }
 
     /**
      * Метод устанавливает уникальный идентификатор для юридического лица
      */
-    private void setUniqueID(int countryNumber) {
-        switch (countryNumber) {
-            case 0:
-            case 6:
+    private void setUniqueID(String country) {
+        switch (country) {
+            case "AZ":
+            case "RU":
                 uniqueID = fakerRU.number().digits(10);
                 break;
-            case 1:
+            case "KG":
                 uniqueID = fakerRU.number().digits(14);
                 break;
-            case 2:
+            case "AM":
                 uniqueID = fakerRU.number().digits(8);
                 break;
-            case 3:
-            case 5:
+            case "BY":
+            case "TJ":
                 uniqueID = fakerRU.number().digits(9);
                 break;
-            case 4:
-            case 7:
+            case "KZ":
+            case "TM":
                 uniqueID = fakerRU.number().digits(12);
                 break;
         }

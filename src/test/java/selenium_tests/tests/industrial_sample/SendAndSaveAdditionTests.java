@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static utils.FileUtils.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SendAndSaveAdditionTests extends TestSeleniumBase {
@@ -53,7 +54,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().signInApplication();
         String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
         assertEquals("Пакет успешно подписан.", sendingConfirmation);
-        app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
+        applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
         app.session().logout();
         app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("industrial");
@@ -99,7 +100,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().signInApplication();
         String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
         assertEquals("Пакет успешно подписан.", sendingConfirmation);
-        app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
+        applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
         app.sender().click(By.cssSelector("input[value='Продолжить']"), true);
         app.saver().saveDocToSoprano("досылки", appNumber);
         String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -143,7 +144,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().signInApplication();
         String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
         assertEquals("Пакет успешно подписан.", sendingConfirmation);
-        app.sender().applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
+        applicationNumbersWriter("src/test/resources/list_of_app/industrialAdditionNumbers.txt", appNumber);
         app.session().logout();
         app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.sender().selectSectionOfAccount("industrial");
@@ -169,7 +170,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        List<String> appNumbers = app.sender().applicationNumbersReader("src/test/resources/list_of_app/industrialAdditionNumbers.txt");
+        List<String> appNumbers = applicationNumbersReader("src/test/resources/list_of_app/industrialAdditionNumbers.txt");
         ArrayList<Integer> actualCount = new ArrayList<>();
         for (String number : appNumbers) {
             int count = app.jdbc().checkDocsInMadras(number);
@@ -185,6 +186,6 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
      */
     @AfterAll
     public static void docsCleaner() {
-        app.session().fileDeleter("src/test/resources/list_of_app");
+        fileDeleter("src/test/resources/list_of_app");
     }
 }

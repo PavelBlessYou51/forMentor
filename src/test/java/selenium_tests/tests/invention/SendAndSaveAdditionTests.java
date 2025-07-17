@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static utils.FileUtils.*;
 
 public class SendAndSaveAdditionTests extends TestSeleniumBase {
 
@@ -41,7 +42,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             for (int i = 0; i < 3; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
-            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", app.sender().getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
+            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
@@ -66,7 +67,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
-            app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
             app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -119,7 +120,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
-            app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
             app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -146,7 +147,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             for (int i = 0; i < 6; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
-            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", app.sender().getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
+            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
@@ -170,7 +171,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
             appNumber = app.sender().extractAppNumber(By.xpath("//span[contains(text(), 'Номер заявки:')]"));
-            app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
             app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -196,7 +197,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            List<String> appNumbers = app.sender().applicationNumbersReader("src/test/resources/list_of_app/inventionAdditionNumbers.txt");
+            List<String> appNumbers = applicationNumbersReader("src/test/resources/list_of_app/inventionAdditionNumbers.txt");
             ArrayList<Integer> actualCount = new ArrayList<>();
             for (String number : appNumbers) {
                 int count = app.jdbc().checkDocsInMadras(number);
@@ -212,7 +213,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
          */
         @AfterAll
         public static void docsCleaner() {
-            app.session().fileDeleter("src/test/resources/list_of_app");
+            fileDeleter("src/test/resources/list_of_app");
         }
 
     }
@@ -262,7 +263,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
-            app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
             app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -290,7 +291,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             for (int i = 0; i < 3; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
-            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", app.sender().getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
+            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
@@ -310,7 +311,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
-            app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
             app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -355,7 +356,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             for (int i = 0; i < 6; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
-            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", app.sender().getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
+            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
@@ -375,7 +376,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
-            app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.session().logout();
             app.session().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
             app.sender().selectSectionOfAccount("invention");
@@ -400,7 +401,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            List<String> appNumbers = app.sender().applicationNumbersReader("src/test/resources/list_of_app/inventionAdditionNumbers.txt");
+            List<String> appNumbers = applicationNumbersReader("src/test/resources/list_of_app/inventionAdditionNumbers.txt");
             ArrayList<Integer> actualCount = new ArrayList<>();
             for (String number : appNumbers) {
                 int count = app.jdbc().checkDocsInMadras(number);
@@ -416,7 +417,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
          */
         @AfterAll
         public static void docsCleaner() {
-            app.session().fileDeleter("src/test/resources/list_of_app");
+            fileDeleter("src/test/resources/list_of_app");
         }
 
     }
@@ -445,7 +446,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             for (int i = 0; i < 3; i++) {
                 app.sender().click(By.cssSelector("input[value='Далее']"), true);
             }
-            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", app.sender().getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
+            app.sender().fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
             app.sender().fillTaxFormInvention();
             app.sender().signInApplication();
@@ -463,7 +464,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals("Пакет успешно подписан.", sendingConfirmation);
-            app.sender().applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
+            applicationNumbersWriter("src/test/resources/list_of_app/inventionAdditionNumbers.txt", appNumber);
             app.sender().click(By.cssSelector("input[value='Продолжить']"), true);
             app.saver().saveDocToSoprano("досылки", appNumber);
             String savingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -486,7 +487,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            List<String> appNumbers = app.sender().applicationNumbersReader("src/test/resources/list_of_app/inventionAdditionNumbers.txt");
+            List<String> appNumbers = applicationNumbersReader("src/test/resources/list_of_app/inventionAdditionNumbers.txt");
             ArrayList<Integer> actualCount = new ArrayList<>();
             for (String number : appNumbers) {
                 int count = app.jdbc().checkDocsInMadras(number);
@@ -502,7 +503,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
          */
         @AfterAll
         public static void docsCleaner() {
-            app.session().fileDeleter("src/test/resources/list_of_app");
+            fileDeleter("src/test/resources/list_of_app");
         }
 
     }

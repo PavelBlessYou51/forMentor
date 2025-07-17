@@ -33,7 +33,7 @@ public class LoginTests extends TestSeleniumBase {
     }
 
     /**
-     * фабричная функция для предоставления данных в параметризированный тест логина
+     * Фабричная функция для предоставления данных в параметризированный тест логина
      */
     static Stream<Arguments> userDataProvider() {
         return Stream.of(
