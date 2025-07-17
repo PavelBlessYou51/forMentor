@@ -15,12 +15,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.FileUtils.*;
 
+@DisplayName("Класс с тестами подачи дополнительных материалов")
 public class SendAndSaveAdditionTests extends TestSeleniumBase {
 
     /**
      * Класс с тестами подачи измененных заявлений на ИЗО
      */
     @Nested
+    @DisplayName("Вложенный класс с тестами подачи измененных заявлений по ИЗО")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class SendChangedApplicationTests {
 
@@ -222,6 +224,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
      * Класс с тестами подачи досылок на ИЗО
      */
     @Nested
+    @DisplayName("Вложенный класс с тестами подачи досылок по ИЗО")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class SendAdditionTests {
 
@@ -426,6 +429,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
      * Класс с тестами подачи досылок на ИЗО с указанием даты
      */
     @Nested
+    @DisplayName("Вложенный класс с тестами подачи досулок по ИЗО с указание даты")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class SendAdditionWithDateTests {
 

@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Класс содержит тесты регистрации
  */
+@DisplayName("Класс с тестами регистрации")
 public class RegistrationTests extends TestSeleniumBase {
 
     /**

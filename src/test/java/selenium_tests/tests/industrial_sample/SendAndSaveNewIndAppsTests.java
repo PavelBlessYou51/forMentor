@@ -15,9 +15,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.FileUtils.*;
 
+@DisplayName("Класс с тестами подачи заявок на ПО")
 class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
 
     @Nested
+    @DisplayName("Вложенный класс с тестами подачи обычных заявок на ПО")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class SendAndSaveUsualAppsTests {
 
@@ -125,6 +127,7 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
     }
 
     @Nested
+    @DisplayName("Вложенный класс с тестами подачи выделенных заявок на ПО")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class SendAndSaveAllocatedAppsTests {
 

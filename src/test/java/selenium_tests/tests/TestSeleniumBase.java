@@ -1,5 +1,6 @@
 package selenium_tests.tests;
 
+import org.junit.jupiter.api.DisplayName;
 import selenium_tests.manager.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
@@ -14,6 +15,7 @@ public class TestSeleniumBase {
      * Инициализатор. Выполняется перед запуском каждого теста
      */
     @BeforeEach
+    @DisplayName("Инициализатор")
     public void init(TestInfo testInfo) {
         if (app == null) {
             app = new ApplicationManager();
@@ -29,6 +31,7 @@ public class TestSeleniumBase {
      * Финализатор. Выполняется после каждого теста
      */
 //    @AfterEach
+//    DisplayName("Финализатор")
 //    public void quit() {
 //        app.quit();
 //    }

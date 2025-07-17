@@ -1,6 +1,7 @@
 package selenide_tests.manager;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import utils.FileUtils;
 
@@ -19,7 +20,7 @@ public class HelperBase {
      * Метод для получения текста, содержащегося в веб-элементе
      */
     public String getTextFromElement(By locator) {
-        String elemText = $(locator).getText();
+        String elemText = $(locator).shouldBe(Condition.exist, Duration.ofSeconds(20)).getText();
         return elemText;
     }
 
@@ -48,7 +49,13 @@ public class HelperBase {
      */
     public void pressNextButton() {
         sleep(500);
-        $("input[value='Далее']").shouldBe(Condition.visible, Condition.clickable, Condition.exist).click();
+        String curTitle = $(By.xpath("//td[@class='application-header']")).getText();
+        String nextTitle = $(By.xpath("//td[@class='application-header']")).getText();
+        while (curTitle.equals(nextTitle)) {
+            $("input[value='Далее']").shouldBe(Condition.visible, Condition.clickable, Condition.exist).click();
+            nextTitle = $(By.xpath("//td[@class='application-header']")).getText();
+        }
+
     }
 
     /**

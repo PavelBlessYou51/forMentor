@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.FileUtils.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DisplayName("Класс с тестами отправки новых заявок по ИЗО")
 public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
 
     /**

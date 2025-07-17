@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Класс содержит тесты авторизации
  */
+@DisplayName("Класс с тестами авторизации")
 public class LoginTests extends TestSeleniumBase {
 
 
@@ -24,7 +25,7 @@ public class LoginTests extends TestSeleniumBase {
      */
     @ParameterizedTest
     @MethodSource("userDataProvider")
-    @DisplayName("Тест тест логина")
+    @DisplayName("Тест логина")
     public void canLoginWithValidDataTest(String login, String password) {
         app.session().login(login, password);
         assertArrayEquals(new String[]{"Добро пожаловать", "Выйти"}, app.session().getConfirmLoginMessage());
