@@ -1,6 +1,7 @@
 package selenium_tests.manager;
 
 import fixture.ConfigProvider;
+import io.qameta.allure.Step;
 import jdbc.JdbcHelper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -23,6 +24,7 @@ public class ApplicationManager {
     /**
      * Инициализатор браузера. Масштабирует окно браузера на максимальный размер экрана
      */
+    @Step("Инициализация браузера")
     public void init() {
         driver = new ChromeDriver();
         driver.get(ConfigProvider.getBaseUrl());
@@ -32,6 +34,7 @@ public class ApplicationManager {
     /**
      * Закрывает браузер
      */
+    @Step("Завершение сеанса")
     public void quit() {
         driver.quit();
     }

@@ -1,5 +1,8 @@
 package selenium_tests.tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Story;
 import jdbc.JdbcHelper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
@@ -12,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Класс содержит тесты регистрации
  */
+@Epic("Регистрация пользователей на портале")
 @DisplayName("Класс с тестами регистрации")
 public class RegistrationTests extends TestSeleniumBase {
 
-    /**
-     * Тест проверяет отправку запроса на регистрацию физического лица
-     */
     @Test
     @DisplayName("Тест регистрации физического лица")
+    @Story("Отправка запроса на регистрацию пользователя - физ лица на портале")
+    @Description("Тест проверяет отправку запроса на регистрацию физического лица")
     public void personRegistrationTest() {
         String surname = app.registrator().fillRegistrationFormForPerson();
         int resultCount = app.jdbc().checkRegisteredEntity(surname, true);
@@ -28,11 +31,10 @@ public class RegistrationTests extends TestSeleniumBase {
         app.quit();
     }
 
-    /**
-     * Тест проверяет отправку запроса на регистрацию юридического лица
-     */
-    @DisplayName("Тест регистрации юридического лица")
     @Test
+    @DisplayName("Тест регистрации юридического лица")
+    @Story("Отправка запроса на регистрацию пользователя - юр лица на портале")
+    @Description("Тест проверяет отправку запроса на регистрацию юридического лица")
     public void organisationRegistrationTest() {
         String surname = app.registrator().fillRegistrationFormForOrganisation();
         int resultCount = app.jdbc().checkRegisteredEntity(surname, true);
@@ -42,13 +44,11 @@ public class RegistrationTests extends TestSeleniumBase {
 
     }
 
-    /**
-     * Параметризированный тест.
-     * Поочередно проверяется отправку запросу на регистриацию ПП по изобретениям и ПО
-     */
     @ParameterizedTest
     @ValueSource(strings = {"invention", "industrial"})
     @DisplayName("Тест регистрации патентного поверенного")
+    @Story("Отправка запроса на регистрацию пользователя - патентного поверенного на портале")
+    @Description("Параметризированный тест. Поочередно проверяется отправку запросу на регистрацию ПП по изобретениям и ПО")
     public void patentAgentRegistrationTest(String agentType) {
         int numberOfEntities = app.jdbc().getNumberOfPortalUserEntries(false);
         app.registrator().fillRegistrationFormForPatentAgent(agentType);

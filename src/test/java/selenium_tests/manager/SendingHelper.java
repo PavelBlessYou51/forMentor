@@ -1,6 +1,7 @@
 package selenium_tests.manager;
 
 import exceptions.NextButtomException;
+import io.qameta.allure.Step;
 import model.EntityDataBase;
 import model.PersonData;
 import org.openqa.selenium.By;
@@ -26,6 +27,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод выбирает тип заявки\дополнений\заявлений
      */
+    @Step("Выбор типа заявления в отношении изобретения")
     public void selectTypeOfApplication(String typeApp) {
         if ("euroApp".equals(typeApp)) {
             click(By.cssSelector("input[value='Подать евразийскую заявку']"), true);
@@ -49,6 +51,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №1 "Общая информация" заявки на изобретение
      */
+    @Step("Заполнение раздела №1 заявки на изобретение")
     public void fillInventionCommonInfoPart() {
         EntityDataBase entity = new EntityDataBase();
         String inventionName = entity.fakerRU.lorem().sentence();
@@ -58,6 +61,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод добавляет приоритет в разделе №1 "Общая информация" заявки на изобретение
      */
+    @Step("Добавление приоритета в заявку на изобретение")
     public void addInventionPriority(String priorityType) {
         EntityDataBase entity = new EntityDataBase();
         boolean flag = presenceOfElement(By.cssSelector("input[value='previous-international-application']")).isEnabled();
@@ -83,6 +87,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет промышленные образцы в досылке по ПО
      */
+    @Step("Заполнение промышленного образца в досылке на ПО")
     public void fillIndustrialPrototypeInAddition(boolean allDocs) {
         List<WebElement> listOfIndustrialSamples = manager.driver.findElements(By.cssSelector("input[title='Развернуть']"));
         int countOfSamples = listOfIndustrialSamples.size();
@@ -103,6 +108,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод добавляет нового заявителя и заполняет его данные
      */
+    @Step("Добавление нового заявителя")
     public void addNewApplicants(int count) throws NextButtomException {
         boolean hasHeader = true;
         int havePersons = 0;
@@ -138,6 +144,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод добавляет нового изобретателя\автора и заполняет его данные
      */
+    @Step("Добавление нового изобретателя/автора")
     public void addNewInventors(int count) throws NextButtomException {
         boolean HasHeader = true;
         int havePersons = 0;
@@ -174,6 +181,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод добавляет нового представителя и заполняет его данные
      */
+    @Step("Добавление нового представителя")
     public void addNewRepresentative() {
         boolean HasHeader = true;
         while (HasHeader) {
@@ -191,6 +199,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Документы" в изобретениях и №6 в ПО
      */
+    @Step("Заполнение раздела №7 в ИЗО/№6 в ПО")
     public void fillAppDocumentForm(String appType) throws NextButtomException {
         if ("invention".equals(appType)) {
             fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
@@ -219,6 +228,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Документы" в изобретениях для тестов сохранения в Madras
      */
+    @Step("Заполнение раздела №7 в ИЗО")
     public void fillAppDocumentFormForMadras(boolean hasPriority) {
         int fieldNumberModifier = 0;
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание(не_сжим_17_Мб%).pdf"));
@@ -245,6 +255,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №1 "Документы" при подаче досылки по ИЗО для тестов сохранения в Madras
      */
+    @Step("Заполнение раздела №1 в досылке по ИЗО")
     public void fillAdditionDocFormForMadras() {
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание(не_сжим_17_Мб%).pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[2]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Формула_(цветной_файл)%.pdf"));
@@ -265,6 +276,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Документы" в изобретениях и ПО
      */
+    @Step("Заполнение раздела №7 в ИЗО/ПО")
     public void fillAdditionDocumentForm() {
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание(не_сжим_17_Мб%).pdf"));
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
@@ -278,6 +290,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №8 "Расчет пошлин" заявки на изобретения
      */
+    @Step("Заполнение раздела №8 в заявке на ИЗО ")
     public void fillTaxFormInvention() {
         chooseDiscount("1");
         click(By.xpath("//input[contains(@id, 'cbDuty001')]"), true);
@@ -288,6 +301,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №6 "Дополнительная информация"
      */
+    @Step("Заполнение раздела №6")
     public void fillAdditionalInfo(String petitionType) {
         if ("replaceDiscription".equals(petitionType)) {
             replaceDiscription();
@@ -327,6 +341,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод подписывает и подает заявки
      */
+    @Step("Подписание и подача заявки")
     public void signInApplication() {
         click(By.xpath("//input[contains(@value, 'Подписать и подать ')]"), true);
         click(By.xpath("//input[@value='Подписать и подать']"), true);
@@ -413,6 +428,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №1 "Общая информация" заявки на ПО
      */
+    @Step("Заполнение раздела №1 заявки на ПО")
     public void fillIndustrialCommonInfoPart() {
         type(By.className("application-input"), "N" + getRandomInt(999), true);
         optionPicker(By.className("application-select-text"), getRandomInt(32), true);
@@ -422,6 +438,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Промышленные образцы" заявки на ПО, добавляя образцы
      */
+    @Step("Добавление и заполнение образцов на ПО")
     public void fillIndustrialPrototypeWithAdditionalSamples(int countOfSamples, boolean allDocs) {
         for (int l = 0; l < countOfSamples; l++) {
             if (l != 0) {
@@ -435,6 +452,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Промышленные образцы" заявки на ПО c 4 образцами и разными приоритетами
      */
+    @Step("Добавление и заполнение образцов на ПО с приоритетами")
     public void fillIndustrialPrototypeWithAllPriorities(int countSamples) {
         EntityDataBase entity = new EntityDataBase();
         for (int i = 0; i < countSamples; i++) {
@@ -514,6 +532,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №8 "Расчет пошлин" заявки на ПО
      */
+    @Step("Добавление и заполнение образцов на ПО с приоритетами")
     public void fillTaxFormIndustrial() {
         click(By.xpath("(//input[contains(@id, 'cbDuty')])[1]"), true);
         click(By.cssSelector("input[value='payment-document']"), true);
@@ -523,6 +542,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод загружает все возможные документы в разделе №1 "Документы" в досылке по ПО
      */
+    @Step("Загрузка документов в досылке ПО")
     public void addAllDocsInIndustrialAddition() {
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/Доверенность%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[2]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/Письмо Заявителя%.pdf"));
@@ -535,6 +555,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №1 "Общая информация" PCT заявки
      */
+    @Step("Заполнение раздела №1 PCT заявки")
     public void fillPCTCommonInfoPart(String PCTNumber) throws NextButtomException {
         EntityDataBase entity = new EntityDataBase();
         String inventionName = entity.fakerRU.lorem().sentence();
@@ -554,6 +575,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №6 "Дополнительная информация" PCT заявки
      */
+    @Step("Заполнение раздела №6 PCT заявки")
     public void fillPCTAdditionalInfo() {
         click(By.xpath("//td[contains(text(), 'поданного')]/input[1]"), true);
         click(By.xpath("//td[contains(text(), 'поданной')]/input[1]"), true);
@@ -564,6 +586,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №7 "Документы" PCT заявки
      */
+    @Step("Заполнение раздела №7 PCT заявки")
     public void fillPCTDocumentForm() {
         fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"), true);
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
@@ -587,6 +610,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет номер заявки для досылки
      */
+    @Step("Ввод номера заявки для досылки")
     public void typeAppNumberForAddition(String appNumber) {
         type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
         click(By.xpath("//input[contains(@id, 'buttonAddSendId')]"), true);
@@ -595,6 +619,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет номер заявки при подаче выделенной заявки
      */
+    @Step("Ввод номера заявки при подаче выделенной заявки")
     public void typeAppNumberForAllocatedApp(String appNumber) {
         type(By.xpath("//input[@type='text' and not(@tabindex)]"), appNumber, false);
         click(By.xpath("//input[contains(@id, 'buttonDivSendId')]"), true);
@@ -603,6 +628,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет номер заявки для подачи измененного заявления
      */
+    @Step("Ввод номера заявки при подаче измененного заявления")
     public void typeAppNumberForChangedApp(String appNumber) {
         type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
         click(By.xpath("//input[contains(@id, 'buttonChangeSendId')]"), true);
@@ -611,6 +637,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет номер заявки и дату для подачи доп. материалов с указанием даты
      */
+    @Step("Ввод номера заявки и даты подачи при подаче доп материалов")
     public void typeAppNumberForAdditionWithDate(String appNumber) {
         type(By.xpath("(//input[contains(@name, 'inputBox')])[last()]"), appNumber, false);
         click(By.xpath("//input[contains(@id, 'buttonAddSendIdWithSubmitDate')]"), true);

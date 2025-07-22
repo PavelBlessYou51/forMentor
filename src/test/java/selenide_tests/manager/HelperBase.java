@@ -2,6 +2,7 @@ package selenide_tests.manager;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import utils.FileUtils;
 
@@ -27,6 +28,7 @@ public class HelperBase {
     /**
      * Метод выбирает раздел аккаунта
      */
+    @Step("Выбор раздела аккаунта")
     public void selectSectionOfAccount(String typeSection) {
         if ("invention".equals(typeSection)) {
             $(By.xpath("//span[contains(text(), 'Изобретения')]")).click();
@@ -40,6 +42,7 @@ public class HelperBase {
     /**
      * Метод выбирает раздел внутри ИЗО или ПО
      */
+    @Step("Выбор секции в выбранном разделе")
     public void selectAction() {
         $(By.xpath("//a[contains(text(), 'Полученные досылки')]")).click();
     }
@@ -47,6 +50,7 @@ public class HelperBase {
     /**
      * Метод нажимает кнопку "Далее" при заполнении формы заявления на изменения
      */
+    @Step("Нажатие 'Далее'")
     public void pressNextButton() {
         sleep(500);
         String curTitle = $(By.xpath("//td[@class='application-header']")).getText();
@@ -61,6 +65,7 @@ public class HelperBase {
     /**
      * Метод нажимает кнопку "Далее" при заполнении формы заявления на изменения
      */
+    @Step("Нажатие кнопки 'Продолжить'")
     public void pressContinueButton() {
         $("input[value='Продолжить']").shouldBe(Condition.visible, Condition.clickable, Condition.exist).click();
     }
@@ -68,6 +73,7 @@ public class HelperBase {
     /**
      * Метод загружает файл на портал с проверкой
      */
+    @Step("Нажатие кнопки 'Продолжить'")
     public void uploadFileWithCheck(String locator, String filePath) {
         String absolutePath = FileUtils.getAbsolutePathToFile(filePath);
         File file = new File(absolutePath);
@@ -78,6 +84,7 @@ public class HelperBase {
     /**
      * Метод загружает ПП об оплате гос пошлины
      */
+    @Step("Загрузка ПП об оплате")
     public void uploadPaymentOrder() {
         $("input[value='payment-document']").click();
         uploadFileWithCheck("//input[@type='file']", "src/test/resources/file_to_upload/doc_for_madras_invention/Пп_об_оплате_ГП%.pdf");
@@ -86,6 +93,7 @@ public class HelperBase {
     /**
      * Метод подает и подписывет документ
      */
+    @Step("Отправка и подписание досылки")
     public void signAndSendDocument() {
         $("input[value='Подписать и подать досылку']").click();
         $("input[value='Подписать и подать']").click();
@@ -94,6 +102,7 @@ public class HelperBase {
     /**
      * Метод осуществляет поиск заявки или досылки по номеру
      */
+    @Step("Поиск заявки по номеру")
     public void findAppByNumber(String appNumber) {
         $(By.xpath("//span[contains(text(), '№ Евразийской заявки')]/following-sibling::input")).shouldBe(Condition.exist).setValue(appNumber);
         $("input[value='Найти']").shouldBe(Condition.clickable).click();
@@ -102,6 +111,7 @@ public class HelperBase {
     /**
      * Метод открывает найденную заявку или досылку, кликая по номеру
      */
+    @Step("Открытие заявки по номеру")
     public void openFoundAppByNumber(String appNumber) {
         String locator = String.format("//a[contains(text(), '%s')]", appNumber);
         $(By.xpath(locator)).shouldBe(Condition.visible).click();

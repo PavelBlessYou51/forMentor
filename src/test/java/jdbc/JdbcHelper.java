@@ -1,6 +1,7 @@
 package jdbc;
 
 import fixture.ConfigProvider;
+import io.qameta.allure.Step;
 
 import java.sql.*;
 import java.util.Random;
@@ -78,6 +79,7 @@ public class JdbcHelper {
     /**
      * Метод для удаления из БД ПП после теста отправки запросов на регистрацию
      */
+    @Step("Удаление зарегистрированных патентных поверенных")
     public void pationAgentDeleter() {
         try {
             Statement statement = portalConnection.createStatement();
@@ -91,6 +93,7 @@ public class JdbcHelper {
     /**
      * Метод для удаления из БД физ и юр лица после теста отправки запросов на регистрацию
      */
+    @Step("Удаление зарегистрированных юр и физ лиц")
     public void personAndOrganisationDeleter() {
         try {
             Statement statement = portalConnection.createStatement();
@@ -104,6 +107,7 @@ public class JdbcHelper {
     /**
      * Метод проверяет запись в БД после теста отправки запроса на регистрацию физ и юр лиц
      */
+    @Step("Проверка записи в Portaluser после регистрации")
     public int checkRegisteredEntity(String surname, boolean hasDelay) {
         try {
             String sql = "SELECT COUNT(*) AS CountOfEntities FROM portaluser WHERE lastname = ? AND middlename = 'Фейкерович'";
@@ -126,6 +130,7 @@ public class JdbcHelper {
     /**
      * Метод проверяет запись в БД после теста отправки запроса на регистрацию ПП
      */
+    @Step("Проверка записи в Portaluser после регистрации патентного поверенного")
     public int checkRegisteredAgent() {
         try {
             Statement statement = portalConnection.createStatement();
@@ -141,6 +146,7 @@ public class JdbcHelper {
     /**
      * Метод возвращает количество записей в БД
      */
+    @Step("Получение количества записей в Portaluser")
     public int getNumberOfPortalUserEntries(boolean hasDelay) {
         try {
             if (hasDelay) {
@@ -162,6 +168,7 @@ public class JdbcHelper {
     /**
      * Метод проверяет создание записей в БД Soprano после сохранения заявок на ИЗО и ПО
      */
+    @Step("Проверка создания записей в Soprano после сохранения заявки")
     public int checkInventionAppInSoprano(String appNumber) {
         try {
             String sql = "SELECT COUNT(*) AS Result " +
@@ -187,6 +194,7 @@ public class JdbcHelper {
     /**
      * Метод проверяет создание записей в БД Soprano после сохранения досылок по ПО и ИЗО
      */
+    @Step("Проверка создания записей в Soprano после сохранения досылки (в History)")
     public int checkInventionAdditionInSoprano(String appNumber) {
         try {
             String sql = "SELECT COUNT(*) AS Result FROM patent_test.history where idappli = (SELECT idappli FROM patent_test.ptappli where extidappli = ?)";
@@ -204,6 +212,7 @@ public class JdbcHelper {
     /**
      * Метод для получения номера PCT заявки для дальнейшей подачи заявки
      */
+    @Step("Получение номера PCT заявки из базы")
     public String getPCTData() {
         try {
             String sql = "SELECT NOPCTEP FROM patent_test.pctref\n" +
@@ -221,8 +230,9 @@ public class JdbcHelper {
     }
 
     /**
-     * Метод для удаления записи о PCT заявки из pctref
+     * Метод для удаления записи о PCT заявке из pctref
      */
+    @Step("Удаление номера записи о PCT заявке из pctref")
     public void deletePCTRecord(String PCTNumber) {
         try {
             String sql = "DELETE\n" +
@@ -243,6 +253,7 @@ public class JdbcHelper {
     /**
      * Метод возвращает заявку для подачи выделенной заявки на ИЗО
      */
+    @Step("Удаление номера записи о PCT заявке из pctref")
     public String getInventionApp() {
         try {
             Statement statement = sopranoConnection.createStatement();
@@ -264,6 +275,7 @@ public class JdbcHelper {
     /**
      * Метод возвращает количество сохраненных в Madras документов по заявке
      */
+    @Step("Проверка количества сохраненных документов в Madras")
     public int checkDocsInMadras(String appNumber) {
         try {
             String sql = "SELECT COUNT(*) AS Result\n" +
@@ -287,6 +299,7 @@ public class JdbcHelper {
     /**
      * Метод возвращает количество сохраненных в Soprano приоритетов по указанной заявке
      */
+    @Step("Проверка количества сохраненных в Soprano приоритетов по заявке")
     public int checkInventionAppPriorities(String appNumber) {
         try {
             String sql = "SELECT COUNT(*) as Result FROM patent_test.priority where idappli = (select idappli from patent_test.ptappli where extidappli = ?)";
@@ -306,6 +319,7 @@ public class JdbcHelper {
      * Статусы для изменений по заявке lgstappli in (60,71,72,75)
      * Статусы для изменений по патенту lgstappli in (100, 101)
      */
+    @Step("Получение номера заявки для подачи заявления об изменении")
     public String getAppNumberForChanges(boolean isApp) {
         String queryCountRows;
         String queryAppNumber;

@@ -1,5 +1,6 @@
 package selenium_tests.manager;
 
+import io.qameta.allure.Step;
 import model.OrganisationData;
 import model.PatentAgent;
 import model.PersonData;
@@ -39,6 +40,7 @@ public class RegistrationHelper extends HelperBase {
     /**
      * Метод для перехода на страницу с формой регистрации
      */
+    @Step("Переход на страницу регистрации")
     public void goToRegisterPage() {
         click(By.xpath("//a[contains(text(), 'Регистрация')]"), true);
     }
@@ -46,6 +48,7 @@ public class RegistrationHelper extends HelperBase {
     /**
      * Метод заполняется форму регистрации для физического лица
      */
+    @Step("Заполнение формы регистрации физ лица")
     public String fillRegistrationFormForPerson() {
         goToRegisterPage();
         PersonData person = new PersonData();
@@ -69,6 +72,7 @@ public class RegistrationHelper extends HelperBase {
     /**
      * Метод заполняется форму регистрации для юридического лица
      */
+    @Step("Заполнение формы регистрации юр лица")
     public String fillRegistrationFormForOrganisation() {
         goToRegisterPage();
         OrganisationData organisationData = new OrganisationData();
@@ -96,6 +100,7 @@ public class RegistrationHelper extends HelperBase {
      * Метод заполняется форму регистрации переданного типа поверенного
      *
      */
+    @Step("Заполнение формы регистрации патентного поверенного")
     public void fillRegistrationFormForPatentAgent(String agentType) {
         goToRegisterPage();
         String regNumber;
@@ -119,6 +124,7 @@ public class RegistrationHelper extends HelperBase {
     /**
      * Метод получающий сообщение об отправке запроса на регистрацию
      */
+    @Step("Получения текста подтверждения регистрации")
     public String getRegistrationRequestMessageConfirm() {
         String massege = getTextFromElement(By.cssSelector("li span[class='error-message']")).split("\\.")[0];
         return massege;

@@ -1,6 +1,7 @@
 package selenium_tests.manager;
 
 import com.github.javafaker.Faker;
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -239,6 +240,7 @@ public class HelperBase {
     /**
      * Метод выбирает раздел аккаунта
      */
+    @Step("Выбор секции аккаунта")
     public void selectSectionOfAccount(String typeSection) {
         if ("invention".equals(typeSection)) {
             click(By.xpath("//span[contains(text(), 'Изобретения')]"), true);

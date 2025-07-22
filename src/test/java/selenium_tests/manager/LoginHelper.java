@@ -1,5 +1,6 @@
 package selenium_tests.manager;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 /**
@@ -14,6 +15,7 @@ public class LoginHelper extends HelperBase {
     /**
      * Метод осуществляет авторизацию
      */
+    @Step("Вход в ЛК")
     public void login(String login, String password) {
         click(By.xpath("//a[contains(text(), 'Войти')]"), false);
         type(By.id("j_username"), login, false);
@@ -24,6 +26,7 @@ public class LoginHelper extends HelperBase {
     /**
      * Метод выхода из учетной записи
      */
+    @Step("Выход из ЛК")
     public void logout() {
         click(By.cssSelector("a[class='logged-in-welcome logged-out']"), false);
     }
@@ -31,6 +34,7 @@ public class LoginHelper extends HelperBase {
     /**
      * Метод для проверки авторизации под учетной записью
      */
+    @Step("Получения подтверждения входа в ЛК")
     public String[] getConfirmLoginMessage() {
         String[] messageText = new String[2];
         String welcomeText = getTextFromElement(By.cssSelector("span[id*='userRoleText']")).split(", ")[0];
@@ -43,6 +47,7 @@ public class LoginHelper extends HelperBase {
     /**
      * Метод для проверки нахождения на стартовой странице
      */
+    @Step("Получения подтверждения выхода из ЛК")
     public String getConfirmLogoutMessage() {
         String messageText = getTextFromElement(By.xpath("//a[contains(text(), 'Войти')]"));
         return messageText;

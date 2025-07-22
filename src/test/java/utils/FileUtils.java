@@ -1,5 +1,7 @@
 package utils;
 
+import io.qameta.allure.Step;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -47,6 +49,7 @@ public final class FileUtils {
     /**
      * Метод удаляет все файлы из указанной директории
      */
+    @Step("Удаление файлов из директории")
     public static void fileDeleter(String path) {
         File[] listOfFile = getListOfFiles(getAbsolutePathToFile(path));
         for (File file : listOfFile) {
@@ -57,6 +60,7 @@ public final class FileUtils {
     /**
      * Метод записывает номер заявки в указанный файл
      */
+    @Step("Заяпись номера заявки в файл")
     public static void applicationNumbersWriter(String path, String appNumber) {
         String absPath = getAbsolutePathToFile(path);
         FileUtils.fileCreator(absPath);
@@ -73,6 +77,7 @@ public final class FileUtils {
     /**
      * Метод номера заявок из указанного файла
      */
+    @Step("Чтение номеров заявок из файла")
     public static List<String> applicationNumbersReader(String path) {
         try {
             List<String> numbers = Files.readAllLines(Paths.get(path).toAbsolutePath());

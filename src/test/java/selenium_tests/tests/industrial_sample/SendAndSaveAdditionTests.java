@@ -2,6 +2,10 @@ package selenium_tests.tests.industrial_sample;
 
 import exceptions.NextButtomException;
 import fixture.ConfigProvider;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import selenium_tests.tests.TestSeleniumBase;
@@ -14,16 +18,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.FileUtils.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+/**
+ * Класс с тестами подачи дополнительных материалов
+ */
+@Epic("Подача дополнительных материалов")
+@Feature("Подача досылок к ПО")
 @DisplayName("Класс с тестами подачи досылок по ПО")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SendAndSaveAdditionTests extends TestSeleniumBase {
 
-    /**
-     * Тест подачи досылки с 1 ПО с загрузкой всех документов
-     */
     @Test
     @Order(1)
     @DisplayName("Тест подачи досылки с 1 ПО с загрузкой всех документов")
+    @Story("Подача досылки с 1 ПО и всеми документами")
+    @Description("Тест подачи досылки с 1 ПО с загрузкой всех документов. Подается новая первоначальная заявка. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
     public void submitIndEuroAdditionWithOneSampleTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
@@ -66,13 +74,11 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         assertEquals(2, sopranoRecords); // проверка формирования записей в Soprano
     }
 
-
-    /**
-     * Тест подачи досылки с 1 ПО с указанием даты
-     */
     @Test
     @Order(2)
     @DisplayName("Тест подачи досылки с 1 ПО с указанием даты")
+    @Story("Подача досылки с 1 ПО с указанием даты")
+    @Description("Тест подачи досылки с 1 ПО с указанием даты. Подается новая первоначальная заявка. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
     public void submitIndEuroAdditionWithDateTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
@@ -110,12 +116,11 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         assertEquals(2, sopranoRecords); // проверка формирования записей в Soprano
     }
 
-    /**
-     * Тест подачи досылки с 3 ПО только обязательные документы
-     */
     @Test
     @Order(3)
     @DisplayName("Тест подачи досылки с 3 ПО только обязательные документы")
+    @Story("Подача досылки с 3 ПО только обязательные документы")
+    @Description("Тест подачи досылки с 3 ПО только обязательные документы. Подается новая первоначальная заявка. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
     public void submitIndEuroAdditionWithThreeSamplesTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
@@ -156,15 +161,12 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         assertEquals(2, sopranoRecords); // проверка формирования записей в Soprano
     }
 
-
-    /**
-     * Тест для проверки сохранения документов в Madras
-     * по проведенным тестам
-     */
     @Test
     @Order(4)
     @Tag("SkipInit")
     @DisplayName("Тест проверки сохранения документов в Madras")
+    @Story("Проверка сохранения статики в Madras")
+    @Description("Тест для проверки сохранения документов в Madras по проведенным тестам")
     public void checkSaveDocsToMadrasTest() {
         try {
             Thread.sleep(140000);

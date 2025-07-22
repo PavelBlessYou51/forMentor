@@ -1,5 +1,6 @@
 package selenium_tests.manager;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 /**
@@ -15,6 +16,7 @@ public class SaveAppAndAdditionHelper extends HelperBase {
     /**
      * Метод запускает процесс сохранения заявок и досылок в Soprano и возвращает true, если все заявки успешно сохранены
      */
+    @Step("Сохранение документа в Soprano")
     public void saveDocToSoprano(String docType, String appNumber) {
         click(By.xpath(String.format("//a[contains(text(), 'Полученные %s')]", docType)), false);
         findDoc(appNumber);

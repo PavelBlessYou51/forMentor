@@ -1,5 +1,6 @@
 package selenium_tests.manager;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 /**
@@ -14,6 +15,7 @@ public class CertificateHelper extends HelperBase {
     /**
      * Метод деактивирует существующий сертификат
      */
+    @Step("Деактивация сертификата")
     public String certificateDeactivation() {
         selectSectionOfAccount("profile");
         selectCertificateAction("deactivate");
@@ -25,6 +27,7 @@ public class CertificateHelper extends HelperBase {
     /**
      * Метод активирует новый сертификат
      */
+    @Step("Активация сертификата")
     public String certificateActivation() {
         selectSectionOfAccount("profile");
         selectCertificateAction("activate");
@@ -36,6 +39,7 @@ public class CertificateHelper extends HelperBase {
     /**
      * Метод переходит в раздел отзыва или выпуска сертификата
      */
+    @Step("Выбор раздела сертификата")
     protected void selectCertificateAction(String action) {
         if ("deactivate".equals(action)) {
             click(By.xpath("//span[contains(text(), 'Отзыв сертификата')]"), true);
@@ -57,6 +61,7 @@ public class CertificateHelper extends HelperBase {
     /**
      * Метод заполняет форму выпуска нового сертификата и выпускает его
      */
+    @Step("Заполнение формы и выпуск сертификата")
     protected void fillCirtificateForm(String pinCode) {
         type(By.xpath("(//input[@class='application-input'])[7]"), pinCode, true);
         type(By.xpath("(//input[@class='application-input'])[8]"), pinCode, true);
@@ -67,6 +72,7 @@ public class CertificateHelper extends HelperBase {
     /**
      * Метод получает сообщение об успешном выпуске сертификата
      */
+    @Step("Получения сообщения об успешном выпуске сертификата")
     protected String getActivationConfirm() {
         String rawConfirm = getTextFromElement(By.xpath("//div[contains(text(), 'У вас есть сертификат')]"));
         String confirm = rawConfirm.split(", ")[0].strip();

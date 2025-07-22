@@ -23,6 +23,7 @@ public class TestSeleniumBase {
         if (testInfo.getTags().contains("SkipInit")) {
             return;
         }
+
         app.init();
     }
 

@@ -2,6 +2,7 @@ package selenide_tests.manager;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import model.EntityDataBase;
 import model.OrganisationData;
 import model.PersonData;
@@ -20,6 +21,7 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод выбирает функционал подачи заявления об изменении
      */
+    @Step("Выбор 'Передача права / Изменение имени или наименования / Изменение адреса'")
     public void selectChangeApplication() {
         $("input[value='Передача права / Изменение имени или наименования / Изменение адреса']").click();
     }
@@ -27,6 +29,7 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод вводит номер заявки по которой будет подаваться заявление об изменении
      */
+    @Step("Ввод номера заявки для подачи заявления об изменении")
     public void typeAppNumberForChange(String appNumber) {
         $(By.xpath("//span[contains(text(), 'Передача права / Изменение имени или наименования / Изменение адреса')]/ancestor::div[contains(@id, 'input-box_container')]//input[contains(@id, 'inputBox')]")).setValue(appNumber);
         $(By.xpath("//span[contains(text(), 'Передача права / Изменение имени или наименования / Изменение адреса')]/ancestor::div[contains(@id, 'input-box_container')]//input[@value='Подать']")).click();
@@ -35,18 +38,23 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод выбирает подать заявление об изменении
      */
+    @Step("Выбор типа заявления об изменении")
     public void selectTypeOfChange(String typeOfChange) {
-        switch (typeOfChange) {
-            case "succession" -> $("input[value='succession']").click();
-            case "assignmentOfRights" -> $("input[value='assignment_of_rights']").click();
-            case "changeName" -> $("input[value='change_name']").click();
-            case "changeAddress" -> $("input[value='address_change']").click();
+        if (typeOfChange.equals("succession")) {
+            $("input[value='succession']").click();
+        } else if (typeOfChange.equals("assignmentOfRights")) {
+            $("input[value='succession']").click();
+        } else if (typeOfChange.equals("changeName")) {
+            $("input[value='change_name']").click();
+        } else if (typeOfChange.equals("changeAddress")) {
+            $("input[value='address_change']").click();
         }
     }
 
     /**
      * Метод проверяет куда вносятся изменения: в заявку или патент
      */
+    @Step("Проверка типа документа в который вносятся изменения")
     public boolean checkTypeOfApp(boolean isApp) {
         String header = getTextFromElement(By.xpath("//td[contains(text(), 'Передача права/Изменение имени или наименования')]"));
         String regex;
@@ -62,6 +70,7 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод удаляет старого заявителя\владельца в форме подачи заявления
      */
+    @Step("Удаление старого владельца/заявителя")
     public void deleteOldOwners() {
         int ownCount = $$("input[value='Удалить заявителя']").size();
         for (int i = 0; i < ownCount; i++) {
@@ -74,6 +83,7 @@ public class ChangingHelper extends HelperBase {
      * Метод удаляет нового заявителя\владельца в форме подачи заявления
      * ownerType: person, company, government физ. лицо\юр. лицо\гос. орг.
      */
+    @Step("Добавление нового владельца/заявителя")
     public void addNewOwner(boolean isPerson) {
         $("input[value='Добавить нового заявителя']").click();
         EntityDataBase newOwner;
@@ -97,6 +107,7 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод загружает документы к заявлению о смене владельца
      */
+    @Step("Загрузка документов")
     public void uploadDocsForSuccession(String appType) {
         if (appType.equals("succession")) {
             uploadFileWithCheck("//td[contains(text(), 'Документ, подтверждающий право на универсальное правопреемство')]/following-sibling::td//input[@type='file']", "src/test/resources/file_to_upload/doc_changed_apps/Документ_о_правопреемстве%.pdf");
@@ -116,13 +127,15 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод получает подтверждение отправки заявления на фронте
      */
+    @Step("Получение подтверждения отправки")
     public String getSendingConfirm() {
         return getTextFromElement(By.cssSelector("span[class='error-message']"));
     }
 
     /**
-     * Метод получает подтверждение охранения заявления в Soprano
+     * Метод получает подтверждение сохранения заявления в Soprano
      */
+    @Step("Проверка сообщения об успешном сохранении в Soprano")
     public String getSavingConfirm() {
         return getTextFromElement(By.cssSelector("span[class='error-message']"));
     }
@@ -130,6 +143,7 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод сохраняет заявление об изменении
      */
+    @Step("Сохранение заявления в Soprano")
     public void saveAppToSoprano() {
         $(By.xpath("//td[contains(@id, ':inactive')]/span[contains(text(), 'РАСЧЕТ ПОШЛИН')]")).should(Condition.exist, Duration.ofSeconds(15)).click();
         $(By.xpath("//input[contains(@id, 'btnSave')]")).shouldBe(Condition.visible, Condition.clickable).click();
@@ -138,6 +152,7 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод изменяет наименования заявителя
      */
+    @Step("Изменение наименования заявителя")
     public void changeOwnerName(boolean isPerson) {
         EntityDataBase ownerData;
         SelenideElement name = $(By.xpath("//textarea[contains(@id, 'name')]")).shouldBe(Condition.editable, Duration.ofSeconds(15));
@@ -154,6 +169,7 @@ public class ChangingHelper extends HelperBase {
     /**
      * Метод изменяет адрес заявителя
      */
+    @Step("Изменение адреса заявителя")
     public void changeOwnerAddress() {
         EntityDataBase ownerData = new EntityDataBase();
         SelenideElement address = $(By.xpath("//textarea[contains(@id, 'address')]")).shouldBe(Condition.editable, Duration.ofSeconds(15));

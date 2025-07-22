@@ -2,6 +2,10 @@ package selenium_tests.tests.invention;
 
 import exceptions.NextButtomException;
 import fixture.ConfigProvider;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import jdbc.JdbcHelper;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -15,16 +19,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.FileUtils.*;
 
+@Epic("Отправка новых заявок")
+@Feature("Отправка заявок на изобретения")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("Класс с тестами отправки новых заявок по ИЗО")
 public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
 
-    /**
-     * Тест евразийской заявки со всеми документами
-     */
     @Test
     @Order(1)
-    @DisplayName("Тест подачи евразийской заявки со всеми документами")
+    @DisplayName("Тест отправки евразийской заявки со всеми документами")
+    @Story("Отправка евразийской заявки со всеми документами")
+    @Description("Тест отправки евразийской заявки со всеми документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
     public void submitInventionEuroApplicationTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -54,12 +59,11 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         assertEquals(3, sopranoRecords); // проверка формирования записей в Soprano
     }
 
-    /**
-     * Тест PCT заявки
-     */
     @Test
     @Order(2)
     @DisplayName("Тест подачи PCT заявки")
+    @Story("Отправка РСТ заявки")
+    @Description("Тест отправки PCT заявки с несколькими документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
     public void submitInventionPCTApplicationTest() throws NextButtomException {
         String PCTNumber = app.jdbc().getPCTData();
         app.jdbc().deletePCTRecord(PCTNumber);
@@ -89,12 +93,11 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         assertEquals(3, sopranoRecords); // проверка формирования записей в Soprano
     }
 
-    /**
-     * Тест подачи выделенной заявки
-     */
     @Test
     @Order(3)
     @DisplayName("Тест подачи выделенной евразийской заявки")
+    @Story("Отправка выделенной заявки")
+    @Description("Тест отправки выделенной заявки с несколькими документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
     public void submitAllocatedApplicationTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -140,12 +143,11 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         assertEquals(3, sopranoRecords); // проверка формирования записей в Soprano
     }
 
-    /**
-     * Тест подачи евразийской заявки c 4 приоритетами разного вида
-     */
     @Test
     @Order(4)
     @DisplayName("Тест подачи евразийской заявки c 4 приоритетами разного вида")
+    @Story("Отправка евразийской заявки с 4 приоритетами разного вида")
+    @Description("Тест отправки евразийской заявки c 4 приоритетами разного вида и несколькими документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
     public void submitInventionEuroAppWithPrioritiesTest() throws NextButtomException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
@@ -180,14 +182,12 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         assertEquals(4, countOfPriorities); // проверка формирования записей в Soprano о приоритетах
     }
 
-    /**
-     * Тест для проверки сохранения документов в Madras
-     * по проведенным тестам
-     */
     @Test
     @Order(5)
     @Tag("SkipInit")
     @DisplayName("Тест проверки сохранения документов в Madras")
+    @Story("Проверка сохранения статики в Madras")
+    @Description("Тест для проверки сохранения документов в Madras по проведенным тестам")
     public void checkSaveDocsToMadrasTest() {
         try {
             Thread.sleep(120000);

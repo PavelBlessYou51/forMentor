@@ -2,6 +2,10 @@ package selenium_tests.tests.industrial_sample;
 
 import exceptions.NextButtomException;
 import fixture.ConfigProvider;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import jdbc.JdbcHelper;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -15,21 +19,21 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static utils.FileUtils.*;
 
+@Epic("Отправка новых заявок")
 @DisplayName("Класс с тестами подачи заявок на ПО")
 class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
 
     @Nested
+    @Feature("Отправка обычных заявок на ПО")
     @DisplayName("Вложенный класс с тестами подачи обычных заявок на ПО")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class SendAndSaveUsualAppsTests {
 
-        /**
-         * Тест заявки на ПО без приоритета по 1 ПО с загрузкой всех возможных файлов,
-         * в т.ч. 3D и доп. документами
-         */
         @Test
         @Order(1)
         @DisplayName("Тест заявки на ПО без приоритета по 1 ПО с загрузкой всех возможных файлов")
+        @Story("Отправка заявки без приоритета по 1 ПО с загрузкой всех возможных документов")
+        @Description("Тест заявки на ПО без приоритета по 1 ПО с загрузкой всех возможных файлов, в т.ч. 3D и доп. документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
         public void submitIndustrialEuroApplicationTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
@@ -57,12 +61,11 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             assertEquals(7, sopranoRecords); // проверка формирования записей в Soprano
         }
 
-        /**
-         * 3 ПО с приоритетами (предшествующей + доп. мат. + открытый показ) и несколькими заявителями и авторами
-         */
         @Test
         @Order(2)
         @DisplayName("Тест заявки на ПО без приоритета по 3 ПО с приоритетами (предшествующей + доп. мат. + открытый показ) и несколькими заявителями и авторами")
+        @Story("Отправка заявки с 3 приоритетами и несколькими заявителями/авторами")
+        @Description("Тест заявки на ПО с 3 ПО с приоритетами (предшествующей + доп. мат. + открытый показ) и несколькими заявителями и авторами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
         public void submitIndustrialEuroApplicationWithPrioritiesTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
@@ -90,14 +93,12 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             assertEquals(3, sopranoRecords); // проверка формирования записей в Soprano
         }
 
-        /**
-         * Тест для проверки сохранения документов в Madras
-         * по проведенным тестам
-         */
         @Test
         @Order(3)
         @Tag("SkipInit")
         @DisplayName("Тест проверки сохранения документов в Madras")
+        @Story("Проверка сохранения статики в Madras")
+        @Description("Тест для проверки сохранения документов в Madras по проведенным тестам")
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(90000);
@@ -127,16 +128,16 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
     }
 
     @Nested
+    @Feature("Отправка выделенных заявок на ПО")
     @DisplayName("Вложенный класс с тестами подачи выделенных заявок на ПО")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     public class SendAndSaveAllocatedAppsTests {
 
-        /**
-         * Тест подачи выделенной заявки с 1 ПО
-         */
         @Test
         @Order(1)
         @DisplayName("Тест подачи выделенной заявки с 1 ПО")
+        @Story("Отправка выделенной заявки с 1 ПО")
+        @Description("Тест подачи выделенной заявки с 1 ПО. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
         public void submitIndAllocatedAppTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
@@ -169,12 +170,11 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             assertEquals("Подача выделенной евразийской заявки невозможна, так как в первоначальной заявке только один промышленный образец", errorMessage); // проверка блока подачи заявки т.к. 1 ПО
         }
 
-        /**
-         * Тест подачи выделенной заявки с 3 ПО
-         */
         @Test
         @Order(2)
         @DisplayName("Тест подачи выделенной заявки с 3 ПО")
+        @Story("Отправка выделенной заявки с 3 ПО")
+        @Description("Тест подачи выделенной заявки с 3 ПО. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
         public void submitIndAllocatedAppWithThreeSampleTest() throws NextButtomException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
@@ -220,14 +220,12 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             assertEquals(3, sopranoRecords); // проверка формирования записей в Soprano
         }
 
-        /**
-         * Тест для проверки сохранения документов в Madras
-         * по проведенным тестам
-         */
         @Test
         @Order(3)
         @Tag("SkipInit")
         @DisplayName("Тест проверки сохранения документов в Madras")
+        @Story("Проверка сохранения статики в Madras")
+        @Description("Тест для проверки сохранения документов в Madras по проведенным тестам")
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(90000);
