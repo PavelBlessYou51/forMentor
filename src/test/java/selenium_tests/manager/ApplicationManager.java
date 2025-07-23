@@ -3,6 +3,7 @@ package selenium_tests.manager;
 import fixture.ConfigProvider;
 import io.qameta.allure.Step;
 import jdbc.JdbcHelper;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -12,7 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
  */
 public class ApplicationManager {
 
-    protected WebDriver driver;
+    public WebDriver driver;
     private LoginHelper session;
     private RegistrationHelper registrator;
     private SendingHelper sender;

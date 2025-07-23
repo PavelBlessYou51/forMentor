@@ -16,6 +16,8 @@ src/test/resources/list_of_app
 cd
 config.properties
 .idea
+.allure
+screenshots
 build
 fcff
 fcff.pub

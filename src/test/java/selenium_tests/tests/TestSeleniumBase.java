@@ -1,15 +1,18 @@
 package selenium_tests.tests;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 import selenium_tests.manager.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
+import extentions.TestInfoExt;
 
 /**
  * Базовый тестовый класс для запуска иницализации и завершения работы браузера
  */
+@ExtendWith(TestInfoExt.class)
 public class TestSeleniumBase {
-    protected static ApplicationManager app;
+    public static ApplicationManager app;
 
     /**
      * Инициализатор. Выполняется перед запуском каждого теста
@@ -23,7 +26,6 @@ public class TestSeleniumBase {
         if (testInfo.getTags().contains("SkipInit")) {
             return;
         }
-
         app.init();
     }
 

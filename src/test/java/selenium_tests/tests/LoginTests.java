@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import utils.SeleniumScreenshotUtils;
 
 import java.util.stream.Stream;
 
@@ -28,7 +29,7 @@ public class LoginTests extends TestSeleniumBase {
     public void canLoginWithValidDataTest(String login, String password) {
         Allure.parameter("Логин", login);
         Allure.parameter("Пароль", password, Parameter.Mode.MASKED);
-        app.session().login(login, password);
+        app.session().login(login, password + "123");
         assertArrayEquals(new String[]{"Добро пожаловать", "Выйти"}, app.session().getConfirmLoginMessage());
         app.session().logout();
         assertEquals("Войти", app.session().getConfirmLogoutMessage());
