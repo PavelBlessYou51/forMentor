@@ -36,7 +36,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillInventionCommonInfoPart();
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
-        app.sender().addNewApplicants(1);
+        app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
@@ -71,7 +71,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("PCT");
         app.sender().fillPCTCommonInfoPart(PCTNumber);
-        app.sender().addNewApplicants(1);
+        app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
         app.sender().addNewRepresentative();
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
@@ -104,7 +104,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillInventionCommonInfoPart();
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
-        app.sender().addNewApplicants(1);
+        app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
         for (int i = 0; i < 3; i++) {
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
@@ -158,7 +158,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         app.sender().addInventionPriority("additionalMaterials");
         app.sender().addInventionPriority("startsOpenShowing");
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
-        app.sender().addNewApplicants(2);
+        app.sender().addNewApplicants(2, "person");
         app.sender().addNewInventors(2);
         for (int i = 0; i < 3; i++) {
             app.sender().click(By.cssSelector("input[value='Далее']"), true);

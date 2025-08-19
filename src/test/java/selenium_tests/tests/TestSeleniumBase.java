@@ -1,5 +1,6 @@
 package selenium_tests.tests;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import selenium_tests.manager.ApplicationManager;
@@ -34,7 +35,7 @@ public class TestSeleniumBase {
      * Финализатор. Выполняется после каждого теста
      */
 //    @AfterEach
-//    DisplayName("Финализатор")
+//    @DisplayName("Финализатор")
 //    public void quit() {
 //        app.quit();
 //    }

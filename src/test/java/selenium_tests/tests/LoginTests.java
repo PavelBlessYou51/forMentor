@@ -29,7 +29,7 @@ public class LoginTests extends TestSeleniumBase {
     public void canLoginWithValidDataTest(String login, String password) {
         Allure.parameter("Логин", login);
         Allure.parameter("Пароль", password, Parameter.Mode.MASKED);
-        app.session().login(login, password + "123");
+        app.session().login(login, password);
         assertArrayEquals(new String[]{"Добро пожаловать", "Выйти"}, app.session().getConfirmLoginMessage());
         app.session().logout();
         assertEquals("Войти", app.session().getConfirmLogoutMessage());

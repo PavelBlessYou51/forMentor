@@ -19,14 +19,6 @@ import static com.codeborne.selenide.Selenide.*;
 public class ChangingHelper extends HelperBase {
 
     /**
-     * Метод выбирает функционал подачи заявления об изменении
-     */
-    @Step("Выбор 'Передача права / Изменение имени или наименования / Изменение адреса'")
-    public void selectChangeApplication() {
-        $("input[value='Передача права / Изменение имени или наименования / Изменение адреса']").click();
-    }
-
-    /**
      * Метод вводит номер заявки по которой будет подаваться заявление об изменении
      */
     @Step("Ввод номера заявки для подачи заявления об изменении")
@@ -43,7 +35,7 @@ public class ChangingHelper extends HelperBase {
         if (typeOfChange.equals("succession")) {
             $("input[value='succession']").click();
         } else if (typeOfChange.equals("assignmentOfRights")) {
-            $("input[value='succession']").click();
+            $("input[value='assignment_of_rights']").click();
         } else if (typeOfChange.equals("changeName")) {
             $("input[value='change_name']").click();
         } else if (typeOfChange.equals("changeAddress")) {
@@ -80,31 +72,6 @@ public class ChangingHelper extends HelperBase {
     }
 
     /**
-     * Метод удаляет нового заявителя\владельца в форме подачи заявления
-     * ownerType: person, company, government физ. лицо\юр. лицо\гос. орг.
-     */
-    @Step("Добавление нового владельца/заявителя")
-    public void addNewOwner(boolean isPerson) {
-        $("input[value='Добавить нового заявителя']").click();
-        EntityDataBase newOwner;
-        if (isPerson) {
-            newOwner = new PersonData();
-            $(By.xpath("//input[contains(@id, 'firstName')]")).setValue(newOwner.name);
-            $(By.xpath("//textarea[contains(@id, 'name')]")).setValue(newOwner.surname);
-            $(By.xpath("//input[contains(@id, 'middleName')]")).setValue(newOwner.patronymic);
-        } else {
-            newOwner = new OrganisationData();
-            $(By.xpath("//div[not(@class)]/select")).selectOptionByValue("juridical-person");
-            $(By.xpath("//textarea[contains(@id, 'name')]")).setValue(((OrganisationData) newOwner).organisationName);
-        }
-        $(By.xpath("//input[contains(@id, 'email')]")).setValue(newOwner.email);
-        $(By.xpath("//input[contains(@id, 'country')]")).setValue(newOwner.countryCode);
-        $(By.xpath("//input[contains(@id, 'phone')]")).setValue(newOwner.phoneNumber);
-        $(By.xpath("//input[contains(@id, 'idTown')]")).setValue(newOwner.postCode);
-        $(By.xpath("//textarea[contains(@id, 'address')]")).setValue(newOwner.address);
-    }
-
-    /**
      * Метод загружает документы к заявлению о смене владельца
      */
     @Step("Загрузка документов")
@@ -123,22 +90,6 @@ public class ChangingHelper extends HelperBase {
         }
     }
 
-
-    /**
-     * Метод получает подтверждение отправки заявления на фронте
-     */
-    @Step("Получение подтверждения отправки")
-    public String getSendingConfirm() {
-        return getTextFromElement(By.cssSelector("span[class='error-message']"));
-    }
-
-    /**
-     * Метод получает подтверждение сохранения заявления в Soprano
-     */
-    @Step("Проверка сообщения об успешном сохранении в Soprano")
-    public String getSavingConfirm() {
-        return getTextFromElement(By.cssSelector("span[class='error-message']"));
-    }
 
     /**
      * Метод сохраняет заявление об изменении
@@ -176,4 +127,6 @@ public class ChangingHelper extends HelperBase {
         address.clear();
         address.setValue(ownerData.address);
     }
+
+
 }

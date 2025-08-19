@@ -37,7 +37,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
-        app.sender().addNewApplicants(1);
+        app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
         app.sender().addNewRepresentative();
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
@@ -84,7 +84,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
-        app.sender().addNewApplicants(1);
+        app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
         app.sender().addNewRepresentative();
         app.sender().click(By.cssSelector("input[value='Далее']"), true);
@@ -126,7 +126,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
-        app.sender().addNewApplicants(1);
+        app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
         app.sender().addNewRepresentative();
         app.sender().click(By.cssSelector("input[value='Далее']"), true);

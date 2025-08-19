@@ -1,6 +1,10 @@
 package selenide_tests.manager;
 
 import io.qameta.allure.Step;
+import jdbc.JdbcHelper;
+import model.EntityDataBase;
+import model.PatentAgent;
+import model.PersonData;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -25,5 +29,6 @@ public class LoginHelper extends HelperBase{
     public void logout() {
         $(By.cssSelector("a[class='logged-in-welcome logged-out']")).click();
     }
+
 
 }

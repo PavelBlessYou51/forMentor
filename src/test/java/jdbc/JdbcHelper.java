@@ -2,6 +2,7 @@ package jdbc;
 
 import fixture.ConfigProvider;
 import io.qameta.allure.Step;
+import model.PatentAgent;
 
 import java.sql.*;
 import java.util.Random;
@@ -80,7 +81,7 @@ public class JdbcHelper {
      * Метод для удаления из БД ПП после теста отправки запросов на регистрацию
      */
     @Step("Удаление зарегистрированных патентных поверенных")
-    public void pationAgentDeleter() {
+    public void patentAgentDeleter() {
         try {
             Statement statement = portalConnection.createStatement();
             int del = statement.executeUpdate("DELETE FROM portaluser WHERE userid IN ('NechaevMA', 'RykovVV', 'KiselevaTS', 'PogosyanAA', 'SubbotinaLA', 'MarkovtsevaDV')");
@@ -348,4 +349,75 @@ public class JdbcHelper {
             throw new RuntimeException(e);
         }
     }
+
+
+    /**
+     * Метод проверяет установку IDmember
+     */
+    public boolean checkIDmember(String userLogin) {
+        try {
+            String sql = "SELECT idmember as Result FROM portaluser where userid = ?";
+            PreparedStatement preparedStatement = portalConnection.prepareStatement(sql);
+            preparedStatement.setString(1, userLogin);
+            ResultSet result = preparedStatement.executeQuery();
+            result.next();
+            int idmember = result.getInt("Result");
+            return idmember != 0;
+        } catch (SQLException e) {
+            System.out.println("Checking of user IDmember is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Метод устанавливает IDmember
+     */
+    @Step("Проверка IDmember и установка IDmember")
+    public void setIDmember(String userLogin) {
+        try {
+            String sql = "UPDATE portaluser SET idmember = 9 WHERE userid = ?";
+            PreparedStatement preparedStatement = sopranoConnection.prepareStatement(sql);
+            preparedStatement.setString(1, userLogin);
+            int result = preparedStatement.executeUpdate();
+            if (result != 1) {
+                throw new SQLException();
+            }
+        } catch (SQLException e) {
+            System.out.println("Updating IDmember is failed!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Метод возвращает данные по случайному ПП
+     */
+    @Step("Получение данных патентного поверенного")
+    public PatentAgent getAgentData() {
+        try {
+            String queryAgentRows = "SELECT COUNT(*) AS Result FROM patent_test.agent WHERE DMSPECIA = 1 AND KDAGENT = 1 AND EPIDAGENT IS NOT NULL";
+            Statement statement = sopranoConnection.createStatement();
+            ResultSet resultSet = statement.executeQuery(queryAgentRows);
+            resultSet.next();
+            int randomAgentNumber = new Random().nextInt(resultSet.getInt("Result")) + 1;
+            String queryAgent = "select FNAGENT AS firstName, MIDNAGENT AS patronymic, NMAGENT AS lastName, ADAGENT AS address, IDTOWN AS postCode, EMAILAGENT AS email, TELAGENT AS phoneNumber, EPIDAGENT AS regNumber " +
+                    "from patent_test.agent WHERE DMSPECIA = 1 AND KDAGENT = 1 AND EPIDAGENT IS NOT NULL";
+            statement = sopranoConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            resultSet = statement.executeQuery(queryAgent);
+            resultSet.absolute(randomAgentNumber);
+            return new PatentAgent(
+                    resultSet.getString("firstName"),
+                    resultSet.getString("patronymic"),
+                    resultSet.getString("lastName"),
+                    resultSet.getString("address"),
+                    resultSet.getString("email"),
+                    resultSet.getString("postCode"),
+                    resultSet.getString("phoneNumber"),
+                    resultSet.getInt("regNumber"));
+        } catch (SQLException e) {
+            System.out.println("Have no any agents to return!");
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

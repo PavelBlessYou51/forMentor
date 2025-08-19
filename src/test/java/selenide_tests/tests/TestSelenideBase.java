@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import selenide_tests.manager.ApplicationManager;
 
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
+
 public class TestSelenideBase {
     protected static ApplicationManager app;
 
@@ -25,6 +27,8 @@ public class TestSelenideBase {
         }
         Configuration.browser = "chrome";
         Configuration.pageLoadTimeout = 10000;
+        Configuration.proxyEnabled = true;
+        Configuration.fileDownload = PROXY;
         Selenide.open(ConfigProvider.getBaseUrl());
         WebDriverRunner.getWebDriver().manage().window().maximize();
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
@@ -32,5 +36,6 @@ public class TestSelenideBase {
                 .savePageSource(true)
         );
     }
+    // если не сработает сканивание файла, то удалить proxyEnabled, fileDownload = PROXY; поменять на FOLDER
 
 }

@@ -1,16 +1,23 @@
 package selenide_tests.manager;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
+import exceptions.NextButtomException;
 import io.qameta.allure.Step;
+import model.EntityDataBase;
+import model.OrganisationData;
+import model.PersonData;
 import org.openqa.selenium.By;
 import utils.FileUtils;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.Random;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.files.FileFilters.withExtension;
+import static utils.FileUtils.getAbsolutePathToFile;
+import static utils.FileUtils.getListOfFiles;
 
 /**
  * Класс содержит базовые методы для работы со страницей
@@ -21,8 +28,7 @@ public class HelperBase {
      * Метод для получения текста, содержащегося в веб-элементе
      */
     public String getTextFromElement(By locator) {
-        String elemText = $(locator).shouldBe(Condition.exist, Duration.ofSeconds(20)).getText();
-        return elemText;
+        return $(locator).shouldBe(Condition.exist, Duration.ofSeconds(20)).getText();
     }
 
     /**
@@ -40,6 +46,19 @@ public class HelperBase {
     }
 
     /**
+     * Метод выбирает функционал подачи заявления об изменении
+     */
+    @Step("Выбор 'Передача права / Изменение имени или наименования / Изменение адреса'")
+    public void selectApplicationType(String appType) {
+        if (appType.equals("change")) {
+            $("input[value='Передача права / Изменение имени или наименования / Изменение адреса']").click();
+        } else if (appType.equals("forward")) {
+            $("input[value='Пересылка ЕА заявки из нацведомства']").click();
+        }
+
+    }
+
+    /**
      * Метод выбирает раздел внутри ИЗО или ПО
      */
     @Step("Выбор секции в выбранном разделе")
@@ -51,13 +70,18 @@ public class HelperBase {
      * Метод нажимает кнопку "Далее" при заполнении формы заявления на изменения
      */
     @Step("Нажатие 'Далее'")
-    public void pressNextButton() {
+    public void pressNextButton() throws NextButtomException {
         sleep(500);
         String curTitle = $(By.xpath("//td[@class='application-header']")).getText();
         String nextTitle = $(By.xpath("//td[@class='application-header']")).getText();
+        int counter = 0;
         while (curTitle.equals(nextTitle)) {
+            if (counter > 3) {
+                throw new NextButtomException("Loop of next button!");
+            }
             $("input[value='Далее']").shouldBe(Condition.visible, Condition.clickable, Condition.exist).click();
             nextTitle = $(By.xpath("//td[@class='application-header']")).getText();
+            counter++;
         }
 
     }
@@ -73,12 +97,20 @@ public class HelperBase {
     /**
      * Метод загружает файл на портал с проверкой
      */
-    @Step("Нажатие кнопки 'Продолжить'")
     public void uploadFileWithCheck(String locator, String filePath) {
         String absolutePath = FileUtils.getAbsolutePathToFile(filePath);
         File file = new File(absolutePath);
         $(By.xpath(locator)).uploadFile(file);
-        $(By.xpath(locator + "/ancestor::tr[position()=1]//input[@title='Cохранить файл на диск']")).shouldBe(Condition.exist, Duration.ofSeconds(10));
+        $(By.xpath(locator + "/ancestor::tr[position()=1]//input[@title='Cохранить файл на диск']")).shouldBe(Condition.exist, Duration.ofSeconds(15));
+    }
+
+    /**
+     * Метод загружает случайный 3D файл
+     */
+    protected void uploadRandom3DFile(String locator) {
+        File[] listOf3DFile = getListOfFiles(getAbsolutePathToFile("src/test/resources/file_to_upload/3D_models"));
+        String pathTo3DFile = listOf3DFile[getRandomInt(listOf3DFile.length - 1)].getPath();
+        uploadFileWithCheck(locator, pathTo3DFile);
     }
 
     /**
@@ -91,11 +123,11 @@ public class HelperBase {
     }
 
     /**
-     * Метод подает и подписывет документ
+     * Метод подает и подписывает документ
      */
-    @Step("Отправка и подписание досылки")
+    @Step("Отправка и подписание")
     public void signAndSendDocument() {
-        $("input[value='Подписать и подать досылку']").click();
+        $(By.xpath("//input[contains(@value, 'Подписать и подать ')]")).click();
         $("input[value='Подписать и подать']").click();
     }
 
@@ -118,6 +150,103 @@ public class HelperBase {
     }
 
 
+    /**
+     * Метод добавляет нового заявителя\владельца в форме подачи заявления
+     * ownerType: person, company, government физ. лицо\юр. лицо\гос. орг.
+     */
+    @Step("Добавление нового владельца/заявителя")
+    public void addNewOwner(boolean isPerson) {
+        $("input[value='Добавить нового заявителя']").click();
+        EntityDataBase newOwner;
+        if (isPerson) {
+            newOwner = new PersonData();
+            $(By.xpath("//input[contains(@id, 'firstName')]")).setValue(newOwner.name);
+            $(By.xpath("//textarea[contains(@id, 'name')]")).setValue(newOwner.surname);
+            $(By.xpath("//input[contains(@id, 'middleName')]")).setValue(newOwner.patronymic);
+        } else {
+            newOwner = new OrganisationData();
+            $(By.xpath("//div[not(@class)]/select")).selectOptionByValue("juridical-person");
+            $(By.xpath("//textarea[contains(@id, 'name')]")).setValue(((OrganisationData) newOwner).organisationName);
+        }
+        $(By.xpath("//input[contains(@id, 'email')]")).setValue(newOwner.email);
+        $(By.xpath("//input[contains(@id, 'country')]")).setValue(newOwner.countryCode);
+        $(By.xpath("//input[contains(@id, 'phone')]")).setValue(newOwner.phoneNumber);
+        $(By.xpath("//input[contains(@id, 'idTown')]")).setValue(newOwner.postCode);
+        $(By.xpath("//textarea[contains(@id, 'address')]")).setValue(newOwner.address);
+    }
+
+    /**
+     * Метод добавляет нового автора\изобретателя в форме подачи заявления
+     */
+    @Step("Добавление нового автора/изобретателя")
+    public void addNewInventor() {
+        $(By.xpath("//input[contains(@value, 'Добавить нового')]")).click();
+        PersonData person = new PersonData();
+        $(By.xpath("//input[contains(@id, 'firstName')]")).setValue(person.name);
+        $(By.xpath("//textarea[contains(@id, 'name')]")).setValue(person.surname);
+        $(By.xpath("//input[contains(@id, 'middleName')]")).setValue(person.patronymic);
+        $(By.xpath("//input[contains(@id, 'email')]")).setValue(person.email);
+        $(By.xpath("//input[contains(@id, 'country')]")).setValue(person.countryCode);
+        $(By.xpath("//input[contains(@id, 'phone')]")).setValue(person.phoneNumber);
+        $(By.xpath("//textarea[contains(@id, 'address')]")).setValue(person.address);
+    }
+
+    /**
+     * Метод выбирает тип представителя: ПП или физ лицо
+     */
+    public void selectRepresentativeType(boolean isAgent) {
+        if (isAgent) {
+            $("input[value='attorney']").click();
+        } else {
+            $("input[value='attorney']").click();
+        }
+    }
+
+    /**
+     * Метод находит и выбирает ПП по регистрационному номеру
+     */
+    public void selectPatentAgentByNumber(int regNumber) {
+        sleep(1000); // если убрать ПП находится через поиск не будут
+        $(By.xpath("//input[contains(@id, 'searchAgentText')]")).shouldBe(Condition.enabled, Condition.exist).setValue(String.valueOf(regNumber));
+        $("input[value='Искать']").click();
+        $(By.xpath("//input[contains(@value, 'Добавить представителя')]")).click();
+    }
+
+    /**
+     * Метод возвращает случайное число от [0, ceil)
+     *
+     * @param ceil int - верхняя граница
+     */
+    protected int getRandomInt(int ceil) {
+        Random rand = new Random();
+        return rand.nextInt(ceil);
+    }
+
+
+    /**
+     * Метод получает подтверждение отправки заявления на фронте
+     */
+    @Step("Получение подтверждения отправки")
+    public String getConfirmMessage() {
+        return getTextFromElement(By.cssSelector("span[class='error-message']"));
+    }
+
+    /**
+     * Метод скачивает файл по локатору
+     */
+    @Step("Скачивание файла")
+    public void downloadFile() {
+        File application = $(By.xpath("//a[contains(text(), 'Заявление')]")).download(withExtension("pdf"));
+    }
+
+    /**
+     * Метод получает номер заявки из сообщения об отправке
+     */
+    @Step("Получение номера заявки")
+    public String getAppNumber() {
+        String message = getTextFromElement(By.xpath("//span[contains(text(), 'Номер заявки')]"));
+        return message.split(": ")[1];
+    }
 }
 
 

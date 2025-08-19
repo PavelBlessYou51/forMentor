@@ -23,7 +23,6 @@ public class SendingHelper extends HelperBase {
     }
 
 
-
     /**
      * Метод выбирает тип заявки\дополнений\заявлений
      */
@@ -109,7 +108,7 @@ public class SendingHelper extends HelperBase {
      * Метод добавляет нового заявителя и заполняет его данные
      */
     @Step("Добавление нового заявителя")
-    public void addNewApplicants(int count) throws NextButtomException {
+    public void addNewApplicants(int count, String type) throws NextButtomException {
         boolean hasHeader = true;
         int havePersons = 0;
         while (hasHeader) {
@@ -206,7 +205,7 @@ public class SendingHelper extends HelperBase {
             uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
             click(By.xpath("//input[@title='Добавить документ']"), true);
             randomOptionPicker(By.xpath("//select"));
-            fileUploadWithCheck("//div[contains(@id, 'repeatOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Перевод_док_о_правопреемстве.pdf"));
+            fileUploadWithCheck("//div[contains(@id, 'repeatOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/Другое%.pdf"));
         } else if ("industrial".equals(appType)) {
             click(By.xpath("//input[@title='Добавить документ']"), true);
             optionPicker(By.xpath("//select"), 1, true);
@@ -248,7 +247,7 @@ public class SendingHelper extends HelperBase {
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
         click(By.xpath("//input[@title='Добавить документ']"), true);
         randomOptionPicker(By.xpath("//select"));
-        fileUploadWithCheck("//span[contains(@id, 'uploadOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Перевод_док_о_правопреемстве.pdf"));
+        fileUploadWithCheck("//span[contains(@id, 'uploadOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
         click(By.cssSelector("input[value='Далее']"), true);
     }
 
@@ -511,10 +510,10 @@ public class SendingHelper extends HelperBase {
             fileUploadWithCheck(uploadLocator, listOfFile[k - 1].getAbsolutePath());
         }
         uploadRandom3DFile("(//input[@type='file'])[8]");
-        fileUpload(By.xpath(String.format("//table[contains(@id, 'designFileLoad')]//tr[position()=11]//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/чертеж_общего_вида_изделия%.jpg"), true);
-        fileUpload(By.xpath(String.format("//table[contains(@id, 'designFileLoad')]//tr[position()=12]//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/конфекционная_карта%.pdf"), true);
-        fileUpload(By.xpath(String.format("//table[contains(@id, 'designFileLoad')]//tr[position()=13]//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/описание_пром_образца%.pdf"), true);
-        fileUpload(By.xpath(String.format("//table[contains(@id, 'designFileLoad')]//tr[position()=14]//div[contains(@id, 'upload')][contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/Права_на_приоритета%.pdf"), true);
+        fileUpload(By.xpath(String.format("//table[contains(@id, '%s:design:designFileLoad')]/following::span[contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber, locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/чертеж_общего_вида_изделия%.jpg"), true);
+        fileUpload(By.xpath(String.format("//table[contains(@id, '%s:design:designFileLoad')]/following::span[contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber, locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/конфекционная_карта%.pdf"), true);
+        fileUpload(By.xpath(String.format("//table[contains(@id, '%s:design:designFileLoad')]/following::span[contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber, locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/описание_пром_образца%.pdf"), true);
+        fileUpload(By.xpath(String.format("//table[contains(@id, '%s:design:designFileLoad')]/following::span[contains(@id, 'repeatDesign:%s:design')]//input[@type='file']", locatorNumber, locatorNumber)), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/Права_на_приоритета%.pdf"), true);
     }
 
     /**
@@ -592,7 +591,7 @@ public class SendingHelper extends HelperBase {
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
         click(By.xpath("//input[contains(@id, 'addOtherDocId')]"), true);
         randomOptionPicker(By.xpath("//select"));
-        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[20]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Перевод_док_о_правопреемстве.pdf"), true);
+        fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[20]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"), true);
         while (isElementPresent(By.xpath("//td[contains(text(), 'Документы')]"))) {
             click(By.cssSelector("input[value='Далее']"), true);
         }
@@ -643,12 +642,4 @@ public class SendingHelper extends HelperBase {
         click(By.xpath("//input[contains(@id, 'buttonAddSendIdWithSubmitDate')]"), true);
     }
 
-    /**
-     * Метод удаляет один случайный промышленный образец
-     */
-    public void deleteRandomSample() {
-        List<WebElement> sampleOpeners = presenceOfElements(By.xpath("//input[@title='Развернуть']"));
-        sampleOpeners.get(getRandomInt(sampleOpeners.size())).click();
-        click(By.cssSelector("input[value='Удалить промышленный образец']"), true);
-    }
 }

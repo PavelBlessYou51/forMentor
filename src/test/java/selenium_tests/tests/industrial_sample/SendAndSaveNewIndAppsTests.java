@@ -39,7 +39,7 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
-            app.sender().addNewApplicants(3);
+            app.sender().addNewApplicants(3, "person");
             app.sender().addNewInventors(3);
             app.sender().addNewRepresentative();
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
@@ -71,7 +71,7 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
-            app.sender().addNewApplicants(1);
+            app.sender().addNewApplicants(1, "person");
             app.sender().addNewInventors(1);
             app.sender().addNewRepresentative();
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
@@ -143,7 +143,7 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
-            app.sender().addNewApplicants(1);
+            app.sender().addNewApplicants(1, "person");
             app.sender().addNewInventors(1);
             app.sender().addNewRepresentative();
             app.sender().click(By.cssSelector("input[value='Далее']"), true);
@@ -180,7 +180,7 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
-            app.sender().addNewApplicants(1);
+            app.sender().addNewApplicants(1, "person");
             app.sender().addNewInventors(1);
             app.sender().addNewRepresentative();
             app.sender().click(By.cssSelector("input[value='Далее']"), true);

@@ -65,7 +65,7 @@ public class RegistrationTests extends TestSeleniumBase {
     @AfterAll
     public static void tearDown() {
         JdbcHelper jdbc = app.jdbc();
-        jdbc.pationAgentDeleter();
+        jdbc.patentAgentDeleter();
         jdbc.personAndOrganisationDeleter();
         jdbc.closePortalConnection();
 

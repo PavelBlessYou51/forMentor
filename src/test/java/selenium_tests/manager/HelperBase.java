@@ -100,14 +100,6 @@ public class HelperBase {
 
 
     /**
-     * Метод для получения значения атрибута веб-элемента - фамилии ПП
-     */
-    protected String getElementSurnameValue(By locator, String attrSurname) {
-        String text = presenceOfElement(locator).getAttribute(attrSurname);
-        return text;
-    }
-
-    /**
      * Метод для выбора элементов выпадающего списка типа select по индексу
      */
     protected void optionPicker(By locator, int index, boolean hasDelay) {

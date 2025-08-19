@@ -23,7 +23,7 @@ public class EntityDataBase {
     public String countryCode;
 
     /**
-     * Конструктор класса
+     * Конструктор класса для организации и физ лица
      */
     public EntityDataBase() {
         setCountryCode();
@@ -35,6 +35,19 @@ public class EntityDataBase {
         this.callTo = "Заявителю";
         this.address = "Россия " + fakerRU.address().cityName() + " " + fakerRU.address().streetAddress();
         this.phoneNumber = "+" + fakerRU.number().digits(10);
+    }
+
+    /**
+     * Конструктор класса патентного поверенного
+     */
+    public EntityDataBase(String firstName, String patronymic, String lastName, String address, String email, String postCode, String phoneNumber) {
+        this.name = firstName;
+        this.surname = lastName;
+        this.address = address;
+        this.patronymic = patronymic;
+        this.email = email;
+        this.postCode = postCode;
+        this.phoneNumber = phoneNumber;
     }
 
     /**

@@ -10,6 +10,7 @@ public class ApplicationManager {
     private ChangingHelper changer;
     private JdbcHelper jdbc;
     private LoginHelper login;
+    private ForwardHelper forward;
 
     /**
      * Возвращает класс-помощник для взаимодействия с JDBS
@@ -42,6 +43,17 @@ public class ApplicationManager {
         }
         return login;
     }
+
+    /**
+     * Возвращает класс-помощник для пересылки заявки зи нацведомства
+     */
+    public ForwardHelper forward() {
+        if (forward == null) {
+            forward = new ForwardHelper();
+        }
+        return forward;
+    }
+
 
 
 

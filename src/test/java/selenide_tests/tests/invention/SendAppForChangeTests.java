@@ -1,6 +1,7 @@
 package selenide_tests.tests.invention;
 
 import com.codeborne.selenide.junit5.BrowserPerTestStrategyExtension;
+import exceptions.NextButtomException;
 import fixture.ConfigProvider;
 import io.qameta.allure.*;
 import jdbc.JdbcHelper;
@@ -31,18 +32,19 @@ public class SendAppForChangeTests extends TestSelenideBase {
 
     @Order(1)
     @ParameterizedTest
-    @ValueSource(booleans = {true, false})
+    @ValueSource(booleans = {false, false})
     @DisplayName("Тест подачи заявления права по патенту и заявке путем правопреемства")
     @Story("Подача заявления о смене владельца по патенту и заявке путем правопреемства")
     @Description("Параметризированный тест подачи заявления о смене владельца по патенту и заявке путем правопреемства. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void SendAppForOwnerChangeBySuccessionTest(boolean isApp) {
+    public void SendAppForOwnerChangeBySuccessionTest(boolean isApp) throws NextButtomException {
         Allure.parameter("IsApplication", isApp);
         String appNumber = app.jdbc().getAppNumberForChanges(isApp);
         applicationNumbersWriter("src/test/resources/list_of_app/changeAppNumbers.txt", appNumber);
         app.login().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.login().selectSectionOfAccount("invention");
-        app.changer().selectChangeApplication();
+        app.changer().selectApplicationType("change");
         app.changer().typeAppNumberForChange(appNumber);
+        System.out.println(appNumber);
         assertTrue(app.changer().checkTypeOfApp(isApp)); // проверка указания в заголовке на тип документа в который вносятся изменения
         app.changer().selectTypeOfChange("succession");
         app.changer().pressNextButton();
@@ -56,13 +58,13 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.changer().pressNextButton();
         app.changer().uploadPaymentOrder();
         app.changer().signAndSendDocument();
-        assertEquals("Пакет успешно подписан.", app.changer().getSendingConfirm()); // Проверяем наличие сообщения об успешной отправке пакета
+        assertEquals("Пакет успешно подписан.", app.changer().getConfirmMessage()); // Проверяем наличие сообщения об успешной отправке пакета
         app.changer().pressContinueButton();
         app.changer().selectAction();
         app.changer().findAppByNumber(appNumber);
         app.changer().openFoundAppByNumber(appNumber);
         app.changer().saveAppToSoprano();
-        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), app.changer().getSavingConfirm()); // Проверяем наличие сообщения о сохранении в Сопрано
+        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), app.changer().getConfirmMessage()); // Проверяем наличие сообщения о сохранении в Сопрано
     }
 
     @Order(2)
@@ -71,13 +73,13 @@ public class SendAppForChangeTests extends TestSelenideBase {
     @DisplayName("Тест подачи заявления передачи права по патенту и заявке путем уступки")
     @Story("Подача заявления о смене владельца по патенту и заявке путем уступки")
     @Description("Параметризированный тест подачи заявления о смене владельца по патенту и заявке путем уступки. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void SendAppForOwnerChangeByAssignmentRightsTest(boolean isApp) {
+    public void SendAppForOwnerChangeByAssignmentRightsTest(boolean isApp) throws NextButtomException {
         Allure.parameter("IsApplication", isApp);
         String appNumber = app.jdbc().getAppNumberForChanges(isApp);
         applicationNumbersWriter("src/test/resources/list_of_app/changeAppNumbers.txt", appNumber);
         app.login().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.login().selectSectionOfAccount("invention");
-        app.changer().selectChangeApplication();
+        app.changer().selectApplicationType("change");
         app.changer().typeAppNumberForChange(appNumber);
         assertTrue(app.changer().checkTypeOfApp(isApp)); // проверка указания в заголовке на тип документа в который вносятся изменения
         app.changer().selectTypeOfChange("assignmentOfRights");
@@ -92,13 +94,13 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.changer().pressNextButton();
         app.changer().uploadPaymentOrder();
         app.changer().signAndSendDocument();
-        assertEquals("Пакет успешно подписан.", app.changer().getSendingConfirm()); // Проверяем наличие сообщения об успешной отправке пакета
+        assertEquals("Пакет успешно подписан.", app.changer().getConfirmMessage()); // Проверяем наличие сообщения об успешной отправке пакета
         app.changer().pressContinueButton();
         app.changer().selectAction();
         app.changer().findAppByNumber(appNumber);
         app.changer().openFoundAppByNumber(appNumber);
         app.changer().saveAppToSoprano();
-        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), app.changer().getSavingConfirm()); // Проверяем наличие сообщения о сохранении в Сопрано
+        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), app.changer().getConfirmMessage()); // Проверяем наличие сообщения о сохранении в Сопрано
     }
 
     @Order(3)
@@ -107,13 +109,13 @@ public class SendAppForChangeTests extends TestSelenideBase {
     @DisplayName("Тест подачи заявления об изменении наименования владельца")
     @Story("Подача заявления о смене имени владельца по патенту и заявлению")
     @Description("Параметризированный тест подачи заявления о смене имени владельца по патенту и заявлению. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void SendAppForChangeOwnerNameTest(boolean isApp) {
+    public void SendAppForChangeOwnerNameTest(boolean isApp) throws NextButtomException {
         Allure.parameter("IsApplication", isApp);
         String appNumber = app.jdbc().getAppNumberForChanges(isApp);
         applicationNumbersWriter("src/test/resources/list_of_app/changeAppNumbers.txt", appNumber);
         app.login().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.login().selectSectionOfAccount("invention");
-        app.changer().selectChangeApplication();
+        app.changer().selectApplicationType("change");
         app.changer().typeAppNumberForChange(appNumber);
         assertTrue(app.changer().checkTypeOfApp(isApp)); // проверка указания в заголовке на тип документа в который вносятся изменения
         app.changer().selectTypeOfChange("changeName");
@@ -127,13 +129,13 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.changer().pressNextButton();
         app.changer().uploadPaymentOrder();
         app.changer().signAndSendDocument();
-        assertEquals("Пакет успешно подписан.", app.changer().getSendingConfirm()); // Проверяем наличие сообщения об успешной отправке пакета
+        assertEquals("Пакет успешно подписан.", app.changer().getConfirmMessage()); // Проверяем наличие сообщения об успешной отправке пакета
         app.changer().pressContinueButton();
         app.changer().selectAction();
         app.changer().findAppByNumber(appNumber);
         app.changer().openFoundAppByNumber(appNumber);
         app.changer().saveAppToSoprano();
-        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), app.changer().getSavingConfirm()); // Проверяем наличие сообщения о сохранении в Сопрано
+        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), app.changer().getConfirmMessage()); // Проверяем наличие сообщения о сохранении в Сопрано
     }
 
     @Order(4)
@@ -142,13 +144,13 @@ public class SendAppForChangeTests extends TestSelenideBase {
     @DisplayName("Тест подачи заявления об изменении адреса владельца")
     @Story("Подача заявления о смене адреса владельца по патенту и заявлению")
     @Description("Параметризированный тест подачи заявления о смене адреса владельца по патенту и заявлению. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void SendAppForChangeOwnerAddressTest(boolean isApp) {
+    public void SendAppForChangeOwnerAddressTest(boolean isApp) throws NextButtomException {
         Allure.parameter("IsApplication", isApp);
         String appNumber = app.jdbc().getAppNumberForChanges(isApp);
         applicationNumbersWriter("src/test/resources/list_of_app/changeAppNumbers.txt", appNumber);
         app.login().login(ConfigProvider.getAdminLogin(), ConfigProvider.getAdminPassword());
         app.login().selectSectionOfAccount("invention");
-        app.changer().selectChangeApplication();
+        app.changer().selectApplicationType("change");
         app.changer().typeAppNumberForChange(appNumber);
         assertTrue(app.changer().checkTypeOfApp(isApp)); // проверка указания в заголовке на тип документа в который вносятся изменения
         app.changer().selectTypeOfChange("changeAddress");
@@ -162,13 +164,13 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.changer().pressNextButton();
         app.changer().uploadPaymentOrder();
         app.changer().signAndSendDocument();
-        assertEquals("Пакет успешно подписан.", app.changer().getSendingConfirm()); // Проверяем наличие сообщения об успешной отправке пакета
+        assertEquals("Пакет успешно подписан.", app.changer().getConfirmMessage()); // Проверяем наличие сообщения об успешной отправке пакета
         app.changer().pressContinueButton();
         app.changer().selectAction();
         app.changer().findAppByNumber(appNumber);
         app.changer().openFoundAppByNumber(appNumber);
         app.changer().saveAppToSoprano();
-        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), app.changer().getSavingConfirm()); // Проверяем наличие сообщения о сохранении в Сопрано
+        assertEquals(String.format("Досылка для заявки %s сохранена в Soprano.", appNumber), app.changer().getConfirmMessage()); // Проверяем наличие сообщения о сохранении в Сопрано
     }
 
     @Test
