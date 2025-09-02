@@ -48,10 +48,10 @@ public class ChangingHelper extends HelperBase {
      */
     @Step("Проверка типа документа в который вносятся изменения")
     public boolean checkTypeOfApp(boolean isApp) {
-        String header = getTextFromElement(By.xpath("//td[contains(text(), 'Передача права/Изменение имени или наименования')]"));
+        String header = getTextFromElement(By.xpath("//h3[contains(text(), 'Передача права/Изменение имени или наименования')]"));
         String regex;
         if (isApp) {
-            regex = ".+заявка.+\\d{9}";
+            regex = ".+заявка.+\\d{9}$";
         } else {
             regex = ".+заявка.+патент.+";
         }

@@ -1,24 +1,18 @@
 package selenium_tests.manager;
 
 import com.github.javafaker.Faker;
+import exceptions.TooManyLoopsException;
 import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import utils.FileUtils;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
-import static utils.FileUtils.getAbsolutePathToFile;
-import static utils.FileUtils.getListOfFiles;
 
 /**
  * Базовый класс-родитель для всех классов-помощников. Содержит общие методы для взаимодействия с элементами страниц.
@@ -41,6 +35,7 @@ public class HelperBase {
         for (var i = 1; i <= 3; i++) {
             try {
                 WebElement element = presenceOfElement(locator);
+                element.clear();
                 element.sendKeys(text);
                 if (hasDelay) {
                     TimeUnit.MILLISECONDS.sleep(400);
@@ -241,8 +236,43 @@ public class HelperBase {
         } else if ("profile".equals(typeSection)) {
             click(By.xpath("//span[contains(text(), 'Профиль')]"), true);
         }
-
     }
+
+    /**
+     * Метод добавляет 2 и последующую форму для заявителя\автора\изобретателя\представителя
+     */
+    public void addNewNextEntityForm() throws TooManyLoopsException {
+        int currentCount = manager.driver.findElements(By.id("tablePersonId")).size();
+        int newCount = -1;
+        int loopCount = 0;
+        while (newCount <= currentCount) {
+            if (loopCount > 4) {
+                throw new TooManyLoopsException("When add new entity form, loop count exceeds 3");
+            }
+            click(By.xpath("//input[contains(@value, 'Добавить нового')]"), true);
+            newCount = presenceOfElements(By.id("tablePersonId")).size();
+            loopCount++;
+        }
+    }
+
+    /**
+     * Метод нажимает кнопку "Далее". Можно использовать вместо обычного нажатия и для случаев, когда не нажимается с первого раза
+     */
+    public void pressNextButton() throws TooManyLoopsException {
+        String currentHeader = getTextFromElement(By.xpath("//td[not(@style='display : none') and contains(@class, '-active')]/span[@class='rf-tab-lbl']"));
+        String newHeader = getTextFromElement(By.xpath("//td[not(@style='display : none') and contains(@class, '-active')]/span[@class='rf-tab-lbl']"));
+        int loopCount = 0;
+        while (currentHeader.equals(newHeader)) {
+            if (loopCount > 4) {
+                throw new TooManyLoopsException("When press next button, loop count exceeds 3");
+            }
+            click(By.cssSelector("input[value='Далее']"), true);
+            newHeader = getTextFromElement(By.xpath("//td[not(@style='display : none') and contains(@class, '-active')]/span[@class='rf-tab-lbl']"));
+            loopCount++;
+        }
+    }
+
+
 
 
 }

@@ -1,7 +1,7 @@
 package selenide_tests.manager;
 
 import com.codeborne.selenide.Condition;
-import exceptions.NextButtomException;
+import exceptions.TooManyLoopsException;
 import io.qameta.allure.Step;
 import model.EntityDataBase;
 import model.OrganisationData;
@@ -69,19 +69,18 @@ public class HelperBase {
     /**
      * Метод нажимает кнопку "Далее" при заполнении формы заявления на изменения
      */
-    @Step("Нажатие 'Далее'")
-    public void pressNextButton() throws NextButtomException {
+    public void pressNextButton() throws TooManyLoopsException {
         sleep(500);
-        String curTitle = $(By.xpath("//td[@class='application-header']")).getText();
-        String nextTitle = $(By.xpath("//td[@class='application-header']")).getText();
-        int counter = 0;
-        while (curTitle.equals(nextTitle)) {
-            if (counter > 3) {
-                throw new NextButtomException("Loop of next button!");
+        String currentHeader = getTextFromElement(By.xpath("//td[not(@style='display : none') and contains(@class, '-active')]/span[@class='rf-tab-lbl']"));
+        String newHeader = getTextFromElement(By.xpath("//td[not(@style='display : none') and contains(@class, '-active')]/span[@class='rf-tab-lbl']"));
+        int loopCount = 0;
+        while (currentHeader.equals(newHeader)) {
+            if (loopCount > 4) {
+                throw new TooManyLoopsException("When press next button, loop count exceeds 3");
             }
-            $("input[value='Далее']").shouldBe(Condition.visible, Condition.clickable, Condition.exist).click();
-            nextTitle = $(By.xpath("//td[@class='application-header']")).getText();
-            counter++;
+            $("input[value='Далее']").shouldBe(Condition.visible, Condition.clickable, Condition.exist).click();;
+            newHeader = getTextFromElement(By.xpath("//td[not(@style='display : none') and contains(@class, '-active')]/span[@class='rf-tab-lbl']"));
+            loopCount++;
         }
 
     }

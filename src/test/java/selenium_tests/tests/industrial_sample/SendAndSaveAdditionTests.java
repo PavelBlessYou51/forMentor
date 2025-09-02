@@ -1,6 +1,6 @@
 package selenium_tests.tests.industrial_sample;
 
-import exceptions.NextButtomException;
+import exceptions.TooManyLoopsException;
 import fixture.ConfigProvider;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -32,15 +32,15 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
     @DisplayName("Тест подачи досылки с 1 ПО с загрузкой всех документов")
     @Story("Подача досылки с 1 ПО и всеми документами")
     @Description("Тест подачи досылки с 1 ПО с загрузкой всех документов. Подается новая первоначальная заявка. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void submitIndEuroAdditionWithOneSampleTest() throws NextButtomException {
+    public void submitIndEuroAdditionWithOneSampleTest() throws TooManyLoopsException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
         app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
-        app.sender().addNewRepresentative();
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
+        app.sender().pressNextButton();
         app.sender().fillAppDocumentForm("industrial");
         app.sender().fillIndustrialPrototypeWithAdditionalSamples(1, false);
         app.sender().fillTaxFormIndustrial();
@@ -56,8 +56,8 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().selectTypeOfApplication("addition");
         app.sender().typeAppNumberForAddition(appNumber);
         app.sender().addAllDocsInIndustrialAddition();
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
+        app.sender().pressNextButton();
         app.sender().fillIndustrialPrototypeInAddition(true);
         app.sender().fillTaxFormIndustrial();
         app.sender().signInApplication();
@@ -79,16 +79,16 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
     @DisplayName("Тест подачи досылки с 1 ПО с указанием даты")
     @Story("Подача досылки с 1 ПО с указанием даты")
     @Description("Тест подачи досылки с 1 ПО с указанием даты. Подается новая первоначальная заявка. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void submitIndEuroAdditionWithDateTest() throws NextButtomException {
+    public void submitIndEuroAdditionWithDateTest() throws TooManyLoopsException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
         app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
-        app.sender().addNewRepresentative();
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
+        app.sender().pressNextButton();
+        app.sender().pressNextButton();
         app.sender().fillIndustrialPrototypeWithAdditionalSamples(1, false);
         app.sender().fillTaxFormIndustrial();
         app.sender().signInApplication();
@@ -101,7 +101,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("additionIndWithDate");
         app.sender().typeAppNumberForAdditionWithDate(appNumber);
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
         app.sender().fillIndustrialPrototypeInAddition(true);
         app.sender().fillTaxFormIndustrial();
         app.sender().signInApplication();
@@ -121,16 +121,16 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
     @DisplayName("Тест подачи досылки с 3 ПО только обязательные документы")
     @Story("Подача досылки с 3 ПО только обязательные документы")
     @Description("Тест подачи досылки с 3 ПО только обязательные документы. Подается новая первоначальная заявка. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void submitIndEuroAdditionWithThreeSamplesTest() throws NextButtomException {
+    public void submitIndEuroAdditionWithThreeSamplesTest() throws TooManyLoopsException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillIndustrialCommonInfoPart();
         app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
-        app.sender().addNewRepresentative();
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
+        app.sender().pressNextButton();
+        app.sender().pressNextButton();
         app.sender().fillIndustrialPrototypeWithAdditionalSamples(3, false);
         app.sender().fillTaxFormIndustrial();
         app.sender().signInApplication();
@@ -144,7 +144,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         app.sender().selectSectionOfAccount("industrial");
         app.sender().selectTypeOfApplication("addition");
         app.sender().typeAppNumberForAddition(appNumber);
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
         app.sender().fillIndustrialPrototypeInAddition(false);
         app.sender().fillTaxFormIndustrial();
         app.sender().signInApplication();

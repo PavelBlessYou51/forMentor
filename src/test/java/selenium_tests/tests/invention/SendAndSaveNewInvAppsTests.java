@@ -1,6 +1,6 @@
 package selenium_tests.tests.invention;
 
-import exceptions.NextButtomException;
+import exceptions.TooManyLoopsException;
 import fixture.ConfigProvider;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -30,19 +30,19 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
     @DisplayName("Тест отправки евразийской заявки со всеми документами")
     @Story("Отправка евразийской заявки со всеми документами")
     @Description("Тест отправки евразийской заявки со всеми документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void submitInventionEuroApplicationTest() throws NextButtomException {
+    public void submitInventionEuroApplicationTest() throws TooManyLoopsException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillInventionCommonInfoPart();
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
         app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
+        app.sender().setNewAddress("old");
         app.sender().fillAdditionalInfo("allPetitions");
         app.sender().fillAppDocumentFormForMadras(false);
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
         app.sender().fillTaxFormInvention();
         app.sender().signInApplication();
         String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -64,7 +64,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
     @DisplayName("Тест подачи PCT заявки")
     @Story("Отправка РСТ заявки")
     @Description("Тест отправки PCT заявки с несколькими документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void submitInventionPCTApplicationTest() throws NextButtomException {
+    public void submitInventionPCTApplicationTest() throws TooManyLoopsException {
         String PCTNumber = app.jdbc().getPCTData();
         app.jdbc().deletePCTRecord(PCTNumber);
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
@@ -73,8 +73,8 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         app.sender().fillPCTCommonInfoPart(PCTNumber);
         app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
-        app.sender().addNewRepresentative();
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
+        app.sender().pressNextButton();
         app.sender().fillPCTAdditionalInfo();
         app.sender().fillPCTDocumentForm();
         app.sender().fillTaxFormInvention();
@@ -98,16 +98,16 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
     @DisplayName("Тест подачи выделенной евразийской заявки")
     @Story("Отправка выделенной заявки")
     @Description("Тест отправки выделенной заявки с несколькими документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void submitAllocatedApplicationTest() throws NextButtomException {
+    public void submitAllocatedApplicationTest() throws TooManyLoopsException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("euroApp");
         app.sender().fillInventionCommonInfoPart();
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
         app.sender().addNewApplicants(1, "person");
         app.sender().addNewInventors(1);
         for (int i = 0; i < 3; i++) {
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().pressNextButton();
         }
         app.sender().fillAppDocumentForm("invention");
         app.sender().fillTaxFormInvention();
@@ -124,7 +124,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         app.sender().typeAppNumberForAllocatedApp(appNumber);
         app.sender().fillInventionCommonInfoPart();
         for (int i = 0; i < 6; i++) {
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().pressNextButton();
         }
         app.sender().fillAppDocumentForm("invention");
         app.sender().fillTaxFormInvention();
@@ -148,7 +148,7 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
     @DisplayName("Тест подачи евразийской заявки c 4 приоритетами разного вида")
     @Story("Отправка евразийской заявки с 4 приоритетами разного вида")
     @Description("Тест отправки евразийской заявки c 4 приоритетами разного вида и несколькими документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void submitInventionEuroAppWithPrioritiesTest() throws NextButtomException {
+    public void submitInventionEuroAppWithPrioritiesTest() throws TooManyLoopsException {
         app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
         app.sender().selectSectionOfAccount("invention");
         app.sender().selectTypeOfApplication("euroApp");
@@ -157,11 +157,11 @@ public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
         app.sender().addInventionPriority("previousEuro");
         app.sender().addInventionPriority("additionalMaterials");
         app.sender().addInventionPriority("startsOpenShowing");
-        app.sender().click(By.cssSelector("input[value='Далее']"), true);
+        app.sender().pressNextButton();
         app.sender().addNewApplicants(2, "person");
         app.sender().addNewInventors(2);
         for (int i = 0; i < 3; i++) {
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().pressNextButton();
         }
         app.sender().fillAppDocumentForm("invention");
         app.sender().fillTaxFormInvention();

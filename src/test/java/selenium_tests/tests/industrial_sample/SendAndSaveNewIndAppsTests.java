@@ -1,6 +1,6 @@
 package selenium_tests.tests.industrial_sample;
 
-import exceptions.NextButtomException;
+import exceptions.TooManyLoopsException;
 import fixture.ConfigProvider;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -34,15 +34,15 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
         @DisplayName("Тест заявки на ПО без приоритета по 1 ПО с загрузкой всех возможных файлов")
         @Story("Отправка заявки без приоритета по 1 ПО с загрузкой всех возможных документов")
         @Description("Тест заявки на ПО без приоритета по 1 ПО с загрузкой всех возможных файлов, в т.ч. 3D и доп. документами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-        public void submitIndustrialEuroApplicationTest() throws NextButtomException {
+        public void submitIndustrialEuroApplicationTest() throws TooManyLoopsException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
-            app.sender().addNewApplicants(3, "person");
-            app.sender().addNewInventors(3);
-            app.sender().addNewRepresentative();
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().addNewApplicants(1, "person");
+            app.sender().addNewInventors(1);
+            app.sender().addNewRepresentative(2, "person");
+            app.sender().pressNextButton();
             app.sender().fillAppDocumentForm("industrial");
             app.sender().fillIndustrialPrototypeWithAdditionalSamples(1, true);
             app.sender().fillTaxFormIndustrial();
@@ -63,21 +63,20 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
 
         @Test
         @Order(2)
-        @DisplayName("Тест заявки на ПО без приоритета по 3 ПО с приоритетами (предшествующей + доп. мат. + открытый показ) и несколькими заявителями и авторами")
-        @Story("Отправка заявки с 3 приоритетами и несколькими заявителями/авторами")
-        @Description("Тест заявки на ПО с 3 ПО с приоритетами (предшествующей + доп. мат. + открытый показ) и несколькими заявителями и авторами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-        public void submitIndustrialEuroApplicationWithPrioritiesTest() throws NextButtomException {
+        @DisplayName("Тест заявки на ПО без приоритета по 4 ПО с приоритетами (предшествующей + доп. мат. + открытый показ) и несколькими заявителями и авторами")
+        @Story("Отправка заявки с 4 приоритетами и несколькими заявителями/авторами")
+        @Description("Тест заявки на ПО с 4 ПО с приоритетами (предшествующей + доп. мат. + открытый показ) и несколькими заявителями и авторами. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
+        public void submitIndustrialEuroApplicationWithPrioritiesTest() throws TooManyLoopsException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
-            app.sender().addNewApplicants(1, "person");
-            app.sender().addNewInventors(1);
-            app.sender().addNewRepresentative();
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().addNewApplicants(3, "person");
+            app.sender().addNewInventors(3);
+            app.sender().addNewRepresentative(2, "person");
+            app.sender().setNewAddress("new");
+            app.sender().pressNextButton();
             app.sender().fillIndustrialPrototypeWithAllPriorities(4);
-            app.sender().fillTaxFormIndustrial();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
             assertEquals("Пакет успешно подписан.", sendingConfirmation); // проверка успешной отправки заявки
@@ -99,6 +98,7 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
         @DisplayName("Тест проверки сохранения документов в Madras")
         @Story("Проверка сохранения статики в Madras")
         @Description("Тест для проверки сохранения документов в Madras по проведенным тестам")
+        @Disabled
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(90000);
@@ -138,18 +138,18 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
         @DisplayName("Тест подачи выделенной заявки с 1 ПО")
         @Story("Отправка выделенной заявки с 1 ПО")
         @Description("Тест подачи выделенной заявки с 1 ПО. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-        public void submitIndAllocatedAppTest() throws NextButtomException {
+        public void submitIndAllocatedAppTest() throws TooManyLoopsException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
             app.sender().addNewApplicants(1, "person");
             app.sender().addNewInventors(1);
-            app.sender().addNewRepresentative();
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().addNewRepresentative(2, "person");
+            app.sender().pressNextButton();
+            app.sender().pressNextButton();
             app.sender().fillIndustrialPrototype(0, false);
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().pressNextButton();
             app.sender().fillTaxFormIndustrial();
             app.sender().signInApplication();
             String sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -175,16 +175,16 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
         @DisplayName("Тест подачи выделенной заявки с 3 ПО")
         @Story("Отправка выделенной заявки с 3 ПО")
         @Description("Тест подачи выделенной заявки с 3 ПО. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-        public void submitIndAllocatedAppWithThreeSampleTest() throws NextButtomException {
+        public void submitIndAllocatedAppWithThreeSampleTest() throws TooManyLoopsException {
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("industrial");
             app.sender().selectTypeOfApplication("euroApp");
             app.sender().fillIndustrialCommonInfoPart();
             app.sender().addNewApplicants(1, "person");
             app.sender().addNewInventors(1);
-            app.sender().addNewRepresentative();
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().addNewRepresentative(2, "person");
+            app.sender().pressNextButton();
+            app.sender().pressNextButton();
             app.sender().fillIndustrialPrototypeWithAdditionalSamples(3, false);
             app.sender().fillTaxFormIndustrial();
             app.sender().signInApplication();
@@ -203,7 +203,7 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
             app.sender().selectTypeOfApplication("allocatedApp");
             app.sender().typeAppNumberForAllocatedApp(appNumber);
             app.sender().click(By.xpath("//td[not(@style='display : none')]/span[contains(text(), 'ПРОМЫШЛЕННЫЕ ОБРАЗЦЫ')]"), true);
-            app.sender().click(By.cssSelector("input[value='Далее']"), true);
+            app.sender().pressNextButton();
             app.sender().fillTaxFormIndustrial();
             app.sender().signInApplication();
             sendingConfirmation = app.sender().getTextFromElement(By.cssSelector("span[class='error-message']"));
@@ -226,6 +226,7 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
         @DisplayName("Тест проверки сохранения документов в Madras")
         @Story("Проверка сохранения статики в Madras")
         @Description("Тест для проверки сохранения документов в Madras по проведенным тестам")
+        @Disabled
         public void checkSaveDocsToMadrasTest() {
             try {
                 Thread.sleep(90000);

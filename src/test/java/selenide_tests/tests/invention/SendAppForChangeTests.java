@@ -1,7 +1,7 @@
 package selenide_tests.tests.invention;
 
 import com.codeborne.selenide.junit5.BrowserPerTestStrategyExtension;
-import exceptions.NextButtomException;
+import exceptions.TooManyLoopsException;
 import fixture.ConfigProvider;
 import io.qameta.allure.*;
 import jdbc.JdbcHelper;
@@ -36,7 +36,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
     @DisplayName("Тест подачи заявления права по патенту и заявке путем правопреемства")
     @Story("Подача заявления о смене владельца по патенту и заявке путем правопреемства")
     @Description("Параметризированный тест подачи заявления о смене владельца по патенту и заявке путем правопреемства. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void SendAppForOwnerChangeBySuccessionTest(boolean isApp) throws NextButtomException {
+    public void SendAppForOwnerChangeBySuccessionTest(boolean isApp) throws TooManyLoopsException {
         Allure.parameter("IsApplication", isApp);
         String appNumber = app.jdbc().getAppNumberForChanges(isApp);
         applicationNumbersWriter("src/test/resources/list_of_app/changeAppNumbers.txt", appNumber);
@@ -44,7 +44,6 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.login().selectSectionOfAccount("invention");
         app.changer().selectApplicationType("change");
         app.changer().typeAppNumberForChange(appNumber);
-        System.out.println(appNumber);
         assertTrue(app.changer().checkTypeOfApp(isApp)); // проверка указания в заголовке на тип документа в который вносятся изменения
         app.changer().selectTypeOfChange("succession");
         app.changer().pressNextButton();
@@ -73,7 +72,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
     @DisplayName("Тест подачи заявления передачи права по патенту и заявке путем уступки")
     @Story("Подача заявления о смене владельца по патенту и заявке путем уступки")
     @Description("Параметризированный тест подачи заявления о смене владельца по патенту и заявке путем уступки. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void SendAppForOwnerChangeByAssignmentRightsTest(boolean isApp) throws NextButtomException {
+    public void SendAppForOwnerChangeByAssignmentRightsTest(boolean isApp) throws TooManyLoopsException {
         Allure.parameter("IsApplication", isApp);
         String appNumber = app.jdbc().getAppNumberForChanges(isApp);
         applicationNumbersWriter("src/test/resources/list_of_app/changeAppNumbers.txt", appNumber);
@@ -109,7 +108,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
     @DisplayName("Тест подачи заявления об изменении наименования владельца")
     @Story("Подача заявления о смене имени владельца по патенту и заявлению")
     @Description("Параметризированный тест подачи заявления о смене имени владельца по патенту и заявлению. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void SendAppForChangeOwnerNameTest(boolean isApp) throws NextButtomException {
+    public void SendAppForChangeOwnerNameTest(boolean isApp) throws TooManyLoopsException {
         Allure.parameter("IsApplication", isApp);
         String appNumber = app.jdbc().getAppNumberForChanges(isApp);
         applicationNumbersWriter("src/test/resources/list_of_app/changeAppNumbers.txt", appNumber);
@@ -144,7 +143,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
     @DisplayName("Тест подачи заявления об изменении адреса владельца")
     @Story("Подача заявления о смене адреса владельца по патенту и заявлению")
     @Description("Параметризированный тест подачи заявления о смене адреса владельца по патенту и заявлению. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
-    public void SendAppForChangeOwnerAddressTest(boolean isApp) throws NextButtomException {
+    public void SendAppForChangeOwnerAddressTest(boolean isApp) throws TooManyLoopsException {
         Allure.parameter("IsApplication", isApp);
         String appNumber = app.jdbc().getAppNumberForChanges(isApp);
         applicationNumbersWriter("src/test/resources/list_of_app/changeAppNumbers.txt", appNumber);
@@ -179,6 +178,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
     @DisplayName("Тест проверки сохранения документов в Madras")
     @Story("Проверка сохранения статики в Madras")
     @Description("Тест для проверки сохранения документов в Madras по проведенным тестам")
+    @Disabled
     public void checkSaveDocsToMadrasTest() {
         try {
             Thread.sleep(60000);

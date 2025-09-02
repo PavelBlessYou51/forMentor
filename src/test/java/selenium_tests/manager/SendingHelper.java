@@ -1,11 +1,13 @@
 package selenium_tests.manager;
 
-import exceptions.NextButtomException;
+import exceptions.TooManyLoopsException;
 import io.qameta.allure.Step;
 import model.EntityDataBase;
+import model.OrganisationData;
 import model.PersonData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import reactor.util.annotation.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -108,104 +110,85 @@ public class SendingHelper extends HelperBase {
      * Метод добавляет нового заявителя и заполняет его данные
      */
     @Step("Добавление нового заявителя")
-    public void addNewApplicants(int count, String type) throws NextButtomException {
-        boolean hasHeader = true;
-        int havePersons = 0;
-        while (hasHeader) {
-            while (havePersons < count) {
-                click(By.cssSelector("input[value='Добавить нового заявителя']"), true);
-                while (havePersons == presenceOfElements(By.xpath("//input[contains(@value, 'Удалить')]")).size()) {
-                    click(By.cssSelector("input[value='Добавить нового заявителя']"), true);
-                }
-                if (isElementPresent(By.xpath("//span[@class='error-message']"))) {
-                    deletePerson(havePersons--);
-                    continue;
-                }
-                fillPersonData("applicant", havePersons);
-                havePersons++;
+    public void addNewApplicants(int count, String type) throws TooManyLoopsException {
+        int haveApplicants = 0;
+        while (haveApplicants < count) {
+            addNewNextEntityForm();
+            if("person".equals(type)) {
+                fillPersonData("applicant", haveApplicants);
+            } else if ("organisation".equals(type)) {
+                fillOrganisationData("org", haveApplicants);
+            } else if ("government".equals(type)) {
+                fillOrganisationData("gov", haveApplicants);
             }
-            int loopCount = 0;
-            while (!isElementPresent(By.xpath("//input[@value='Добавить нового изобретателя' or @value='Добавить нового автора']"))) {
-                if (loopCount > 4) {
-                    throw new NextButtomException("Loop of next button!");
-                }
-                click(By.cssSelector("input[value='Далее']"), true);
-                loopCount++;
-            }
-            hasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Заявители')]"));
-            if (hasHeader) {
-                deletePerson(count);
-                havePersons--;
-            }
+            if (checkCorrectApplicantDataFilling(haveApplicants)) {
+                deletePerson(haveApplicants);
+                continue;
+            };
+            haveApplicants++;
         }
+        pressNextButton();
     }
 
     /**
      * Метод добавляет нового изобретателя\автора и заполняет его данные
      */
     @Step("Добавление нового изобретателя/автора")
-    public void addNewInventors(int count) throws NextButtomException {
-        boolean HasHeader = true;
-        int havePersons = 0;
-        while (HasHeader) {
-            while (havePersons < count) {
-                click(By.xpath("//input[contains(@value, 'Добавить нового')]"), true);
-                while (havePersons == presenceOfElements(By.xpath("//input[contains(@value, 'Удалить')]")).size()) {
-                    click(By.xpath("//input[contains(@value, 'Добавить нового')]"), true);
-                }
-                if (isElementPresent(By.xpath("//span[@class='error-message']"))) {
-                    deletePerson(havePersons--);
-                    continue;
-                }
-                fillPersonData("inventor", havePersons);
-                havePersons++;
-            }
-            int loopCount = 0;
-            while (!isElementPresent(By.xpath("//input[@value='Добавить нового представителя']"))) {
-                if (loopCount > 4) {
-                    throw new NextButtomException("Loop of next button!");
-                }
-                click(By.cssSelector("input[value='Далее']"), true);
-                loopCount++;
-            }
-            HasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Изобретатели') or contains(text(), 'Авторы')]"));
-            if (HasHeader) {
-                deletePerson(count);
-                havePersons--;
-            }
+    public void addNewInventors(int count) throws TooManyLoopsException {
+        int haveInventors = 0;
+        while (haveInventors < count) {
+            addNewNextEntityForm();
+            fillPersonData(null, haveInventors);
+            if (checkCorrectApplicantDataFilling(haveInventors)) {
+                deletePerson(haveInventors);
+                continue;
+            };
+            haveInventors++;
         }
-
+        pressNextButton();
     }
 
     /**
      * Метод добавляет нового представителя и заполняет его данные
      */
     @Step("Добавление нового представителя")
-    public void addNewRepresentative() {
-        boolean HasHeader = true;
-        while (HasHeader) {
-            click(By.xpath("//input[contains(@value, 'Добавить нового')]"), true);
-            fillPersonData("representative", 1);
-            click(By.cssSelector("input[value='Далее']"), true);
-            HasHeader = isElementPresent(By.xpath("//td[contains(text(), 'Представители')]"));
-            if (HasHeader) {
-                deletePerson(2);
-            }
+    public void addNewRepresentative(int count, String type) throws TooManyLoopsException {
+        int haveRepresentatives = 1;
+        if(type.equals("person")) {
+            click(By.xpath("//input[@value='representative' and @type='radio']"), true);
+        } else if (type.equals("agent")) {
+            addAgent();
         }
+        while (haveRepresentatives < count) {
+            addNewNextEntityForm();
+            fillPersonData("representative", haveRepresentatives);
+            if (checkCorrectApplicantDataFilling(haveRepresentatives)) {
+                deletePerson(haveRepresentatives);
+                continue;
+            };
+            haveRepresentatives++;
+        }
+        pressNextButton();
+    }
 
+    /**
+     * Метод добавляет патентного поверенного в заявку
+     * Пока заглушка, дописать при необходимости
+     */
+    public void addAgent() {
     }
 
     /**
      * Метод заполняет раздел №7 "Документы" в изобретениях и №6 в ПО
      */
     @Step("Заполнение раздела №7 в ИЗО/№6 в ПО")
-    public void fillAppDocumentForm(String appType) throws NextButtomException {
+    public void fillAppDocumentForm(String appType) throws TooManyLoopsException {
         if ("invention".equals(appType)) {
             fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"));
             uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
             click(By.xpath("//input[@title='Добавить документ']"), true);
             randomOptionPicker(By.xpath("//select"));
-            fileUploadWithCheck("//div[contains(@id, 'repeatOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/Другое%.pdf"));
+            fileUploadWithCheck("//div[contains(@id, 'repeatOtherDocId')]//input[@type='file']", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"));
         } else if ("industrial".equals(appType)) {
             click(By.xpath("//input[@title='Добавить документ']"), true);
             optionPicker(By.xpath("//select"), 1, true);
@@ -213,14 +196,7 @@ public class SendingHelper extends HelperBase {
             fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/Доверенность%.pdf"), true);
             fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[2]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_industrial/Письмо Заявителя%.pdf"), true);
         }
-        int count = 0;
-        while (isElementPresent(By.xpath("//td[contains(text(), 'Документы')]"))) {
-            if (count > 4) {
-                throw new NextButtomException("Loop of next button!");
-            }
-            click(By.cssSelector("input[value='Далее']"), true);
-            count++;
-        }
+        pressNextButton();
     }
 
 
@@ -233,7 +209,7 @@ public class SendingHelper extends HelperBase {
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание(не_сжим_17_Мб%).pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[2]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Формула_(цветной_файл)%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[3]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Чертежи_(%).pdf"));
-        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[5]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Реферат_(много_шрифтов)%.pdf"));
+//        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[5]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Реферат_(много_шрифтов)%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[6]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Список_последовательностей%.txt"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[7]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Документ_о_депонировании%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[8]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Основания_уменьшения_пошлины%.pdf"));
@@ -259,7 +235,7 @@ public class SendingHelper extends HelperBase {
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[1]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание(не_сжим_17_Мб%).pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[2]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Формула_(цветной_файл)%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[3]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Чертежи_(%).pdf"));
-        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[5]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Реферат_(много_шрифтов)%.pdf"));
+//        fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[5]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Реферат_(много_шрифтов)%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[6]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Список последовательностей%.xml"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[7]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Доверенность%.pdf"));
         fileUploadWithCheck("(//div[contains(@id, 'upload')]//input[@type='file'])[8]", getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Передача_права_на_евр_заявку%.pdf"));
@@ -350,7 +326,7 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет данные физического лица(Заявитель, Изобретатель, Представитель)
      */
-    public void fillPersonData(String personType, int count) {
+    public void fillPersonData(@Nullable String personType, int count) {
         PersonData person = new PersonData();
         optionPicker(By.xpath(String.format("(//select[@class='application-input'])[%s]", count + 1)), 1, true);
         type(By.xpath(String.format("//input[contains(@id, '%s:appeal')]", count)), person.callTo, true);
@@ -367,10 +343,38 @@ public class SendingHelper extends HelperBase {
     }
 
     /**
+     * Метод заполняет данные юридического лица(коммерческая и гос организации)
+     */
+    public void fillOrganisationData(String orgType, int count) {
+        OrganisationData organisation = new OrganisationData();
+        if ("gov".equals(orgType)) {
+            optionPicker(By.xpath(String.format("(//select[not(@class='application-input')])[%s]", count + 1)), 2, true);
+        } else {
+            optionPicker(By.xpath(String.format("(//select[not(@class='application-input')])[%s]", count + 1)), 1, true);
+        }
+        type(By.xpath(String.format("//textarea[contains(@id, '%s:name')]", count)), organisation.surname, true);
+        type(By.xpath(String.format("//input[contains(@id, '%s:email')]", count)), organisation.email, true);
+        type(By.xpath(String.format("//input[contains(@id, '%s:country')]", count)), organisation.countryCode, true);
+        type(By.xpath(String.format("//input[contains(@id, '%s:idTown')]", count)), organisation.postCode, true);
+        type(By.xpath(String.format("//input[contains(@id, '%s:phone')]", count)), organisation.phoneNumber, true);
+        type(By.xpath(String.format("//textarea[contains(@id, '%s:address')]", count)), organisation.address, true);
+    }
+
+    /**
+     * Метод проверяет, что данные заявителя заполнены верно
+     */
+    public boolean checkCorrectApplicantDataFilling(int count) throws TooManyLoopsException {
+        addNewNextEntityForm();
+        boolean correct = isElementPresent(By.xpath("//span[@class='error-message']"));
+        deletePerson(count + 1);
+        return correct;
+    }
+
+    /**
      * Метод удаляет добавленного заявителя\автора\изобретателя
      */
     protected void deletePerson(int personNumber) {
-        String locator = String.format("(//table[@id='tablePersonId'])[%s]//input[contains(@value, 'Удалить ')]", personNumber);
+        String locator = String.format("(//table[@id='tablePersonId'])[%s]//input[contains(@value, 'Удалить ')]", personNumber + 1);
         click(By.xpath(locator), true);
     }
 
@@ -555,20 +559,13 @@ public class SendingHelper extends HelperBase {
      * Метод заполняет раздел №1 "Общая информация" PCT заявки
      */
     @Step("Заполнение раздела №1 PCT заявки")
-    public void fillPCTCommonInfoPart(String PCTNumber) throws NextButtomException {
+    public void fillPCTCommonInfoPart(String PCTNumber) throws TooManyLoopsException {
         EntityDataBase entity = new EntityDataBase();
         String inventionName = entity.fakerRU.lorem().sentence();
         type(By.xpath("//input[contains(@id, 'numInv')]"), "N" + getRandomInt(999), false);
         type(By.xpath("//textarea[contains(@id, 'nameInv')]"), inventionName, false);
         type(By.xpath("//input[contains(@id, 'pctNumber')]"), PCTNumber, true);
-        int count = 0;
-        while (isElementPresent(By.xpath("//td[contains(text(), 'Общая информация')]"))) {
-            if (count > 4) {
-                throw new NextButtomException("Loop of next button!");
-            }
-            click(By.cssSelector("input[value='Далее']"), true);
-            count++;
-        }
+        pressNextButton();
     }
 
     /**
@@ -586,15 +583,13 @@ public class SendingHelper extends HelperBase {
      * Метод заполняет раздел №7 "Документы" PCT заявки
      */
     @Step("Заполнение раздела №7 PCT заявки")
-    public void fillPCTDocumentForm() {
+    public void fillPCTDocumentForm() throws TooManyLoopsException {
         fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[1]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Описание изобретения%(обычное).pdf"), true);
         uploadRandom3DFile("//td[contains(text(), 'Изображение в формате 3D(obj, step, stl, stp, u3d)')]/..//input[@type='file']");
         click(By.xpath("//input[contains(@id, 'addOtherDocId')]"), true);
         randomOptionPicker(By.xpath("//select"));
         fileUpload(By.xpath("(//div[contains(@id, 'upload')]//input[@type='file'])[20]"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Другое%.pdf"), true);
-        while (isElementPresent(By.xpath("//td[contains(text(), 'Документы')]"))) {
-            click(By.cssSelector("input[value='Далее']"), true);
-        }
+        pressNextButton();
     }
 
     /**
@@ -642,4 +637,23 @@ public class SendingHelper extends HelperBase {
         click(By.xpath("//input[contains(@id, 'buttonAddSendIdWithSubmitDate')]"), true);
     }
 
+    /**
+     * Метод заполняет новый адрес для переписки: новый либо из ранее добавленных
+     */
+    @Step("Ввод нового адреса для переписки")
+    public void setNewAddress(String addressType) throws TooManyLoopsException {
+        click(By.xpath("//input[@type='checkbox']"), true);
+        if ("old".equals(addressType)) {
+            click(By.xpath("//input[@value='1']"), true);
+        } else if ("new".equals(addressType)) {
+            optionPicker(By.xpath("//select"), 1, true);
+            PersonData personData = new PersonData();
+            type(By.xpath("//div[contains(@id, 'titleAndAppeal')]/input"), personData.callTo, true);
+            type(By.xpath("//input[contains(@id, 'partIdTown')]"), personData.postCode, true);
+            type(By.xpath("//textarea[contains(@id, 'partAddress')]"), personData.address, true);
+            type(By.xpath("//input[contains(@id, 'partPhone')]"), personData.phoneNumber, true);
+            type(By.xpath("//input[contains(@id, 'partEmail')]"), personData.email, true);
+        }
+        pressNextButton();
+    }
 }

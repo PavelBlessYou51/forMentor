@@ -1,6 +1,6 @@
 package selenide_tests.tests.invention;
 
-import exceptions.NextButtomException;
+import exceptions.TooManyLoopsException;
 import fixture.ConfigProvider;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -25,7 +25,7 @@ public class ForwardApplicationTests extends TestSelenideBase {
     @Test
     @Story("Пересылка EA заявки из нацведомтсва с тремя представителями (Представитель, Патентный поверенный и Работник ведомства) и всеми документами")
     @DisplayName("Тест пересылки ЕА заявки из нацведомтсва с тремя представителями и всеми документами")
-    public void forwardEaAppFromNDP() throws NextButtomException {
+    public void forwardEaAppFromNDP() throws TooManyLoopsException {
         if (!app.jdbc().checkIDmember(ConfigProvider.getUserLogin())) {
             app.jdbc().setIDmember(ConfigProvider.getUserLogin());
         };
