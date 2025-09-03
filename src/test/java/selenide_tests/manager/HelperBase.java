@@ -46,14 +46,16 @@ public class HelperBase {
     }
 
     /**
-     * Метод выбирает функционал подачи заявления об изменении
+     * Метод выбирает функционал из списка
      */
-    @Step("Выбор 'Передача права / Изменение имени или наименования / Изменение адреса'")
+    @Step("Выбор функционала из списка")
     public void selectApplicationType(String appType) {
         if (appType.equals("change")) {
             $("input[value='Передача права / Изменение имени или наименования / Изменение адреса']").click();
         } else if (appType.equals("forward")) {
             $("input[value='Пересылка ЕА заявки из нацведомства']").click();
+        } else if (appType.equals("request")) {
+            $("input[value='Запрос нацведомства / Гос. органа']").click();
         }
 
     }
@@ -62,7 +64,7 @@ public class HelperBase {
      * Метод выбирает раздел внутри ИЗО или ПО
      */
     @Step("Выбор секции в выбранном разделе")
-    public void selectAction() {
+    public void selectSection() {
         $(By.xpath("//a[contains(text(), 'Полученные досылки')]")).click();
     }
 

@@ -143,7 +143,7 @@ public class SendAndSaveAdditionTests extends TestSeleniumBase {
         @Story("Подача измененной выделенной заявки со всеми документами")
         @Description("Тест подачи измененной выделенной заявки. Проверяются сообщения на фронте и сохранения мета-данных в Soprano")
         public void submitChangedAllocatedApplicationTest() throws TooManyLoopsException {
-            String appNumber = app.jdbc().getInventionApp();
+            String appNumber = app.jdbc().getInventionApp(14157, 'I');
             app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
             app.sender().selectSectionOfAccount("invention");
             app.sender().selectTypeOfApplication("allocatedApp");

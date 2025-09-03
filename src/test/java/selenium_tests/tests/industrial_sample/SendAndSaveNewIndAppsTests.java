@@ -30,6 +30,30 @@ class SendAndSaveNewIndAppsTests extends TestSeleniumBase {
     public class SendAndSaveUsualAppsTests {
 
         @Test
+        @DisplayName("Тест отсутствия смены статуса заявки после валидации")
+        @Story("Попытка отправить заявку без обязательных документов для проверки отсутствия смены статуса")
+        @Description("Тест отсутствия смены статуса заявки. Проверяется, что после валидации статус заявки не сменился на национальную")
+        public void changingApplicationStatusTest() throws TooManyLoopsException {
+            app.jdbc().setIDmember(ConfigProvider.getUserLogin());
+            app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
+            app.sender().selectSectionOfAccount("industrial");
+            app.sender().selectTypeOfApplication("euroApp");
+            app.sender().fillIndustrialCommonInfoPart();
+            app.sender().addNewApplicants(1, "person");
+            app.sender().addNewInventors(1);
+            for (int i = 0; i < 3; i++) {
+                app.sender().pressNextButton();
+            }
+            app.sender().fillIndustrialPrototype(0, false);
+            app.sender().pressNextButton();
+            app.sender().selectCommonFee();
+            app.sender().signInApplication();
+            String applicationType = app.sender().getTextFromElement(By.cssSelector("h3"));
+            assertEquals("ЗАЯВКА НА ПРОМЫШЛЕННЫЙ ОБРАЗЕЦ", applicationType); // проверка, что ти заявки не изменился
+
+        }
+
+        @Test
         @Order(1)
         @DisplayName("Тест заявки на ПО без приоритета по 1 ПО с загрузкой всех возможных файлов")
         @Story("Отправка заявки без приоритета по 1 ПО с загрузкой всех возможных документов")

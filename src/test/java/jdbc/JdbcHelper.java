@@ -3,6 +3,7 @@ package jdbc;
 import fixture.ConfigProvider;
 import io.qameta.allure.Step;
 import model.PatentAgent;
+import reactor.util.annotation.Nullable;
 
 import java.sql.*;
 import java.util.Random;
@@ -252,21 +253,46 @@ public class JdbcHelper {
     }
 
     /**
-     * Метод возвращает заявку для подачи выделенной заявки на ИЗО
+     * Метод возвращает случайный номер заявки по id пользователя
      */
-    @Step("Удаление номера записи о PCT заявке из pctref")
-    public String getInventionApp() {
+    @Step("Получение номера заявки")
+    public String getInventionApp(int idPerson, @Nullable char appType) {
         try {
-            Statement statement = sopranoConnection.createStatement();
-            ResultSet result = statement.executeQuery("SELECT EXTIDAPPLI\n" +
-                    "FROM patent_test.ptappli p\n" +
-                    "JOIN patent_test.apply a\n" +
-                    "ON p.IDAPPLI = a.IDAPPLI\n" +
-                    "WHERE a.IDPERSON = 14157 AND EXTIDAPPLI REGEXP '.{4}9.{4}'\n" +
-                    "ORDER BY EXTIDAPPLI DESC\n" +
-                    "LIMIT 1");
+            String queryAppNumber = null;
+            String queryCountRows = null;
+            if (appType == 'I') {
+                queryCountRows = "SELECT COUNT(*) AS Result\n" +
+                        "FROM patent_test.ptappli p\n" +
+                        "JOIN patent_test.apply a\n" +
+                        "ON p.IDAPPLI = a.IDAPPLI\n" +
+                        "WHERE a.IDPERSON = ? AND EXTIDAPPLI REGEXP '.{4}9.{4}'";
+                queryAppNumber = "SELECT EXTIDAPPLI AS Result\n" +
+                        "FROM patent_test.ptappli p\n" +
+                        "JOIN patent_test.apply a\n" +
+                        "ON p.IDAPPLI = a.IDAPPLI\n" +
+                        "WHERE a.IDPERSON = ? AND EXTIDAPPLI REGEXP '.{4}9.{4}'";
+            } else if (appType == 'D') {
+                queryCountRows = "SELECT COUNT(EXTIDAPPLI) AS Result\n" +
+                        "FROM patent_test.ptappli p\n" +
+                        "JOIN patent_test.apply a\n" +
+                        "ON p.IDAPPLI = a.IDAPPLI\n" +
+                        "WHERE a.IDPERSON = ? AND EXTIDAPPLI REGEXP '.{4}4.{4}'";
+                queryAppNumber = "SELECT EXTIDAPPLI AS Result\n" +
+                        "FROM patent_test.ptappli p\n" +
+                        "JOIN patent_test.apply a\n" +
+                        "ON p.IDAPPLI = a.IDAPPLI\n" +
+                        "WHERE a.IDPERSON = ? AND EXTIDAPPLI REGEXP '.{4}4.{4}'";
+            }
+            PreparedStatement preparedStatement = sopranoConnection.prepareStatement(queryCountRows);
+            preparedStatement.setInt(1, idPerson);
+            ResultSet result = preparedStatement.executeQuery();
             result.next();
-            return result.getString("EXTIDAPPLI");
+            int randomAppNumber = new Random().nextInt(result.getInt("Result")) + 1;
+            preparedStatement = sopranoConnection.prepareStatement(queryAppNumber, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            preparedStatement.setInt(1, idPerson);
+            result = preparedStatement.executeQuery();
+            result.absolute(randomAppNumber);
+            return result.getString("Result");
         } catch (SQLException e) {
             System.out.println("Getting of application for sending an allocated application is failed!");
             throw new RuntimeException(e);
@@ -375,8 +401,8 @@ public class JdbcHelper {
     @Step("Проверка IDmember и установка IDmember")
     public void setIDmember(String userLogin) {
         try {
-            String sql = "UPDATE portaluser SET idmember = 9 WHERE userid = ?";
-            PreparedStatement preparedStatement = sopranoConnection.prepareStatement(sql);
+            String sql = "UPDATE DB2ADMIN.portaluser SET idmember = 9 WHERE userid = ?";
+            PreparedStatement preparedStatement = portalConnection.prepareStatement(sql);
             preparedStatement.setString(1, userLogin);
             int result = preparedStatement.executeUpdate();
             if (result != 1) {

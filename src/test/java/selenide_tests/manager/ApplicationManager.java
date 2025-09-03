@@ -1,6 +1,7 @@
 package selenide_tests.manager;
 
 import jdbc.JdbcHelper;
+import org.bouncycastle.cert.ocsp.Req;
 
 /**
  * Класс содержит экземпляры помощников для работы с порталом
@@ -11,6 +12,7 @@ public class ApplicationManager {
     private JdbcHelper jdbc;
     private LoginHelper login;
     private ForwardHelper forward;
+    private RequestHelper request;
 
     /**
      * Возвращает класс-помощник для взаимодействия с JDBS
@@ -45,13 +47,23 @@ public class ApplicationManager {
     }
 
     /**
-     * Возвращает класс-помощник для пересылки заявки зи нацведомства
+     * Возвращает класс-помощник для пересылки заявки из нацведомства
      */
     public ForwardHelper forward() {
         if (forward == null) {
             forward = new ForwardHelper();
         }
         return forward;
+    }
+
+    /**
+     * Возвращает класс-помощник для направления запроса гос органа \ нац ведомства
+     */
+    public RequestHelper request() {
+        if (request == null) {
+            request = new RequestHelper();
+        }
+        return request;
     }
 
 

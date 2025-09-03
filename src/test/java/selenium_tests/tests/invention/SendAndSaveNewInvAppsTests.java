@@ -26,6 +26,29 @@ import static utils.FileUtils.*;
 public class SendAndSaveNewInvAppsTests extends TestSeleniumBase {
 
     @Test
+    @DisplayName("Тест отсутствия смены статуса заявки после валидации")
+    @Story("Попытка отправить заявку без обязательных документов для проверки отсутствия смены статуса")
+    @Description("Тест отсутствия смены статуса заявки. Проверяется, что после валидации статус заявки не сменился на национальную")
+    public void changingApplicationStatusTest() throws TooManyLoopsException {
+        app.jdbc().setIDmember(ConfigProvider.getUserLogin());
+        app.session().login(ConfigProvider.getUserLogin(), ConfigProvider.getUserPassword());
+        app.sender().selectSectionOfAccount("invention");
+        app.sender().selectTypeOfApplication("euroApp");
+        app.sender().fillInventionCommonInfoPart();
+        app.sender().pressNextButton();
+        app.sender().addNewApplicants(1, "person");
+        app.sender().addNewInventors(1);
+        for (int i = 0; i < 4; i++) {
+            app.sender().pressNextButton();
+        }
+        app.sender().selectCommonFee();
+        app.sender().signInApplication();
+        String applicationType = app.sender().getTextFromElement(By.cssSelector("h3"));
+        assertEquals("ЕВРАЗИЙСКАЯ ЗАЯВКА", applicationType); // проверка, что ти заявки не изменился
+    }
+
+
+    @Test
     @Order(1)
     @DisplayName("Тест отправки евразийской заявки со всеми документами")
     @Story("Отправка евразийской заявки со всеми документами")

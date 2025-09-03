@@ -59,7 +59,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.changer().signAndSendDocument();
         assertEquals("Пакет успешно подписан.", app.changer().getConfirmMessage()); // Проверяем наличие сообщения об успешной отправке пакета
         app.changer().pressContinueButton();
-        app.changer().selectAction();
+        app.changer().selectSection();
         app.changer().findAppByNumber(appNumber);
         app.changer().openFoundAppByNumber(appNumber);
         app.changer().saveAppToSoprano();
@@ -95,7 +95,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.changer().signAndSendDocument();
         assertEquals("Пакет успешно подписан.", app.changer().getConfirmMessage()); // Проверяем наличие сообщения об успешной отправке пакета
         app.changer().pressContinueButton();
-        app.changer().selectAction();
+        app.changer().selectSection();
         app.changer().findAppByNumber(appNumber);
         app.changer().openFoundAppByNumber(appNumber);
         app.changer().saveAppToSoprano();
@@ -130,7 +130,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.changer().signAndSendDocument();
         assertEquals("Пакет успешно подписан.", app.changer().getConfirmMessage()); // Проверяем наличие сообщения об успешной отправке пакета
         app.changer().pressContinueButton();
-        app.changer().selectAction();
+        app.changer().selectSection();
         app.changer().findAppByNumber(appNumber);
         app.changer().openFoundAppByNumber(appNumber);
         app.changer().saveAppToSoprano();
@@ -165,7 +165,7 @@ public class SendAppForChangeTests extends TestSelenideBase {
         app.changer().signAndSendDocument();
         assertEquals("Пакет успешно подписан.", app.changer().getConfirmMessage()); // Проверяем наличие сообщения об успешной отправке пакета
         app.changer().pressContinueButton();
-        app.changer().selectAction();
+        app.changer().selectSection();
         app.changer().findAppByNumber(appNumber);
         app.changer().openFoundAppByNumber(appNumber);
         app.changer().saveAppToSoprano();

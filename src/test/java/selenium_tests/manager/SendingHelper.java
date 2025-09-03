@@ -265,12 +265,21 @@ public class SendingHelper extends HelperBase {
     /**
      * Метод заполняет раздел №8 "Расчет пошлин" заявки на изобретения
      */
-    @Step("Заполнение раздела №8 в заявке на ИЗО ")
+    @Step("Заполнение раздела №8 в заявке на ИЗО")
     public void fillTaxFormInvention() {
         chooseDiscount("1");
-        click(By.xpath("//input[contains(@id, 'cbDuty001')]"), true);
+        click(By.xpath("//input[contains(@id, 'cbDuty')]"), true);
         click(By.cssSelector("input[value='payment-document']"), true);
         fileUpload(By.xpath("//input[@class='rf-fu-inp']"), getAbsolutePathToFile("src/test/resources/file_to_upload/doc_for_madras_invention/Пп_об_оплате_ГП%.pdf"), true);
+    }
+
+    /**
+     * Метод выбрает ЕПП в разделе №8 "Расчет пошлин" без загрузки ПП об оплате
+     */
+    @Step("Выбор ЕПП без загруки ПП об оплате")
+    public void selectCommonFee() {
+        click(By.xpath("//input[contains(@id, 'cbDuty')]"), true);
+        click(By.cssSelector("input[value='payment-document']"), true);
     }
 
     /**
